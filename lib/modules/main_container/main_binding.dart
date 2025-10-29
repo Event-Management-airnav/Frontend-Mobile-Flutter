@@ -1,0 +1,9 @@
+import 'package:frontend_mobile_flutter/modules/main_container/main_controller.dart';
+import 'package:get/get.dart';
+
+class MainBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<MainController>(() => MainController());
+  }
+}
