@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'event_registration_model.g.dart';
 
 @JsonSerializable()
-class EventRegistrationModel extends Equatable {
+class EventRegistration extends Equatable {
   final int id;
   final int prsId;
   final int mdlId;
@@ -12,7 +12,7 @@ class EventRegistrationModel extends Equatable {
   final int status;
   final String qrCode;
 
-  const EventRegistrationModel({
+  const EventRegistration({
     required this.id,
     required this.prsId,
     required this.mdlId,
@@ -21,10 +21,10 @@ class EventRegistrationModel extends Equatable {
     required this.qrCode,
   });
 
-  factory EventRegistrationModel.fromJson(Map<String, dynamic> json) =>
-      _$EventRegistrationModelFromJson(json);
+  factory EventRegistration.fromJson(Map<String, dynamic> json) =>
+      _$EventRegistrationFromJson(json);
 
-  Map<String, dynamic> toJson() => _$EventRegistrationModelToJson(this);
+  Map<String, dynamic> toJson() => _$EventRegistrationToJson(this);
 
   @override
   List<Object?> get props => [id, prsId, mdlId, tanggal, status, qrCode];
