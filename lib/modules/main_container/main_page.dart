@@ -39,6 +39,7 @@ class MainView extends GetView<MainController> {
       icon: const Icon(Icons.person),
       title: 'Notification',
     ),
+    PersistentBottomNavBarItem(
       icon: const Icon(Icons.details),
       title: 'Detail',
     ),
