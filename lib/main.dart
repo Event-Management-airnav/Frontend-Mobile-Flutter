@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend_mobile_flutter/app_pages.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
+import 'modules/admin/dashboard/admin_dashboard_page.dart';
+
 void main() {
   runApp(const MainApp());
 }
