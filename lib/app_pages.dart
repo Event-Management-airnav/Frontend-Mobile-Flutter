@@ -2,10 +2,14 @@ import 'package:frontend_mobile_flutter/modules/auth/auth_binding.dart';
 import 'package:frontend_mobile_flutter/modules/auth/auth_page.dart';
 import 'package:frontend_mobile_flutter/modules/main_container/main_binding.dart';
 import 'package:frontend_mobile_flutter/modules/main_container/main_page.dart';
+import 'package:frontend_mobile_flutter/modules/participant/activity/activity_binding.dart';
+import 'package:frontend_mobile_flutter/modules/participant/activity/activity_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_binding.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/profile_binding.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/profile_page.dart';
+import 'package:frontend_mobile_flutter/modules/test/test_binding.dart';
+import 'package:frontend_mobile_flutter/modules/test/test_page.dart';
 import 'package:get/get.dart';
 
 part 'app_routes.dart';
@@ -16,6 +20,15 @@ class AppPages {
   static const INITIAL = Routes.HOME;
 
   static final routes = [
+    GetPage(
+        name: _Paths.ACTIVITY,
+        page: () => const ActivityPage(),
+        binding: ActivityBinding()),
+    GetPage(
+      name: '/',
+      page: () => const TestPage(),
+      binding: TestBinding(),
+    ),
     GetPage(
         name: _Paths.AUTH,
         page: () => const AuthPage(),
