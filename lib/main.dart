@@ -19,7 +19,6 @@ class MainApp extends StatelessWidget {
       theme: AppThemes.lightTheme,
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
-      theme: ThemeData(),
     );
   }
 }
