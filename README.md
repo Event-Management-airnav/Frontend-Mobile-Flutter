@@ -1,3 +1,3 @@
 # frontend_mobile_flutter
 
-A new Flutter project.
+Event management flutter app by AirNav Indonesia
