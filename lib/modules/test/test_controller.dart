@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
 
-class ActivityController extends GetxController {
+class TestController extends GetxController {
   // Your controller logic here
 }
