@@ -11,7 +11,8 @@ class UserModel extends Equatable {
   final String email;
   final String telp;
   final String role;
-  final String? foto;
+  final String remember_token;
+  final String foto; // TODO backend belum ada foto
 
   const UserModel ({
     required this.id,
@@ -20,6 +21,7 @@ class UserModel extends Equatable {
     required this.email,
     required this.telp,
     required this.role,
+    required this.remember_token,
     required this.foto,
   });
 
@@ -29,9 +31,5 @@ class UserModel extends Equatable {
 
 
   @override
-  // TODO: implement props
-  List<Object?> get props => [id, username, email, telp, role];
-
-
-
+  List<Object?> get props => [id, name, username, email, telp, role, remember_token, foto];
 }
