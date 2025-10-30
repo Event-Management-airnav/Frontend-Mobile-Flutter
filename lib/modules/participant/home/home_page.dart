@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_controller.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/notification_button.dart';
 import 'package:get/get.dart';
@@ -12,60 +13,7 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80.0), // Set the desired height
-        child: AppBar(
-          title: Container(
-            color: Colors.white,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  width: 35, // TODO extract to constants
-                  height: 35,
-                  child: Image(image: AssetImage('assets/images/appbar_logo_airnav.png'))
-                ),
-                const SizedBox(width: 10.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Event Management',
-                      style: TextStyle(
-                        color: AppColors.primary,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      'AirNav Indonesia',
-                      style: TextStyle(
-                        color: Colors.grey[700], // TODO use style color
-                        fontSize: 14.0,
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          actions: [
-            NotificationButton(notificationCount: 1, onPressed: () => {}), // TODO add new notification indicator
-            const SizedBox(width: 8.0),
-            const SizedBox(
-              width: 40,
-              height: 40,
-              child: CircleAvatar(
-                backgroundImage: AssetImage("assets/images/user_image.jpg"),
-              ),
-            ), // TODO user avatar fetch
-            const SizedBox(width: 16.0),
-          ],
-          backgroundColor: Colors.white,
-          elevation: 1,
-          scrolledUnderElevation: 0,
-        ),
-      ),
+      appBar: TAppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
@@ -77,12 +25,14 @@ class HomePage extends GetView<HomeController> {
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide.none
+                  borderSide: BorderSide.none,
                 ),
                 filled: true,
                 fillColor: Colors.white,
-                contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 0,
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -116,7 +66,7 @@ class HomePage extends GetView<HomeController> {
                       selectedColor: Colors.blue[100],
                       showCheckmark: false,
                       backgroundColor: Colors.grey[200],
-                    )
+                    ),
                   ],
                 ),
               ],
@@ -132,7 +82,7 @@ class HomePage extends GetView<HomeController> {
                     'time': '09:00 - 12:00',
                     'location': 'Ruang Rapat A',
                     'status': 'Selesai', // 'Terbuka', 'Berlangsung', 'Selesai'
-                    'imageUrl': 'assets/images/dashboard_user_card_image.png'
+                    'imageUrl': 'assets/images/dashboard_user_card_image.png',
                   }; // TODO fetch from data
 
                   Color statusColor;
@@ -173,9 +123,7 @@ class HomePage extends GetView<HomeController> {
                                   ),
                                 ),
                               ),
-                              const SizedBox(
-                                width: 12,
-                              ),
+                              const SizedBox(width: 12),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -194,9 +142,18 @@ class HomePage extends GetView<HomeController> {
                                       spacing: 2.0,
                                       runSpacing: 2.0,
                                       children: [
-                                        _buildEventInfo(Icons.calendar_today, event['date']!),
-                                        _buildEventInfo(Icons.access_time, event['time']!),
-                                        _buildEventInfo(Icons.location_on, event['location']!),
+                                        _buildEventInfo(
+                                          Icons.calendar_today,
+                                          event['date']!,
+                                        ),
+                                        _buildEventInfo(
+                                          Icons.access_time,
+                                          event['time']!,
+                                        ),
+                                        _buildEventInfo(
+                                          Icons.location_on,
+                                          event['location']!,
+                                        ),
                                         _buildEventInfo(
                                           Icons.circle,
                                           event['status']!,
@@ -215,10 +172,7 @@ class HomePage extends GetView<HomeController> {
                           DecoratedBox(
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
-                                colors: [
-                                  Colors.blue[500]!,
-                                  Colors.blue[400]!,
-                                ],
+                                colors: [Colors.blue[500]!, Colors.blue[400]!],
                                 begin: Alignment.centerLeft,
                                 end: Alignment.centerRight,
                               ),
@@ -236,7 +190,10 @@ class HomePage extends GetView<HomeController> {
                               ),
                               child: const Text(
                                 'Detail Acara',
-                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
@@ -246,7 +203,7 @@ class HomePage extends GetView<HomeController> {
                   );
                 },
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -272,13 +229,7 @@ class HomePage extends GetView<HomeController> {
         children: [
           Icon(icon, size: iconSize, color: textColor),
           const SizedBox(width: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 10,
-              color: textColor,
-            ),
-          ),
+          Text(label, style: TextStyle(fontSize: 10, color: textColor)),
         ],
       ),
     );

@@ -33,6 +33,18 @@ class AuthPage extends GetView<AuthController> {
         onLogin: _onLogin,
         onSignup: _onSignup,
         onRecoverPassword: _onRecoverPassword,
+        additionalSignupFields: [
+          UserFormField(
+            keyName: 'full_name',
+            displayName: 'Full Name',
+            fieldValidator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Full Name is required';
+              }
+              return null;
+            },
+          ),
+        ],
       ),
     );
   }

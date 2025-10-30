@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
 
-class TestController extends GetxController {
+class NotificationController extends GetxController {
   // Your controller logic here
 }
