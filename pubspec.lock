@@ -349,7 +349,7 @@ packages:
       sha256: "8d658f0d367c48bd420e7cf2d26655e2d1130147bca1eea917e576ca76668aaf"
       url: "https://pub.dev"
     source: hosted
-    version: "7.2.0"
+    version: "1.0.3"
   flutter_localizations:
     dependency: transitive
     description: flutter
@@ -430,7 +430,7 @@ packages:
     source: sdk
     version: "0.0.0"
   font_awesome_flutter:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: font_awesome_flutter
       sha256: b9011df3a1fa02993630b8fb83526368cf2206a711259830325bab2f1d2a4eb0
