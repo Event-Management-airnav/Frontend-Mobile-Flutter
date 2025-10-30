@@ -3,6 +3,9 @@ import 'package:frontend_mobile_flutter/modules/auth/auth_binding.dart';
 import 'package:frontend_mobile_flutter/modules/auth/auth_page.dart';
 import 'package:frontend_mobile_flutter/modules/main_container/main_binding.dart';
 import 'package:frontend_mobile_flutter/modules/main_container/main_page.dart';
+import 'package:frontend_mobile_flutter/modules/participant/activity/activity_binding.dart';
+import 'package:frontend_mobile_flutter/modules/participant/activity/activity_page.dart';
+import 'package:frontend_mobile_flutter/modules/participant/home/detail_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_binding.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/profile_binding.dart';
@@ -10,6 +13,8 @@ import 'package:frontend_mobile_flutter/modules/participant/profile/profile_page
 import 'package:frontend_mobile_flutter/modules/participant/notification/notification_binding.dart';
 import 'package:frontend_mobile_flutter/modules/participant/notification/notification_page.dart';
 
+import 'package:frontend_mobile_flutter/modules/test/test_binding.dart';
+import 'package:frontend_mobile_flutter/modules/test/test_page.dart';
 import 'package:get/get.dart';
 
 part 'app_routes.dart';
@@ -21,16 +26,29 @@ class AppPages {
 
   static final routes = [
     GetPage(
-        name: _Paths.AUTH,
-        page: () => const AuthPage(),
-        binding: AuthBinding()),
+      name: _Paths.ACTIVITY,
+      page: () => const ActivityPage(),
+      binding: ActivityBinding(),
+    ),
+    GetPage(name: '/', page: () => const TestPage(), binding: TestBinding()),
     GetPage(
-        name: _Paths.MAIN,
-        page: () => const MainView(),
-        binding: MainBinding()),
+      name: _Paths.AUTH,
+      page: () => const AuthPage(),
+      binding: AuthBinding(),
+    ),
+    GetPage(
+      name: _Paths.MAIN,
+      page: () => const MainView(),
+      binding: MainBinding(),
+    ),
     GetPage(
       name: _Paths.HOME,
       page: () => const HomePage(),
+      binding: HomeBinding(),
+    ),
+    GetPage(
+      name: _Paths.DETAIL,
+      page: () => const DetailPage(),
       binding: HomeBinding(),
     ),
     GetPage(

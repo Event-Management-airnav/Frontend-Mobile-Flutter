@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_controller.dart';
 import 'package:get/get.dart';
 
@@ -303,13 +304,7 @@ class ProfilePage extends GetView<HomeController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.grey[600],
-            fontSize: 14,
-          ),
-        ),
+        Text(label, style: TextStyle(color: Colors.grey[600], fontSize: 14)),
         const SizedBox(height: 8),
         TextField(
           decoration: InputDecoration(
@@ -320,8 +315,10 @@ class ProfilePage extends GetView<HomeController> {
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide.none,
             ),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 14,
+            ),
           ),
         ),
       ],
@@ -448,8 +445,8 @@ class ProfilePage extends GetView<HomeController> {
               ],
             ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }
