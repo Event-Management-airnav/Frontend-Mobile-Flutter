@@ -28,6 +28,7 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   background_downloader: ^9.2.6
   mobile_scanner: ^7.1.3
+  font_awesome_flutter: ^10.12.0
 
 
 dev_dependencies:
