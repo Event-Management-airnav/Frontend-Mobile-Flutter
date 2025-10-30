@@ -17,6 +17,7 @@ class MainApp extends StatelessWidget {
       title: 'NavEvent',
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
+      theme: ThemeData(),
     );
   }
 }
