@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_mobile_flutter/app_pages.dart';
 import 'package:frontend_mobile_flutter/core/app_themes.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:frontend_mobile_flutter/data/network/api_services.dart';
+import 'package:get/get.dart';
 
 void main() {
+  Get.put<ApiService>(ApiService());
   runApp(const MainApp());
 }
 
