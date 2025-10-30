@@ -1,6 +1,5 @@
 // lib/modules/main/views/main_view.dart
 import 'package:flutter/material.dart';
-import 'package:frontend_mobile_flutter/modules/auth/auth_page.dart';
 import 'package:frontend_mobile_flutter/modules/main_container/main_controller.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_page.dart';
@@ -12,20 +11,26 @@ import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 class MainView extends GetView<MainController> {
   const MainView({super.key});
 
-  List<Widget> _screens() =>
-      const [HomePage(), ProfilePage(), AuthPage(), TestPage(), ActivityPage()];
+  List<Widget> _screens() => const [
+    HomePage(),
+    ActivityPage(),
+    ProfilePage(),
+  ];
 
   List<PersistentBottomNavBarItem> _items() => [
-        PersistentBottomNavBarItem(icon: const Icon(Icons.home), title: 'Home'),
-        PersistentBottomNavBarItem(
-            icon: const Icon(Icons.person), title: 'Profile'),
-        PersistentBottomNavBarItem(
-            icon: const Icon(Icons.login), title: 'Auth'),
-        PersistentBottomNavBarItem(
-            icon: const Icon(Icons.text_fields_outlined), title: 'Test'),
-        PersistentBottomNavBarItem(
-            icon: const Icon(Icons.event), title: 'Activity'),
-      ];
+    PersistentBottomNavBarItem(
+      icon: const Icon(Icons.home),
+      title: 'Dashboard',
+    ),
+    PersistentBottomNavBarItem(
+      icon: const Icon(Icons.calendar_today),
+      title: 'Acara',
+    ),
+    PersistentBottomNavBarItem(
+      icon: const Icon(Icons.person),
+      title: 'Profile',
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
