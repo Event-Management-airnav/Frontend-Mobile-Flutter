@@ -1,12 +1,14 @@
 // lib/modules/main/views/main_view.dart
 import 'package:flutter/material.dart';
+import 'package:frontend_mobile_flutter/modules/auth/auth_page.dart';
 import 'package:frontend_mobile_flutter/modules/main_container/main_controller.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_page.dart';
+import 'package:frontend_mobile_flutter/modules/participant/home/detail_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/profile_page.dart';
-import 'package:frontend_mobile_flutter/modules/test/test_page.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:frontend_mobile_flutter/modules/participant/notification/notification_page.dart';
 
 class MainView extends GetView<MainController> {
   const MainView({super.key});
@@ -15,6 +17,9 @@ class MainView extends GetView<MainController> {
     HomePage(),
     ActivityPage(),
     ProfilePage(),
+    NotificationPage(),
+    DetailPage(),
+    AuthPage(),
   ];
 
   List<PersistentBottomNavBarItem> _items() => [
@@ -30,6 +35,15 @@ class MainView extends GetView<MainController> {
       icon: const Icon(Icons.person),
       title: 'Profile',
     ),
+    PersistentBottomNavBarItem(
+      icon: const Icon(Icons.person),
+      title: 'Notification',
+    ),
+    PersistentBottomNavBarItem(
+      icon: const Icon(Icons.details),
+      title: 'Detail',
+    ),
+    PersistentBottomNavBarItem(icon: const Icon(Icons.login), title: 'Auth'),
   ];
 
   @override
