@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:frontend_mobile_flutter/modules/auth/auth_binding.dart';
 import 'package:frontend_mobile_flutter/modules/auth/auth_page.dart';
 import 'package:frontend_mobile_flutter/modules/main_container/main_binding.dart';
@@ -9,6 +10,9 @@ import 'package:frontend_mobile_flutter/modules/participant/home/home_binding.da
 import 'package:frontend_mobile_flutter/modules/participant/home/home_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/profile_binding.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/profile_page.dart';
+import 'package:frontend_mobile_flutter/modules/participant/notification/notification_binding.dart';
+import 'package:frontend_mobile_flutter/modules/participant/notification/notification_page.dart';
+
 import 'package:get/get.dart';
 
 part 'app_routes.dart';
@@ -48,6 +52,11 @@ class AppPages {
       name: _Paths.PROFILE,
       page: () => const ProfilePage(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.NOTIFICATION,
+      page: () => const NotificationPage(),
+      binding: NotificationBinding(),
     ),
     // GetPage(
     //   name: _Paths.DASHBOARD,

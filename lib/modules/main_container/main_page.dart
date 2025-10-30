@@ -8,6 +8,7 @@ import 'package:frontend_mobile_flutter/modules/participant/home/home_page.dart'
 import 'package:frontend_mobile_flutter/modules/participant/profile/profile_page.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:frontend_mobile_flutter/modules/participant/notification/notification_page.dart';
 
 class MainView extends GetView<MainController> {
   const MainView({super.key});
@@ -16,6 +17,7 @@ class MainView extends GetView<MainController> {
     HomePage(),
     ActivityPage(),
     ProfilePage(),
+    NotificationPage(),
     DetailPage(),
     AuthPage(),
   ];
@@ -34,6 +36,9 @@ class MainView extends GetView<MainController> {
       title: 'Profile',
     ),
     PersistentBottomNavBarItem(
+      icon: const Icon(Icons.person),
+      title: 'Notification',
+    ),
       icon: const Icon(Icons.details),
       title: 'Detail',
     ),
