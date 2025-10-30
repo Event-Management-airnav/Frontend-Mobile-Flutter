@@ -6,7 +6,7 @@ part of 'event_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-EventModel _$EventModelFromJson(Map<String, dynamic> json) => EventModel(
+Event _$EventFromJson(Map<String, dynamic> json) => Event(
   user_id: (json['user_id'] as num).toInt(),
   mdl_kode: json['mdl_kode'] as String,
   mdl_slug: json['mdl_slug'] as String,
@@ -38,9 +38,7 @@ EventModel _$EventModelFromJson(Map<String, dynamic> json) => EventModel(
   mdl_catatan: json['mdl_catatan'] as String,
 );
 
-Map<String, dynamic> _$EventModelToJson(
-  EventModel instance,
-) => <String, dynamic>{
+Map<String, dynamic> _$EventToJson(Event instance) => <String, dynamic>{
   'user_id': instance.user_id,
   'mdl_kode': instance.mdl_kode,
   'mdl_slug': instance.mdl_slug,

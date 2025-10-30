@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'user_model.g.dart';
 
 @JsonSerializable()
-class UserModel extends Equatable {
+class User extends Equatable {
   final int id;
   final String name;
   final String username;
@@ -14,7 +14,7 @@ class UserModel extends Equatable {
   final String remember_token;
   final String foto; // TODO backend belum ada foto
 
-  const UserModel ({
+  const User ({
     required this.id,
     required this.name,
     required this.username,
@@ -25,8 +25,8 @@ class UserModel extends Equatable {
     required this.foto,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) =>
-      _$UserModelFromJson(json);
+  factory User.fromJson(Map<String, dynamic> json) =>
+      _$UserFromJson(json);
 
 
 
