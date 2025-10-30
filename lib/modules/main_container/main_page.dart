@@ -4,6 +4,7 @@ import 'package:frontend_mobile_flutter/modules/main_container/main_controller.d
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/profile_page.dart';
+import 'package:frontend_mobile_flutter/modules/test/test_page.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
