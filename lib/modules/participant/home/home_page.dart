@@ -18,54 +18,65 @@ class HomePage extends GetView<HomeController> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
-            const SizedBox(height: 16),
-            TextField(
-              decoration: InputDecoration(
-                hintText: "Cari acara...",
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-                fillColor: Colors.white,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 0,
-                ),
-              ),
-            ),
+            // const SizedBox(height: 16),
+            // TextField(
+            //   decoration: InputDecoration(
+            //     hintText: "Cari acara...",
+            //     prefixIcon: const Icon(Icons.search),
+            //     border: OutlineInputBorder(
+            //       borderRadius: BorderRadius.circular(30),
+            //       borderSide: BorderSide.none,
+            //     ),
+            //     filled: true,
+            //     fillColor: Colors.white,
+            //     contentPadding: const EdgeInsets.symmetric(
+            //       horizontal: 16,
+            //       vertical: 0,
+            //     ),
+            //   ),
+            // ),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Wrap(
-                  spacing: 8.0,
+                  spacing: 12.0,
                   runSpacing: 4.0,
                   children: <Widget>[
-                    FilterChip(
-                      label: const Text('Terbuka'),
-                      selected: true, // TODO fetch from controller
-                      onSelected: (bool selected) {},
-                      selectedColor: Colors.blue[100],
-                      showCheckmark: false,
-                      backgroundColor: Colors.grey[200],
+                    ChoiceChip.elevated(
+                      elevation: 1,
+                      backgroundColor: const Color(0xFFEBFAFF),
+                      selectedColor: Colors.blue[200],
+                      label: const Text('All'),
+                      selected: false,
+                      onSelected: (_) {
+                        //controller.activeFilter.value = null;
+                      },
                     ),
-                    FilterChip(
-                      label: const Text('Berlangsung'),
-                      selected: false, // TODO fetch from controller
-                      onSelected: (bool selected) {},
-                      selectedColor: Colors.blue[100],
-                      showCheckmark: false,
-                      backgroundColor: Colors.grey[200],
+                    ChoiceChip.elevated(
+                        elevation: 1,
+                        backgroundColor: const Color(0xFFEBFAFF),
+                        selectedColor: Colors.blue[200],
+                      label: const Text('Active'),
+                      selected: false,// active == HomeFilter.active,
+                      onSelected: (_) {}// => controller.toggleFilter(HomeFilter.active),
                     ),
-                    FilterChip(
-                      label: const Text('Selesai'),
-                      selected: false, // TODO fetch from controller
-                      onSelected: (bool selected) {},
-                      selectedColor: Colors.blue[100],
-                      showCheckmark: false,
-                      backgroundColor: Colors.grey[200],
+                    ChoiceChip.elevated(
+                        elevation: 1,
+                        backgroundColor: const Color(0xFFEBFAFF),
+                        selectedColor: Colors.blue[200],
+                      label: const Text('Upcoming'),
+                      selected: false,// active == HomeFilter.upcoming,
+                      onSelected: (_) => {}
+                          //controller.toggleFilter(HomeFilter.upcoming),
+                    ),
+                    ChoiceChip.elevated(
+                        elevation: 1,
+                        backgroundColor: const Color(0xFFEBFAFF),
+                        selectedColor: Colors.blue[200],
+                      label: const Text('Past'),
+                      selected: false,// active == HomeFilter.past,
+                      onSelected: (_) {}// => controller.toggleFilter(HomeFilter.past),
                     ),
                   ],
                 ),

@@ -30,11 +30,12 @@ class AuthService extends GetxService {
       final model = LoginResponse.fromJson(response.data);
 
       if (model.success && model.data != null) {
-        await secure.write(
-          key: "access_token",
-          value: model.data!.accessToken,
-        );
+        // await secure.write(
+        //   key: "access_token",
+        //   value: model.data!.accessToken,
+        // );
 
+        storage.write("access_token", model.data!.accessToken);
         storage.write("name", model.data!.user.name);
         storage.write("username", model.data!.user.username);
         storage.write("role", model.data!.user.role);

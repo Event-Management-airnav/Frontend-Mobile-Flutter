@@ -5,11 +5,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApiInterceptor extends Interceptor {
   final storage = GetStorage();
-  final secure = const FlutterSecureStorage();
+  // final secure = const FlutterSecureStorage();
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    final token = await secure.read(key: "token");
+    // final token = await secure.read(key: "token");
+    final token = storage.read("access_token");
+
 
     if (token != null && token.isNotEmpty) {
       options.headers["Authorization"] = "Bearer $token";
