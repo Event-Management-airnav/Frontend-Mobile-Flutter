@@ -7,6 +7,10 @@ import '../../models/auth/login_request.dart';
 import '../../models/auth/login_response.dart';
 import '../../models/auth/register_request.dart';
 import '../../models/auth/register_response.dart';
+
+import '../../models/auth/reset_password_request.dart';
+import '../../models/auth/forgot_password_request.dart';
+import '../../models/basic_response.dart';
 import '../api_client.dart';
 import '../endpoints.dart';
 
@@ -61,6 +65,42 @@ class AuthService extends GetxService {
         success: false,
         message: res?["message"] ?? "Registration failed",
         errors: res?["errors"],
+      );
+    }
+  }
+
+  Future<BasicResponse> forgotPassword(ForgotPasswordRequest req) async {
+    try {
+      final res = await ApiClient.dio.post(
+        Endpoints.forgotPassword,
+        data: req.toJson(),
+      );
+
+      return BasicResponse.fromJson(res.data);
+
+    } on DioException catch (e) {
+      final data = e.response?.data;
+      return BasicResponse(
+        success: false,
+        message: data?["message"] ?? "Password reset failed",
+      );
+    }
+  }
+
+  Future<BasicResponse> resetPassword(ResetPasswordRequest req) async {
+    try {
+      final res = await ApiClient.dio.post(
+        Endpoints.resetPassword,
+        data: req.toJson(),
+      );
+
+      return BasicResponse.fromJson(res.data);
+
+    } on DioException catch (e) {
+      final data = e.response?.data;
+      return BasicResponse(
+        success: false,
+        message: data?["message"] ?? "Invalid reset token",
       );
     }
   }
