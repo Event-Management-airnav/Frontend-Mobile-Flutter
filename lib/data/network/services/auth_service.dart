@@ -59,11 +59,11 @@ class AuthService extends GetxService {
         data: req.toJson(),
       );
 
-      final model = RegisterResponse.fromJson(response.data);
+      // final model = RegisterResponse.fromJson(response.data);
 
-      if (model.success && model.data != null) {
-        storage.write("email", model.data!.user.email);
-      }
+      // if (model.success && model.data != null) {
+      //   storage.write("email", model.data!.user.email);
+      // }
       return RegisterResponse.fromJson(response.data);
     } on DioException catch (e) {
       final res = e.response?.data;
