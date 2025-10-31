@@ -19,4 +19,6 @@ class Endpoints {
 
   // Profile
   static final profile = "$baseUrl/profile";
+  static final profileUpdate = "$baseUrl/profile/update";
+  static final profileChangePassword = "$baseUrl/profile/change-password";
 }
