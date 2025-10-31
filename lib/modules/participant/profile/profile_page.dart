@@ -7,13 +7,16 @@ import 'package:frontend_mobile_flutter/modules/participant/profile/profile_cont
 import 'package:frontend_mobile_flutter/modules/participant/profile/profile_widgets.dart';
 import 'package:get/get.dart';
 
+// Kelas utama untuk halaman profil, terhubung dengan ProfileController melalui GetView.
 class ProfilePage extends GetView<ProfileController> {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Scaffold menyediakan struktur dasar untuk layout halaman.
     return Scaffold(
       backgroundColor: Colors.grey[100],
+      // AppBar adalah bar bagian atas halaman.
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarIconBrightness: Brightness.dark,
@@ -21,6 +24,7 @@ class ProfilePage extends GetView<ProfileController> {
         ),
         backgroundColor: Colors.white,
         elevation: 0.5,
+        // Judul AppBar yang berisi logo dan nama perusahaan.
         title: Row(
           children: [
             Image.asset(
@@ -28,6 +32,7 @@ class ProfilePage extends GetView<ProfileController> {
               height: 30,
             ),
             const SizedBox(width: 10),
+            // Kolom untuk menyusun teks "AirNav" dan "Indonesia" secara vertikal.
             const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -53,6 +58,7 @@ class ProfilePage extends GetView<ProfileController> {
             ),
           ],
         ),
+        // Actions adalah widget yang ditempatkan di sisi kanan AppBar (contoh: tombol logout).
         actions: [
           IconButton(
             onPressed: () {
@@ -65,9 +71,11 @@ class ProfilePage extends GetView<ProfileController> {
           ),
         ],
       ),
+      // Body utama halaman yang dapat di-scroll.
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+          // Card sebagai container utama untuk informasi profil.
           child: Card(
             elevation: 0,
             color: Colors.white,
@@ -79,6 +87,7 @@ class ProfilePage extends GetView<ProfileController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  // Judul kartu informasi.
                   const Text(
                     'Informasi Profil',
                     textAlign: TextAlign.center,
@@ -89,7 +98,9 @@ class ProfilePage extends GetView<ProfileController> {
                     ),
                   ),
                   const SizedBox(height: 30),
+                  // Obx membungkus widget agar menjadi reaktif terhadap perubahan state di controller.
                   Obx(() {
+                    // Logika untuk menentukan gambar mana yang akan ditampilkan.
                     ImageProvider? backgroundImage;
                     if (controller.profileImageFile.value != null) {
                       backgroundImage = FileImage(controller.profileImageFile.value!);
@@ -97,15 +108,17 @@ class ProfilePage extends GetView<ProfileController> {
                       backgroundImage = NetworkImage(controller.profileImageUrl.value);
                     }
 
-                    // === PERUBAHAN DI SINI: Menambahkan GestureDetector ===
+                    // GestureDetector menangkap aksi ketukan pada gambar profil.
                     return GestureDetector(
                       onTap: () {
+                        // Jika ada gambar, tampilkan dalam mode layar penuh.
                         if (backgroundImage != null) {
                           Get.dialog(
                             GestureDetector(
-                              onTap: () => Get.back(), // Klik di mana saja untuk menutup
+                              onTap: () => Get.back(), // Klik di mana saja untuk menutup.
                               child: Container(
                                 color: Colors.black.withOpacity(0.8),
+                                // InteractiveViewer memungkinkan zoom dan pan pada gambar.
                                 child: InteractiveViewer(
                                   panEnabled: true,
                                   minScale: 0.5,
@@ -120,6 +133,7 @@ class ProfilePage extends GetView<ProfileController> {
                           );
                         }
                       },
+                      // CircleAvatar untuk menampilkan gambar profil dalam bentuk lingkaran.
                       child: Center(
                         child: CircleAvatar(
                           radius: 80,
@@ -132,14 +146,17 @@ class ProfilePage extends GetView<ProfileController> {
                     );
                   }),
                   const SizedBox(height: 30),
+                  // Menampilkan informasi nama, whatsapp, dan email secara reaktif.
                   Obx(() => ProfileInfoTile(label: 'Nama Lengkap', value: controller.name.value)),
                   const SizedBox(height: 12),
                   Obx(() => ProfileInfoTile(label: 'No. Whatsapp', value: controller.whatsapp.value)),
                   const SizedBox(height: 12),
                   Obx(() => ProfileInfoTile(label: 'Email', value: controller.email.value)),
                   const SizedBox(height: 36),
+                  // Row untuk menata tombol secara horizontal.
                   Row(
                     children: [
+                      // Tombol untuk membuka dialog edit profil.
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
@@ -164,6 +181,7 @@ class ProfilePage extends GetView<ProfileController> {
                         ),
                       ),
                       const SizedBox(width: 12),
+                      // Tombol untuk membuka dialog ubah kata sandi.
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () {
