@@ -21,4 +21,11 @@ class Endpoints {
   static final profile = "$baseUrl/profile";
   static final profileUpdate = "$baseUrl/profile/update";
   static final profileChangePassword = "$baseUrl/profile/change-password";
+
+  // Home
+  static final eventsAll = "$baseUrl/events/all";
+  static final events = "$baseUrl/events";
+  static final eventsUpcoming = "$baseUrl/events/upcoming";
+  static final eventsPast = "$baseUrl/events/past";
+
 }
