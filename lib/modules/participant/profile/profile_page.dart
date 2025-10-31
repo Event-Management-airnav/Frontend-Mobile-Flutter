@@ -340,7 +340,7 @@ class ProfilePage extends GetView<HomeController> {
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'Kata Sandi Baru',
+                    'Kata Sandi Lama',
                     style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                   const SizedBox(height: 8),
@@ -374,7 +374,7 @@ class ProfilePage extends GetView<HomeController> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Ketik Ulang Kata Sandi Baru',
+                    'Kata Sandi Baru',
                     style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                   const SizedBox(height: 8),
