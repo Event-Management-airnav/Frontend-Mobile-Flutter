@@ -1,7 +1,9 @@
 // lib/modules/main/views/main_view.dart
 import 'package:flutter/material.dart';
+import 'package:frontend_mobile_flutter/modules/auth/auth_page.dart';
 import 'package:frontend_mobile_flutter/modules/main_container/main_controller.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_page.dart';
+import 'package:frontend_mobile_flutter/modules/participant/home/detail_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/profile_page.dart';
 import 'package:get/get.dart';
@@ -16,6 +18,8 @@ class MainView extends GetView<MainController> {
     ActivityPage(),
     ProfilePage(),
     NotificationPage(),
+    DetailPage(),
+    AuthPage(),
   ];
 
   List<PersistentBottomNavBarItem> _items() => [
@@ -35,6 +39,11 @@ class MainView extends GetView<MainController> {
       icon: const Icon(Icons.person),
       title: 'Notification',
     ),
+    PersistentBottomNavBarItem(
+      icon: const Icon(Icons.details),
+      title: 'Detail',
+    ),
+    PersistentBottomNavBarItem(icon: const Icon(Icons.login), title: 'Auth'),
   ];
 
   @override
