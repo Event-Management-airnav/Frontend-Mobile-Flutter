@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 
-class ActivityController extends GetxController {
-
+class NotificationController extends GetxController {
   // Your controller logic here
 }
