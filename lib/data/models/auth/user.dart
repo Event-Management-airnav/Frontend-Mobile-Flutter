@@ -11,6 +11,8 @@ class User extends Equatable {
   final String email;
   final String telp;
   final String role;
+  @JsonKey(name: "email_verified_at")
+  final String? emailVerifiedAt;
 
   const User({
     required this.id,
@@ -19,12 +21,22 @@ class User extends Equatable {
     required this.email,
     required this.telp,
     required this.role,
+    this.emailVerifiedAt,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  factory User.fromJson(Map<String, dynamic> json) =>
+      _$UserFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
   @override
-  List<Object?> get props => [id, name, username, email, telp, role];
+  List<Object?> get props => [
+    id,
+    name,
+    username,
+    email,
+    telp,
+    role,
+    emailVerifiedAt,
+  ];
 }
