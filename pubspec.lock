@@ -397,7 +397,6 @@ packages:
       sha256: "277d25d960c15674ce78ca97f57d0bae2ee401c844b6ac80fcd972a9c99d09fe"
       url: "https://pub.dev"
     source: hosted
-    version: "7.2.0"
     version: "9.1.0"
   flutter_local_notifications_windows:
     dependency: transitive
@@ -417,9 +416,6 @@ packages:
     description:
       name: flutter_login
       sha256: "13351d09de94741e0920235132318445ff2122a6fa693eeb9f590f49aa5b80f9"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.0.0"
       url: "https://pub.dev"
     source: hosted
     version: "6.0.0"
@@ -580,10 +576,6 @@ packages:
   image_picker:
     dependency: "direct main"
     description:
-      name: intl
-      sha256: "3df61194eb431efc39c4ceba583b95633a403f46c9fd341e550ce0bfa50e9aa5"
-      url: "https://pub.dev"
-    source: hosted
       name: image_picker
       sha256: b6951e25b795d053a6ba03af5f710069c99349de9341af95155d52665cb4607c
       url: "https://pub.dev"
