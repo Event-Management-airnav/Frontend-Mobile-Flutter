@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_mobile_flutter/data/models/auth/reset_password_request.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import '../../core/app_colors.dart';
 import '../../core/text_styles.dart';
 import 'auth_controller.dart';
@@ -35,58 +37,59 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     super.dispose();
   }
 
-  Future<void> _submitNewPassword() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-
-      try {
-        // Call actual API through AuthController
-        final error = await _authController.resetPassword(
-          email: widget.email,
-          otp: widget.otp,
-          newPassword: _passwordController.text.trim(),
-        );
-
-        setState(() {
-          _isLoading = false;
-        });
-
-        if (error == null) {
-          // Success
-          Get.offAllNamed('/login'); // atau sesuaikan dengan route Anda
-          Get.snackbar(
-            'Berhasil',
-            'Password berhasil diubah! Silakan login dengan password baru.',
-            backgroundColor: Colors.green,
-            colorText: Colors.white,
-            duration: Duration(seconds: 3),
-          );
-        } else {
-          // Error
-          Get.snackbar(
-            'Error',
-            error,
-            backgroundColor: AppColors.error,
-            colorText: Colors.white,
-          );
-        }
-        
-      } catch (e) {
-        setState(() {
-          _isLoading = false;
-        });
-        
-        Get.snackbar(
-          'Error',
-          'Terjadi kesalahan: $e',
-          backgroundColor: AppColors.error,
-          colorText: Colors.white,
-        );
-      }
-    }
-  }
+  // Future<void> _submitNewPassword() async {
+  //   if (_formKey.currentState!.validate()) {
+  //     setState(() {
+  //       _isLoading = true;
+  //     });
+  //
+  //     final storage = GetStorage();
+  //     final token = storage.read('access_token');
+  //
+  //     try {
+  //       // Call actual API through AuthController
+  //       final error = await _authController.resetPassword( // TODO replace with actual API call
+  //         ResetPasswordRequest(email: widget.email, token: token, password: _passwordController.text.trim(), passwordConfirmation: _confirmPasswordController.text.trim())
+  //       );
+  //
+  //       setState(() {
+  //         _isLoading = false;
+  //       });
+  //
+  //       if (error == null) {
+  //         // Success
+  //         Get.offAllNamed('/login'); // atau sesuaikan dengan route Anda
+  //         Get.snackbar(
+  //           'Berhasil',
+  //           'Password berhasil diubah! Silakan login dengan password baru.',
+  //           backgroundColor: Colors.green,
+  //           colorText: Colors.white,
+  //           duration: Duration(seconds: 3),
+  //         );
+  //       } else {
+  //         // Error
+  //         Get.snackbar(
+  //           'Error',
+  //           error,
+  //           backgroundColor: AppColors.error,
+  //           colorText: Colors.white,
+  //         );
+  //       }
+  //
+  //     } catch (e) {
+  //       setState(() {
+  //         _isLoading = false;
+  //       });
+  //
+  //       Get.snackbar(
+  //         'Error',
+  //         'Terjadi kesalahan: $e',
+  //         backgroundColor: AppColors.error,
+  //         colorText: Colors.white,
+  //       );
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -276,37 +279,37 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 SizedBox(height: 40),
                 
                 // Submit Button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _submitNewPassword,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      elevation: 0,
-                      disabledBackgroundColor: AppColors.primary.withOpacity(0.6),
-                    ),
-                    child: _isLoading
-                        ? SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                            ),
-                          )
-                        : Text(
-                            'Perbarui Kata Sandi',
-                            style: TextStyles.button.copyWith(
-                              fontSize: 16,
-                            ),
-                          ),
-                  ),
-                ),
+                // SizedBox(
+                //   width: double.infinity,
+                //   child: ElevatedButton(
+                //     onPressed: _isLoading ? null : _submitNewPassword,
+                //     style: ElevatedButton.styleFrom(
+                //       backgroundColor: AppColors.primary,
+                //       foregroundColor: Colors.white,
+                //       padding: EdgeInsets.symmetric(vertical: 16),
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(8),
+                //       ),
+                //       elevation: 0,
+                //       disabledBackgroundColor: AppColors.primary.withOpacity(0.6),
+                //     ),
+                //     child: _isLoading
+                //         ? SizedBox(
+                //             height: 20,
+                //             width: 20,
+                //             child: CircularProgressIndicator(
+                //               strokeWidth: 2,
+                //               valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                //             ),
+                //           )
+                //         : Text(
+                //             'Perbarui Kata Sandi',
+                //             style: TextStyles.button.copyWith(
+                //               fontSize: 16,
+                //             ),
+                //           ),
+                //   ),
+                // ),
                 SizedBox(height: 20),
                 
                 // Cancel Button

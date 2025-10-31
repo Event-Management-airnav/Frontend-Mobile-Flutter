@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:frontend_mobile_flutter/data/models/auth/register_request.dart';
 import 'package:frontend_mobile_flutter/modules/auth/auth_controller.dart';
 import 'package:frontend_mobile_flutter/modules/auth/otp_verification_page.dart';
 import 'package:get/get.dart';
@@ -14,19 +15,32 @@ class AuthPage extends GetView<AuthController> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final headerHeight = screenHeight * 0.10;
-    
+
     Future<String?> _onLogin(LoginData data) async {
-      Get.snackbar('login', 'email: ${data.name}, password: ${data.password}');
-      return null;
+      // Get.snackbar('login', 'email: ${data.name}, password: ${data.password}');
+      // return null;
+      return controller.login(data.name, data.password);
     }
 
     Future<String?> _onSignup(SignupData data) async {
-      final fullName = data.additionalSignupData?['fullname'];
-      final phone = data.additionalSignupData?['phone'];
-      
-      // TODO: Send OTP to email via API
-      // await controller.sendOtpRegistration(email: data.name);
-      
+      final name = data.additionalSignupData?['name'];
+      final telp = data.additionalSignupData?['telp'];
+      final username = data.additionalSignupData?['username'];
+
+      if (name == null || telp == null || username == null || data.name == null || data.password == null) {
+        return 'Nama lengkap, nomor telepon, dan nama pengguna harus diisi';
+      }
+
+      await controller.register(
+          name: name,
+          username: username,
+          email: data.name!,
+          telp: telp,
+          password: data.password!,
+          confirmPassword: data.password!,
+          statusKaryawan: 0,
+      );
+
       // Navigate to OTP verification for registration
       Get.to(
         () => OtpVerificationPage(
@@ -36,7 +50,7 @@ class AuthPage extends GetView<AuthController> {
         transition: Transition.rightToLeft,
         duration: Duration(milliseconds: 300),
       );
-      
+
       return null;
     }
 
@@ -47,7 +61,7 @@ class AuthPage extends GetView<AuthController> {
         transition: Transition.rightToLeft,
         duration: Duration(milliseconds: 300),
       );
-      
+
       // Return null to prevent flutter_login from showing success message
       // The OTP page will handle the rest of the flow
       return null;
@@ -58,14 +72,14 @@ class AuthPage extends GetView<AuthController> {
       body: Stack(
         children: [
           Container(color: AppColors.background),
-          
+
           Positioned(
             top: headerHeight,
             left: 0,
             right: 0,
             bottom: 0,
             child: PrimaryScrollController(
-              controller: ScrollController(), 
+              controller: ScrollController(),
               child: Builder(
                 builder: (context) {
                   return ScrollConfiguration(
@@ -80,12 +94,11 @@ class AuthPage extends GetView<AuthController> {
                         onLogin: _onLogin,
                         onSignup: _onSignup,
                         onRecoverPassword: _onRecoverPassword,
-                        
-                       
+
                         additionalSignupFields: [
                           // Field 1: Nama Lengkap
                           UserFormField(
-                            keyName: 'fullname',
+                            keyName: 'name',
                             displayName: 'Nama Lengkap',
                             icon: Icon(Icons.person_outline),
                             fieldValidator: (value) {
@@ -98,10 +111,10 @@ class AuthPage extends GetView<AuthController> {
                               return null;
                             },
                           ),
-                          
+
                           // Field 2: Nomor Telepon
                           UserFormField(
-                            keyName: 'phone',
+                            keyName: 'telp',
                             displayName: 'Nomor Telepon',
                             icon: Icon(Icons.phone_outlined),
                             fieldValidator: (value) {
@@ -118,10 +131,23 @@ class AuthPage extends GetView<AuthController> {
                               return null;
                             },
                           ),
+
+                          // Field 3: Nama User
+                          UserFormField(
+                            keyName: 'username',
+                            displayName: 'Nama Pengguna',
+                            icon: Icon(Icons.credit_card),
+                            fieldValidator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Nama pengguna tidak boleh kosong';
+                              }
+                              return null;
+                            },
+                          ),
                         ],
-                        
+
                         messages: LoginMessages(
-                          userHint: 'Email / Username',
+                          userHint: 'Email',
                           passwordHint: 'Enter your password',
                           confirmPasswordHint: 'Konfirmasi password',
                           loginButton: 'Login',
@@ -130,17 +156,19 @@ class AuthPage extends GetView<AuthController> {
                           recoverPasswordButton: 'RESET',
                           goBackButton: 'KEMBALI',
                           confirmPasswordError: 'Password tidak cocok!',
-                          recoverPasswordDescription: 'Masukkan email Anda untuk menerima kode verifikasi',
-                          recoverPasswordSuccess: 'Kode verifikasi telah dikirim ke email Anda',
+                          recoverPasswordDescription:
+                              'Masukkan email Anda untuk menerima kode verifikasi',
+                          recoverPasswordSuccess:
+                              'Kode verifikasi telah dikirim ke email Anda',
                         ),
-                        
+
                         theme: LoginTheme(
                           primaryColor: AppColors.primary,
                           accentColor: AppColors.background,
                           errorColor: AppColors.error,
                           pageColorLight: AppColors.background,
                           pageColorDark: AppColors.background,
-                          
+
                           cardTheme: CardTheme(
                             color: AppColors.background,
                             elevation: 0,
@@ -149,7 +177,7 @@ class AuthPage extends GetView<AuthController> {
                               borderRadius: BorderRadius.zero,
                             ),
                           ),
-                          
+
                           inputTheme: InputDecorationTheme(
                             filled: true,
                             fillColor: AppColors.inputFill,
@@ -178,7 +206,7 @@ class AuthPage extends GetView<AuthController> {
                             prefixIconColor: AppColors.textSecondary,
                             suffixIconColor: AppColors.textSecondary,
                           ),
-                          
+
                           buttonTheme: LoginButtonTheme(
                             backgroundColor: AppColors.primary,
                             splashColor: AppColors.primaryDark,
@@ -189,35 +217,35 @@ class AuthPage extends GetView<AuthController> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
-                          
+
                           titleStyle: TextStyles.headerMedium.copyWith(
                             color: AppColors.textPrimary,
                           ),
                           bodyStyle: TextStyles.bodyMedium,
                           textFieldStyle: TextStyles.bodyMedium,
                           buttonStyle: TextStyles.button,
-                          
+
                           beforeHeroFontSize: 20,
                           afterHeroFontSize: 20,
                         ),
-                        
+
                         userValidator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Masukkan email atau username';
                           }
                           return null;
                         },
-                        
+
                         passwordValidator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Masukkan password';
                           }
-                          if (value.length < 6) {
-                            return 'Password minimal 6 karakter';
+                          if (value.length < 8) {
+                            return 'Password minimal 8 karakter';
                           }
                           return null;
                         },
-                        
+
                         scrollable: false,
                         hideForgotPasswordButton: false,
                         hideProvidersTitle: true,
@@ -228,7 +256,7 @@ class AuthPage extends GetView<AuthController> {
               ),
             ),
           ),
-          
+
           // Header - Fixed di atas
           Positioned(
             top: 0,
