@@ -5,6 +5,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../models/auth/login_request.dart';
 import '../../models/auth/login_response.dart';
+import '../../models/auth/otp_resend_request.dart';
+import '../../models/auth/otp_verify_request.dart';
 import '../../models/auth/register_request.dart';
 import '../../models/auth/register_response.dart';
 
@@ -101,6 +103,42 @@ class AuthService extends GetxService {
       return BasicResponse(
         success: false,
         message: data?["message"] ?? "Invalid reset token",
+      );
+    }
+  }
+
+  Future<BasicResponse> verifyOtp(OtpVerifyRequest req) async {
+    try {
+      final response = await ApiClient.dio.post(
+        Endpoints.verifyOtp,
+        data: req.toJson(),
+      );
+
+      return BasicResponse.fromJson(response.data);
+    } on DioException catch (e) {
+      final res = e.response?.data;
+
+      return BasicResponse(
+        success: false,
+        message: res?["message"] ?? "Verification failed",
+      );
+    }
+  }
+
+  Future<BasicResponse> resendOtp(OtpResendRequest req) async {
+    try {
+      final response = await ApiClient.dio.post(
+        Endpoints.resendOtp,
+        data: req.toJson(),
+      );
+
+      return BasicResponse.fromJson(response.data);
+    } on DioException catch (e) {
+      final res = e.response?.data;
+
+      return BasicResponse(
+        success: false,
+        message: res?["message"] ?? "Resend failed",
       );
     }
   }
