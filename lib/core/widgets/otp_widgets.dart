@@ -3,7 +3,6 @@ import '../app_colors.dart';
 import '../text_styles.dart';
 
 class OtpWidgets {
-  // OTP Box Widget
   static Widget buildOtpBox({
     required int position,
     required String otpCode,

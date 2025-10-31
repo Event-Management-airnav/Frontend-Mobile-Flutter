@@ -24,10 +24,19 @@ class AuthPage extends GetView<AuthController> {
       final fullName = data.additionalSignupData?['fullname'];
       final phone = data.additionalSignupData?['phone'];
       
-      Get.snackbar(
-        'signup', 
-        'email: ${data.name}, password: ${data.password}, nama: $fullName, telepon: $phone'
+      // TODO: Send OTP to email via API
+      // await controller.sendOtpRegistration(email: data.name);
+      
+      // Navigate to OTP verification for registration
+      Get.to(
+        () => OtpVerificationPage(
+          email: data.name ?? '',
+          isFromRegistration: true,
+        ),
+        transition: Transition.rightToLeft,
+        duration: Duration(milliseconds: 300),
       );
+      
       return null;
     }
 
