@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/profile_controller.dart';
 import 'package:get/get.dart';
 
-// Widget untuk menampilkan baris informasi di halaman profil
+// Widget untuk menampilkan satu baris informasi profil (label dan value).
 class ProfileInfoTile extends StatelessWidget {
   final String label;
   final String value;
@@ -48,12 +48,13 @@ class ProfileInfoTile extends StatelessWidget {
   }
 }
 
-// Dialog untuk mengedit profil pengguna
+// Widget dialog untuk mengedit data profil pengguna.
 class EditProfileDialog extends GetView<ProfileController> {
   const EditProfileDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Efek blur pada latar belakang saat dialog muncul.
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
       child: Dialog(
@@ -61,6 +62,7 @@ class EditProfileDialog extends GetView<ProfileController> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),
+        // Membuat konten dialog dapat di-scroll.
         child: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(24),
@@ -88,24 +90,23 @@ class EditProfileDialog extends GetView<ProfileController> {
                 ),
                 const SizedBox(height: 8),
                 Center(
+                  // Menangkap aksi ketuk untuk memilih gambar dari galeri.
                   child: GestureDetector(
                     onTap: () {
                       controller.pickImageFromGallery();
                     },
+                    // Obx membuat widget ini reaktif terhadap perubahan state gambar.
                     child: Obx(() {
-                      // === PERUBAHAN DI SINI ===
                       ImageProvider? dialogImage;
                       if (controller.selectedImageFile.value != null) {
-                        // Prioritas 1: Tampilkan gambar baru yang dipilih untuk pratinjau
                         dialogImage = FileImage(controller.selectedImageFile.value!);
                       } else if (controller.profileImageFile.value != null) {
-                        // Prioritas 2: Tampilkan gambar profil lokal yang aktif
                         dialogImage = FileImage(controller.profileImageFile.value!);
                       } else if (controller.profileImageUrl.isNotEmpty) {
-                        // Prioritas 3: Tampilkan gambar profil dari internet
                         dialogImage = NetworkImage(controller.profileImageUrl.value);
                       }
 
+                      // Stack untuk menumpuk ikon kamera di atas avatar.
                       return Stack(
                         children: [
                           CircleAvatar(
@@ -141,6 +142,7 @@ class EditProfileDialog extends GetView<ProfileController> {
                   ),
                 ),
                 const SizedBox(height: 24),
+                // Kolom input reusable untuk form.
                 _EditField(
                     label: 'Nama Lengkap', hint: 'Nama Lengkap baru...', controller: controller.nameController),
                 const SizedBox(height: 16),
@@ -149,6 +151,7 @@ class EditProfileDialog extends GetView<ProfileController> {
                 const SizedBox(height: 16),
                 _EditField(label: 'Email', hint: 'Email baru...', controller: controller.emailController),
                 const SizedBox(height: 24),
+                // Tombol untuk menyimpan semua perubahan.
                 ElevatedButton(
                   onPressed: controller.updateProfile,
                   style: ElevatedButton.styleFrom(
@@ -176,7 +179,7 @@ class EditProfileDialog extends GetView<ProfileController> {
   }
 }
 
-// Widget internal untuk kolom input di dalam EditProfileDialog
+// Widget private untuk kolom input teks pada form.
 class _EditField extends StatelessWidget {
   final String label;
   final String hint;
@@ -199,9 +202,11 @@ class _EditField extends StatelessWidget {
         const SizedBox(height: 8),
         TextField(
           controller: controller,
+          // Menentukan tipe keyboard (angka untuk Whatsapp).
           keyboardType: label == 'No. Whatsapp'
               ? TextInputType.number
               : TextInputType.text,
+          // Memfilter input agar hanya menerima digit angka.
           inputFormatters: label == 'No. Whatsapp'
               ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
               : [],
@@ -223,12 +228,13 @@ class _EditField extends StatelessWidget {
 }
 
 
-// Dialog untuk mengubah kata sandi
+// Widget dialog untuk mengubah kata sandi pengguna.
 class ChangePasswordDialog extends GetView<ProfileController> {
   const ChangePasswordDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Efek blur pada latar belakang saat dialog muncul.
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
       child: Dialog(
@@ -236,6 +242,7 @@ class ChangePasswordDialog extends GetView<ProfileController> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),
+        // Membuat konten dialog dapat di-scroll.
         child: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(24),
@@ -260,6 +267,7 @@ class ChangePasswordDialog extends GetView<ProfileController> {
                   ),
                 ),
                 const SizedBox(height: 8),
+                // Obx membuat TextField reaktif terhadap perubahan visibilitas.
                 Obx(() => TextField(
                       controller: controller.passwordController,
                       obscureText: controller.isPasswordObscured1.value,
@@ -273,6 +281,7 @@ class ChangePasswordDialog extends GetView<ProfileController> {
                         ),
                         contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 14),
+                        // Ikon mata untuk toggle visibilitas password.
                         suffixIcon: IconButton(
                           icon: Icon(
                             controller.isPasswordObscured1.value
@@ -295,6 +304,7 @@ class ChangePasswordDialog extends GetView<ProfileController> {
                   ),
                 ),
                 const SizedBox(height: 8),
+                // Obx membuat TextField reaktif terhadap perubahan visibilitas.
                 Obx(() => TextField(
                       controller: controller.confirmPasswordController,
                       obscureText: controller.isPasswordObscured2.value,
@@ -308,6 +318,7 @@ class ChangePasswordDialog extends GetView<ProfileController> {
                         ),
                         contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 14),
+                        // Ikon mata untuk toggle visibilitas password.
                         suffixIcon: IconButton(
                           icon: Icon(
                             controller.isPasswordObscured2.value
@@ -322,6 +333,7 @@ class ChangePasswordDialog extends GetView<ProfileController> {
                       ),
                     )),
                 const SizedBox(height: 24),
+                // Tombol untuk menyimpan kata sandi baru.
                 ElevatedButton(
                   onPressed: controller.changePassword,
                   style: ElevatedButton.styleFrom(
