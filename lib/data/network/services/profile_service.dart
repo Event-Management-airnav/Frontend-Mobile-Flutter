@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_disposable.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../models/basic_response.dart';
 import '../../models/profile/change_password_request.dart';
@@ -9,6 +11,8 @@ import '../api_client.dart';
 import '../endpoints.dart';
 
 class ProfileService extends GetxService {
+  final _secure = const FlutterSecureStorage();
+  final _box = GetStorage();
 
   Future<ProfileResponse> getProfile() async {
     try {
@@ -62,6 +66,24 @@ class ProfileService extends GetxService {
       return BasicResponse(
         success: false,
         message: data?["message"] ?? "Change password failed",
+      );
+    }
+  }
+
+  Future<BasicResponse> logout() async {
+    try {
+      final res = await ApiClient.dio.post(Endpoints.logout);
+
+      await _secure.deleteAll();
+      _box.erase();
+
+      return BasicResponse.fromJson(res.data);
+
+    } on DioException catch (e) {
+      final data = e.response?.data;
+      return BasicResponse(
+        success: false,
+        message: data?["message"] ?? "Logout failed",
       );
     }
   }
