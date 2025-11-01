@@ -134,18 +134,18 @@ class _EventListTile extends StatelessWidget {
     final lokasi = event.lokasi;
 
     Color statusColor;
-    switch (event.statusEvent) {
-      case 'Berlangsung':
-        statusColor = Colors.green.shade100;
+    switch (event.statusAcara) {
+      case 'Sedang Berlangsung':
+        statusColor = Colors.green.shade200;
         break;
       case 'Akan Datang':
-        statusColor = Colors.yellow.shade100;
+        statusColor = Colors.yellow.shade200;
         break;
       case 'Selesai':
-        statusColor = Colors.red.shade100;
+        statusColor = Colors.red.shade200;
         break;
       default:
-        statusColor = Colors.grey.shade100;
+        statusColor = Colors.grey.shade200;
     }
 
     return Card(
@@ -279,7 +279,7 @@ Widget _buildEventInfo(
     IconData icon,
     String label, {
       Color backgroundColor = AppColors.chipBackground,
-      Color textColor = Colors.black54,
+      Color textColor = Colors.black87,
       double iconSize = 16,
     }) {
   return Container(
@@ -294,7 +294,7 @@ Widget _buildEventInfo(
       children: [
         Icon(icon, size: iconSize, color: textColor),
         const SizedBox(width: 4),
-        Text(label, style: TextStyle(fontSize: 10, color: textColor)),
+        Text(label, style: TextStyle(fontSize: 12, color: textColor)),
       ],
     ),
   );

@@ -60,7 +60,7 @@ class AboutEventCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
                 child: Text(
-                  registerButtonText! ,
+                  registerButtonText,
                   style: const TextStyle(fontSize: 15, color: Colors.white),
                 ),
               ),

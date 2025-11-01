@@ -20,8 +20,8 @@ class AuthPage extends GetView<AuthController> {
     Future<String?> _onLogin(LoginData data) async {
       final result = await controller.login(data.name, data.password);
 
-      Get.offAllNamed('/main');
       if (result == null) {
+        Get.offAllNamed('/main');
         SuccessRegister.show(context, title: 'LOGIN SUCCESS', subtitle: 'Selamat Datang Kembali!');
       } else {
         FailRegister.show(context, title: 'LOGIN FAILED', subtitle: result);
@@ -50,11 +50,7 @@ class AuthPage extends GetView<AuthController> {
         );
 
         if (error != null) {
-          FailRegister.show(
-            context,
-            title: 'REGISTER FAILED',
-            subtitle: error,
-          );
+          return error;
         }
 
         SuccessRegister.show(
@@ -63,7 +59,6 @@ class AuthPage extends GetView<AuthController> {
           subtitle: 'Akun berhasil dibuat, silahkan cek email untuk verifikasi',
         );
 
-        // Navigate to OTP verification for registration
         Get.to(
               () => OtpVerificationPage(
             email: data.name ?? '',
@@ -83,7 +78,6 @@ class AuthPage extends GetView<AuthController> {
     }
 
     Future<String?> _onRecoverPassword(String email) async {
-      // Navigate to OTP verification page
       Get.to(
         () => OtpVerificationPage(email: email),
         transition: Transition.rightToLeft,
