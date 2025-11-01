@@ -17,9 +17,6 @@ class MainView extends GetView<MainController> {
     HomePage(),
     ActivityPage(),
     ProfilePage(),
-    // NotificationPage(),
-    // DetailPage(),
-    AuthPage(),
   ];
 
   List<PersistentBottomNavBarItem> _items() => [
@@ -34,16 +31,7 @@ class MainView extends GetView<MainController> {
     PersistentBottomNavBarItem(
       icon: const Icon(Icons.person),
       title: 'Profile',
-    ),
-    // PersistentBottomNavBarItem(
-    //   icon: const Icon(Icons.person),
-    //   title: 'Notification',
-    // ),
-    // PersistentBottomNavBarItem(
-    //   icon: const Icon(Icons.details),
-    //   title: 'Detail',
-    // ),
-    PersistentBottomNavBarItem(icon: const Icon(Icons.login), title: 'Auth'),
+    )
   ];
 
   @override
