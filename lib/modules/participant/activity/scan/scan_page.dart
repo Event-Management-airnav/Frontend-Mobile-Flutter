@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+
 import 'package:frontend_mobile_flutter/data/models/event/presence.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_controller.dart';
-
 import '../../../../data/models/event/scan_response.dart';
 
 class ScanPage extends StatefulWidget {
@@ -15,12 +15,16 @@ class ScanPage extends StatefulWidget {
 
 class _ScanPageState extends State<ScanPage> {
   final ActivityController c = Get.find<ActivityController>();
+
   final MobileScannerController _scanner = MobileScannerController(
     facing: CameraFacing.back,
-    formats: [BarcodeFormat.qrCode],
-    detectionSpeed: DetectionSpeed.noDuplicates
+    formats: const [BarcodeFormat.qrCode],
+    detectionSpeed: DetectionSpeed.noDuplicates,
+    autoZoom: true,
   );
+
   bool _handled = false;
+  String? _lastCode;
 
   @override
   void dispose() {
@@ -30,13 +34,18 @@ class _ScanPageState extends State<ScanPage> {
 
   Future<void> _onDetect(BarcodeCapture capture) async {
     if (_handled) return;
+
     final code = capture.barcodes.first.rawValue;
     if (code == null || code.isEmpty) return;
 
-    setState(() => _handled = true);
+    setState(() {
+      _handled = true;
+      _lastCode = code;
+    });
     await _scanner.stop();
 
     final payload = Presence(kode: code);
+
     try {
       final ScanResponse res = await c.submitPresence(payload);
       final ok = res.status;
@@ -45,40 +54,45 @@ class _ScanPageState extends State<ScanPage> {
           : (ok ? 'Presensi berhasil' : 'Presensi gagal');
 
       Get.snackbar(
-        'Presensi', msg,
+        'Presensi',
+        msg,
         backgroundColor: ok ? const Color(0xFFEFFFF9) : const Color(0xFFFFF1F0),
         colorText: ok ? const Color(0xFF049E67) : const Color(0xFFB42318),
         snackPosition: SnackPosition.BOTTOM,
         duration: const Duration(seconds: 2),
       );
 
-      // success: close; gagal: bisa scan lagi (opsional)
       if (ok) {
         Future.delayed(const Duration(milliseconds: 300), () {
           if (mounted) Get.back(result: ok);
         });
-      } else {
-        if (mounted) {
-          await _scanner.start();
-          setState(() => _handled = false);
-        }
       }
     } catch (e) {
       Get.snackbar(
-        'Presensi', 'Gagal memproses: $e',
+        'Presensi',
+        'Gagal memproses: $e',
         backgroundColor: const Color(0xFFFFF1F0),
         colorText: const Color(0xFFB42318),
         snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 2),
       );
-      if (mounted) {
-        await _scanner.start();
-        setState(() => _handled = false);
-      }
     }
+  }
+
+  Future<void> _restartScan() async {
+    setState(() {
+      _handled = false;
+      _lastCode = null;
+    });
+    try {
+      await _scanner.start();
+    } catch (_) {}
   }
 
   @override
   Widget build(BuildContext context) {
+    const navy = Color(0xFF0E3977);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Scan QR Presensi'),
@@ -99,16 +113,103 @@ class _ScanPageState extends State<ScanPage> {
             controller: _scanner,
             onDetect: _onDetect,
           ),
-          // optional overlay sederhana
+
+          Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 35),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Text(
+                    'SCAN Barcode',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: navy,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Scan Barcode sebagai daftar hadir:',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: navy,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
           Align(
             alignment: Alignment.center,
-            child: Container(
-              width: 260,
-              height: 260,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.white, width: 2),
-                borderRadius: BorderRadius.circular(12),
-              ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 260,
+                  height: 260,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white, width: 2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+
+                if (_lastCode != null) ...[
+                  const SizedBox(height: 18),
+                  const Text(
+                    "QR Code terbaca:",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.white24,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      _lastCode!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+
+                const SizedBox(height: 18),
+                ElevatedButton.icon(
+                  onPressed: _restartScan,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF175FA4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  icon: const Icon(Icons.refresh, color: Colors.white),
+                  label: const Text(
+                    'Ulang Scan',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
