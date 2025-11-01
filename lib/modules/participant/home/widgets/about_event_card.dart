@@ -11,7 +11,7 @@ class AboutEventCard extends StatelessWidget {
   final VoidCallback onCopyLink;
   final Color primaryColor;
   final Color secondaryColor;
-  final String? registerButtonText;
+  final String registerButtonText;
 
   const AboutEventCard({
     super.key,
@@ -24,7 +24,7 @@ class AboutEventCard extends StatelessWidget {
     required this.onCopyLink,
     this.primaryColor = const Color(0xFF005EA2),
     this.secondaryColor = const Color(0xff075f47),
-    this.registerButtonText,
+    required this.registerButtonText,
   });
 
   @override
@@ -60,7 +60,7 @@ class AboutEventCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
                 child: Text(
-                  registerButtonText ?? (isRegistered ? 'Sudah Daftar' : 'Daftar Sekarang'),
+                  registerButtonText! ,
                   style: const TextStyle(fontSize: 15, color: Colors.white),
                 ),
               ),

@@ -17,15 +17,12 @@ class ProfilePage extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TAppBar(),
-      backgroundColor: const Color(0xFFF3F3F3),
       body: SafeArea(
         child: Obx(() {
-          // If the user is not logged in, show a call-to-action (CTA) to login/signup.
           if (!controller.isLoggedIn.value) {
             return CallToLogin();
           }
 
-          // If the user is logged in, show the profile information.
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
