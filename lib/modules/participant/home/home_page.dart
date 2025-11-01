@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_controller.dart';
-import 'package:frontend_mobile_flutter/modules/participant/home/notification_button.dart';
 import 'package:get/get.dart';
 
+import '../../../app_pages.dart';
 import '../../../core/app_colors.dart';
 import '../../../data/models/event/event.dart';
 
@@ -177,13 +177,13 @@ class _EventListTile extends StatelessWidget {
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Image.asset(
-                          'assets/images/dashboard_user_card_image.png',
+                          'assets/images/placeholder-img.jpg',
                           fit: BoxFit.cover,
                         );
                       },
                     )
                         : Image.asset(
-                      'assets/images/placeholder-img.png',
+                      'assets/images/placeholder-img.jpg',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -250,7 +250,9 @@ class _EventListTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: ElevatedButton(
-                onPressed: () {}, // TODO gettonamed detail_page.dart
+                onPressed: () {
+                  Get.toNamed(Routes.DETAIL, arguments: event.id);
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
                   shadowColor: Colors.transparent,

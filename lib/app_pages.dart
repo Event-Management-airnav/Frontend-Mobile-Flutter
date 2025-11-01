@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:frontend_mobile_flutter/modules/auth/auth_binding.dart';
 import 'package:frontend_mobile_flutter/modules/auth/auth_page.dart';
+import 'package:frontend_mobile_flutter/modules/event_detail/event_detail_binding.dart';
 import 'package:frontend_mobile_flutter/modules/main_container/main_binding.dart';
 import 'package:frontend_mobile_flutter/modules/main_container/main_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_binding.dart';
@@ -46,7 +47,7 @@ class AppPages {
     GetPage(
       name: _Paths.DETAIL,
       page: () => const DetailPage(),
-      binding: HomeBinding(),
+      binding: EventDetailBinding(),
     ),
     GetPage(
       name: _Paths.PROFILE,
