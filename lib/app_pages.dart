@@ -5,7 +5,7 @@ import 'package:frontend_mobile_flutter/modules/main_container/main_binding.dart
 import 'package:frontend_mobile_flutter/modules/main_container/main_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_binding.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_page.dart';
-import 'package:frontend_mobile_flutter/modules/participant/home/detail_page.dart';
+import 'package:frontend_mobile_flutter/modules/event_detail/detail_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_binding.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/profile_binding.dart';

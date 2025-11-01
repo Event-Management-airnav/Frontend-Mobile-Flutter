@@ -13,10 +13,10 @@ class OtpVerificationPage extends StatefulWidget {
   final bool isFromRegistration;
 
   const OtpVerificationPage({
-    Key? key,
+    super.key,
     required this.email,
     this.isFromRegistration = false,
-  }) : super(key: key);
+  });
 
   @override
   State<OtpVerificationPage> createState() => _OtpVerificationPageState();

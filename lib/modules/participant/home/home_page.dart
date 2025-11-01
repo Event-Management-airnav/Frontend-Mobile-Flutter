@@ -108,15 +108,6 @@ class HomePage extends GetView<HomeController> {
                   itemCount: list.length,
                   separatorBuilder: (_, __) => const SizedBox(height: 8),
                   itemBuilder: (context, index) {
-                    final event = {
-                      'name': 'Rapat Tinjauan Manajemen (RTM) Tahun 2024',
-                      'date': '17 Agu 2024',
-                      'time': '09:00 - 12:00',
-                      'location': 'Ruang Rapat A',
-                      'status': 'Selesai',
-                      // 'Terbuka', 'Berlangsung', 'Selesai'
-                      'imageUrl': 'assets/images/dashboard_user_card_image.png',
-                    }; // TODO fetch from data
 
                     final Event e = list[index];
                     return _EventListTile(event: e);
@@ -142,7 +133,7 @@ class _EventListTile extends StatelessWidget {
     final waktu = event.tanggalMulai!;
     final tanggal = waktu.substring(0, 11);
     final jam = waktu.substring(waktu.length - 5);
-    final lokasi = event.lokasi!;
+    final lokasi = event.lokasi;
 
     Color statusColor;
     switch (event.statusEvent) {
@@ -180,8 +171,19 @@ class _EventListTile extends StatelessWidget {
                       .width * 0.3,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    child: Image.asset(
-                      'assets/images/dashboard_user_card_image.png', // TODO change to network image
+                    child: event.banner != null && event.banner!.isNotEmpty
+                        ? Image.network(
+                      event.banner!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          'assets/images/dashboard_user_card_image.png',
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    )
+                        : Image.asset(
+                      'assets/images/placeholder-img.png',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -216,11 +218,13 @@ class _EventListTile extends StatelessWidget {
                           ),
                           _buildEventInfo(
                             Icons.location_on,
-                            lokasi.length > 13 ? '${lokasi.substring(0, 10)}...' : lokasi,
+                            (lokasi != null && lokasi.isNotEmpty)
+                                ? (lokasi.length > 13 ? '${lokasi.substring(0, 10)}...' : lokasi)
+                                : "Online",
                           ),
                           _buildEventInfo(
                             Icons.circle,
-                            event.statusAcara!,
+                            event.statusAcara ?? 'Status N/A',
                             backgroundColor: statusColor,
                             iconSize: 10,
                             textColor: Colors.black87,
@@ -246,7 +250,7 @@ class _EventListTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {}, // TODO gettonamed detail_page.dart
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
                   shadowColor: Colors.transparent,
