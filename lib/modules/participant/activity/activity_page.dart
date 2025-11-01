@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_mobile_flutter/modules/participant/profile/widgets/call_to_login.dart';
 import 'package:get/get.dart';
 
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_controller.dart';
@@ -31,6 +32,9 @@ class ActivityPage extends GetView<ActivityController> {
         child: Obx(() {
           if (controller.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
+          }
+          if(controller.isLoggedIn.isFalse){
+            return CallToLogin();
           }
           if (controller.error.value != null) {
             return Center(child: Text('Error: ${controller.error.value}'));
