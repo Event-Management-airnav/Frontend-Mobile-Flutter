@@ -9,6 +9,7 @@ abstract class Routes {
   static const NOTIFICATION = _Paths.NOTIFICATION;
   static const TEST = _Paths.TEST;
   static const ACTIVITY = _Paths.ACTIVITY;
+  static const SCAN = _Paths.SCAN;
   // static const DASHBOARD = _Paths.DASHBOARD;
   // static const EVENT = _Paths.EVENT;
 }
@@ -22,6 +23,7 @@ abstract class _Paths {
   static const NOTIFICATION ='/notif';
   static const TEST = '/test';
   static const ACTIVITY = '/activity';
+  static const SCAN = '/scan';
   // static const DASHBOARD = '/dashboard';
   // static const EVENT = '/event';
 }

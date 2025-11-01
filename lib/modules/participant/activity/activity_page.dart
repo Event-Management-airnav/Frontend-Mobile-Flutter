@@ -136,6 +136,23 @@ class ActivityPage extends GetView<ActivityController> {
                     ),
                   );
                 }),
+                      return ActivityContainer(
+                        eventName: name,
+                        eventDate: date,
+                        status: status,
+                        onTap: () => Get.toNamed(Routes.DETAIL, arguments: d.id),
+                        onActionTap: (){
+                          if (status == 'Selesai'){
+                            Get.snackbar('Sertifikat', 'Fitur Unduh sertifikat akan segera hadir.');
+                          } else if (status == 'Berlangsung'){
+                            Get.snackbar('Scan QR Code', 'Scan untuk absensi kegiatan.');
+                            Get.toNamed(Routes.SCAN);
+                          }
+                        },
+                      );
+                    },
+                  ),
+                ),
               ),
             ],
           ),
