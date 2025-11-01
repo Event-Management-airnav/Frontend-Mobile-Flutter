@@ -5,13 +5,19 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../data/models/profile/change_password_request.dart';
+import '../../../data/models/profile/update_profile_request.dart';
+import '../../../data/network/services/profile_service.dart';
+
 // Controller untuk mengelola state dan logika halaman profil.
 class ProfileController extends GetxController {
   // -- DEPENDENCIES --
   final _storage = GetStorage();
+  final _profileService = Get.find<ProfileService>();
 
   // -- STATE REAKTIF (.obs) --
   final RxBool isLoggedIn = false.obs;
+  final RxBool isLoading = false.obs;
   final RxString profileImageUrl = ''.obs; // Menyimpan URL gambar dari server.
   final Rx<File?> profileImageFile = Rx<File?>(null); // Menyimpan file gambar lokal yang aktif.
   final RxString name = ''.obs; // Menyimpan nama pengguna.
@@ -22,15 +28,17 @@ class ProfileController extends GetxController {
   final Rx<File?> selectedImageFile = Rx<File?>(null);
 
   // State untuk visibilitas password di dialog.
-  final RxBool isPasswordObscured1 = true.obs;
-  final RxBool isPasswordObscured2 = true.obs;
+  final RxBool isCurrentPasswordObscured = true.obs;
+  final RxBool isNewPasswordObscured = true.obs;
+  final RxBool isConfirmPasswordObscured = true.obs;
 
   // -- TEXT CONTROLLERS --
   // Untuk mendapatkan input dari kolom teks.
   late TextEditingController nameController;
   late TextEditingController whatsappController;
   late TextEditingController emailController;
-  late TextEditingController passwordController;
+  late TextEditingController currentPasswordController;
+  late TextEditingController newPasswordController;
   late TextEditingController confirmPasswordController;
 
   // Metode yang dijalankan saat controller pertama kali diinisialisasi.
@@ -40,17 +48,18 @@ class ProfileController extends GetxController {
     nameController = TextEditingController();
     whatsappController = TextEditingController();
     emailController = TextEditingController();
-    passwordController = TextEditingController();
+    currentPasswordController = TextEditingController();
+    newPasswordController = TextEditingController();
     confirmPasswordController = TextEditingController();
-    
+
     // Listen for changes in the access_token and update login status
     _storage.listenKey('access_token', (value) {
       checkLoginStatus();
     });
-    
+
     checkLoginStatus();
   }
-  
+
   void checkLoginStatus() {
     final token = _storage.read('access_token');
     isLoggedIn.value = token != null && token.isNotEmpty;
@@ -65,7 +74,8 @@ class ProfileController extends GetxController {
     nameController.dispose();
     whatsappController.dispose();
     emailController.dispose();
-    passwordController.dispose();
+    currentPasswordController.dispose();
+    newPasswordController.dispose();
     confirmPasswordController.dispose();
     super.onClose();
   }
@@ -73,11 +83,22 @@ class ProfileController extends GetxController {
   // --- FUNGSI-FUNGSI LOGIKA --
 
   // Mengambil data profil awal (saat ini masih simulasi).
-  void fetchUserProfile() {
-    profileImageUrl.value = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80';
-    name.value = 'Akbar Maulana';
-    whatsapp.value = '+62 895-1720-0895';
-    email.value = 'akbarmaulana212@airnav.com';
+  Future<void> fetchUserProfile() async {
+    isLoading.value = true;
+    try {
+      final response = await _profileService.getProfile();
+      if (response.success) {
+        final profile = response.data!;
+        profileImageUrl.value = profile.profilePhoto ?? '';
+        name.value = profile.name;
+        whatsapp.value = profile.telp;
+        email.value = profile.email;
+      } else {
+        Get.snackbar('Gagal', response.message, backgroundColor: Colors.red, colorText: Colors.white);
+      }
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   // Menginisialisasi form edit dengan data saat ini.
@@ -90,10 +111,12 @@ class ProfileController extends GetxController {
 
   // Mereset form ubah password sebelum dialog muncul.
   void initChangePasswordForm() {
-    passwordController.clear();
+    currentPasswordController.clear();
+    newPasswordController.clear();
     confirmPasswordController.clear();
-    isPasswordObscured1.value = true;
-    isPasswordObscured2.value = true;
+    isCurrentPasswordObscured.value = true;
+    isNewPasswordObscured.value = true;
+    isConfirmPasswordObscured.value = true;
   }
 
   // Membuka galeri untuk memilih gambar.
@@ -109,38 +132,84 @@ class ProfileController extends GetxController {
   }
 
   // Logika untuk menyimpan perubahan profil.
-  void updateProfile() {
-    if (selectedImageFile.value != null) {
-      profileImageFile.value = selectedImageFile.value;
-      profileImageUrl.value = '';
-      print('API UPDATE PROFILE: Mengunggah gambar baru: ${selectedImageFile.value!.path}');
+  Future<void> updateProfile() async {
+    isLoading.value = true;
+    try {
+      final request = UpdateProfileRequest(
+        name: nameController.text,
+        telp: whatsappController.text,
+        profilePhoto: selectedImageFile.value,
+      );
+
+      final response = await _profileService.updateProfile(request);
+
+      if (response.success) {
+        if (selectedImageFile.value != null) {
+          profileImageFile.value = selectedImageFile.value;
+          profileImageUrl.value = '';
+        }
+
+        name.value = nameController.text;
+        whatsapp.value = whatsappController.text;
+        email.value = emailController.text;
+
+        Get.back(); // Menutup dialog.
+        Get.snackbar('Berhasil', 'Profil berhasil diperbarui.', backgroundColor: Colors.green, colorText: Colors.white);
+      } else {
+        Get.snackbar('Gagal', response.message, backgroundColor: Colors.red, colorText: Colors.white);
+      }
+    } finally {
+      isLoading.value = false;
     }
-
-    print('API UPDATE PROFILE DIPANGGIL DENGAN DATA:');
-    print('Nama: ${nameController.text}');
-
-    name.value = nameController.text;
-    whatsapp.value = whatsappController.text;
-    email.value = emailController.text;
-
-    Get.back(); // Menutup dialog.
-    Get.snackbar('Berhasil', 'Profil berhasil diperbarui.', backgroundColor: Colors.green, colorText: Colors.white);
   }
 
   // Logika untuk menyimpan kata sandi baru.
-  void changePassword() {
-    if (passwordController.text != confirmPasswordController.text) {
-      Get.snackbar('Gagal', 'Password tidak cocok.', backgroundColor: Colors.red, colorText: Colors.white);
+  Future<void> changePassword() async {
+    if (newPasswordController.text != confirmPasswordController.text) {
+      Get.snackbar('Gagal', 'Password baru tidak cocok.', backgroundColor: Colors.red, colorText: Colors.white);
       return;
     }
-    if (passwordController.text.isEmpty) {
-      Get.snackbar('Gagal', 'Password tidak boleh kosong.', backgroundColor: Colors.red, colorText: Colors.white);
+    if (currentPasswordController.text.isEmpty) {
+      Get.snackbar('Gagal', 'Password saat ini tidak boleh kosong.', backgroundColor: Colors.red, colorText: Colors.white);
+      return;
+    }
+    if (newPasswordController.text.isEmpty) {
+      Get.snackbar('Gagal', 'Password baru tidak boleh kosong.', backgroundColor: Colors.red, colorText: Colors.white);
       return;
     }
 
-    print('API UBAH PASSWORD DIPANGGIL DENGAN PASSWORD: ${passwordController.text}');
+    isLoading.value = true;
+    try {
+      final request = ChangePasswordRequest(
+        currentPassword: currentPasswordController.text,
+        newPassword: newPasswordController.text,
+        newPasswordConfirmation: confirmPasswordController.text,
+      );
+      final response = await _profileService.changePassword(request);
 
-    Get.back(); // Menutup dialog.
-    Get.snackbar('Berhasil', 'Kata sandi berhasil diubah.', backgroundColor: Colors.green, colorText: Colors.white);
+      if (response.success) {
+        Get.back(); // Menutup dialog.
+        Get.snackbar('Berhasil', 'Kata sandi berhasil diubah.', backgroundColor: Colors.green, colorText: Colors.white);
+      } else {
+        Get.snackbar('Gagal', response.message, backgroundColor: Colors.red, colorText: Colors.white);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> logout() async {
+    isLoading.value = true;
+    try {
+      final response = await _profileService.logout();
+      if (response.success) {
+        isLoggedIn.value = false;
+        Get.offAllNamed('/login'); // or your login route
+      } else {
+        Get.snackbar('Gagal', response.message, backgroundColor: Colors.red, colorText: Colors.white);
+      }
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

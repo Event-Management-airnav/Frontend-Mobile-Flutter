@@ -260,6 +260,41 @@ class ChangePasswordDialog extends GetView<ProfileController> {
                 ),
                 const SizedBox(height: 24),
                 Text(
+                  'Kata Sandi Saat Ini',
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Obx(() => TextField(
+                      controller: controller.currentPasswordController,
+                      obscureText: controller.isCurrentPasswordObscured.value,
+                      decoration: InputDecoration(
+                        hintText: 'Masukkan password saat ini',
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 14),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            controller.isCurrentPasswordObscured.value
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: Colors.grey[600],
+                          ),
+                          onPressed: () {
+                            controller.isCurrentPasswordObscured.toggle();
+                          },
+                        ),
+                      ),
+                    )),
+                const SizedBox(height: 16),
+                Text(
                   'Kata Sandi Baru',
                   style: TextStyle(
                     color: Colors.grey[600],
@@ -269,8 +304,8 @@ class ChangePasswordDialog extends GetView<ProfileController> {
                 const SizedBox(height: 8),
                 // Obx membuat TextField reaktif terhadap perubahan visibilitas.
                 Obx(() => TextField(
-                      controller: controller.passwordController,
-                      obscureText: controller.isPasswordObscured1.value,
+                      controller: controller.newPasswordController,
+                      obscureText: controller.isNewPasswordObscured.value,
                       decoration: InputDecoration(
                         hintText: 'Masukkan password baru',
                         filled: true,
@@ -284,13 +319,13 @@ class ChangePasswordDialog extends GetView<ProfileController> {
                         // Ikon mata untuk toggle visibilitas password.
                         suffixIcon: IconButton(
                           icon: Icon(
-                            controller.isPasswordObscured1.value
+                            controller.isNewPasswordObscured.value
                                 ? Icons.visibility_off
                                 : Icons.visibility,
                             color: Colors.grey[600],
                           ),
                           onPressed: () {
-                            controller.isPasswordObscured1.toggle();
+                            controller.isNewPasswordObscured.toggle();
                           },
                         ),
                       ),
@@ -307,7 +342,7 @@ class ChangePasswordDialog extends GetView<ProfileController> {
                 // Obx membuat TextField reaktif terhadap perubahan visibilitas.
                 Obx(() => TextField(
                       controller: controller.confirmPasswordController,
-                      obscureText: controller.isPasswordObscured2.value,
+                      obscureText: controller.isConfirmPasswordObscured.value,
                       decoration: InputDecoration(
                         hintText: 'Konfirmasi password baru',
                         filled: true,
@@ -321,13 +356,13 @@ class ChangePasswordDialog extends GetView<ProfileController> {
                         // Ikon mata untuk toggle visibilitas password.
                         suffixIcon: IconButton(
                           icon: Icon(
-                            controller.isPasswordObscured2.value
+                            controller.isConfirmPasswordObscured.value
                                 ? Icons.visibility_off
                                 : Icons.visibility,
                             color: Colors.grey[600],
                           ),
                           onPressed: () {
-                            controller.isPasswordObscured2.toggle();
+                            controller.isConfirmPasswordObscured.toggle();
                           },
                         ),
                       ),
