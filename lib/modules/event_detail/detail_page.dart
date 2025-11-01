@@ -115,12 +115,10 @@ class DetailPage extends GetView<EventDetailController> {
                   const SizedBox(height: 16),
                   // Display additional info if it exists
                   if (event.catatan != null && event.catatan!.isNotEmpty)
-                    Expanded(
-                      child: AdditionalInfoCard(
-                        title: 'Informasi Tambahan',
-                        // Split the notes by newline characters for the list
-                        contentLines: event.catatan!.split('\n'),
-                      ),
+                    AdditionalInfoCard(
+                      title: 'Informasi Tambahan',
+                      // Split the notes by newline characters for the list
+                      contentLines: event.catatan!.split('\n'),
                     ),
                 ],
               ),
