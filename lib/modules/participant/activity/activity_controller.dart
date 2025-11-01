@@ -1,15 +1,16 @@
 // lib/modules/participant/activity/activity_controller.dart
 import 'package:get/get.dart';
-import 'package:frontend_mobile_flutter/data/network/services/followed_services.dart';
+import 'package:frontend_mobile_flutter/data/network/services/activity_service.dart';
 import 'package:frontend_mobile_flutter/data/models/event/followed_event.dart';
 import 'package:frontend_mobile_flutter/data/models/event/presence.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../../core/utils.dart';
+import '../../../data/models/event/scan_response.dart';
 
 
 class ActivityController extends GetxController {
-  final FollowedServices service = Get.find<FollowedServices>();
+  final ActivityService service = Get.find<ActivityService>();
   final _utils = Utils();
   final _storage = GetStorage();
 
@@ -76,11 +77,11 @@ class ActivityController extends GetxController {
 
   Future<void> refreshFollowed() => loadFollowed(page: 1);
 
-  Future<Map<String, dynamic>> submitPresence(Presence payload) async {
+  Future<ScanResponse> submitPresence(Presence payload) async {
     try {
       isLoading.value = true;
       error.value = null;
-      final res = await service.sendPresence(payload);
+      final res = await service.sendPresence(payload); // <-- ScanResponse
       return res;
     } catch (e) {
       error.value = e.toString();

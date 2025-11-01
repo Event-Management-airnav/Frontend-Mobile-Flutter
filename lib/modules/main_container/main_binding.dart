@@ -7,7 +7,7 @@ import 'package:frontend_mobile_flutter/modules/participant/home/home_controller
 import 'package:frontend_mobile_flutter/modules/participant/profile/profile_controller.dart';
 import 'package:get/get.dart';
 
-import '../../data/network/services/followed_services.dart';
+import '../../data/network/services/activity_service.dart';
 import '../participant/activity/activity_controller.dart';
 
 class MainBinding extends Bindings {
@@ -20,7 +20,7 @@ class MainBinding extends Bindings {
     Get.lazyPut<AuthController>(() => AuthController());
     Get.lazyPut<ProfileService>(() => ProfileService(), fenix: true);
     Get.lazyPut<ProfileController>(() => ProfileController());
-    Get.lazyPut<FollowedServices>(()=> FollowedServices(), fenix: true);
+    Get.lazyPut<ActivityService>(()=> ActivityService(), fenix: true);
     Get.lazyPut<ActivityController>(() => ActivityController());
 
   }

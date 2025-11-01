@@ -6,7 +6,9 @@ import 'package:frontend_mobile_flutter/data/network/endpoints.dart';
 import 'package:frontend_mobile_flutter/data/models/event/followed_event.dart';
 import 'package:frontend_mobile_flutter/data/models/event/presence.dart';
 
-class FollowedServices extends GetxService {
+import '../../models/event/scan_response.dart';
+
+class ActivityService extends GetxService {
   final Dio _client = ApiClient.dio;
 
   /// GET daftar event yg diikuti
@@ -26,18 +28,22 @@ class FollowedServices extends GetxService {
     }
   }
 
-  /// POST presensi -> payload Presence model
-  Future<Map<String, dynamic>> sendPresence(Presence data) async {
+  Future<ScanResponse> sendPresence(Presence data) async {
     try {
       final Response res = await _client.post(
         Endpoints.presence,
         data: data.toJson(),
       );
-      return res.data as Map<String, dynamic>;
+      return ScanResponse.fromJson(res.data as Map<String, dynamic>);
     } on DioException catch (e) {
-      throw Exception(_msg(e, 'Gagal mengirim presensi'));
+      // ambil message dari server bila ada, tapi jangan throw agar UI 1 alur
+      final body = e.response?.data;
+      final msg = (body is Map && body['message'] != null)
+          ? body['message'].toString()
+          : 'Gagal mengirim presensi';
+      return ScanResponse(status: false, message: msg);
     } catch (e) {
-      throw Exception('Terjadi kesalahan: $e');
+      return ScanResponse(status: false, message: 'Terjadi kesalahan: $e');
     }
   }
 
