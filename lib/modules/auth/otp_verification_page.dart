@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_mobile_flutter/data/models/auth/otp_resend_request.dart';
+import 'package:frontend_mobile_flutter/data/models/auth/otp_verify_request.dart';
 import 'package:get/get.dart';
 import '../../core/app_colors.dart';
 import '../../core/text_styles.dart';
@@ -9,12 +11,12 @@ import 'reset_password_page.dart';
 class OtpVerificationPage extends StatefulWidget {
   final String email;
   final bool isFromRegistration;
-  
+
   const OtpVerificationPage({
-    Key? key,
+    super.key,
     required this.email,
     this.isFromRegistration = false,
-  }) : super(key: key);
+  });
 
   @override
   State<OtpVerificationPage> createState() => _OtpVerificationPageState();
@@ -56,7 +58,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       setState(() {
         otpCode = otpCode + value;
       });
-      
+
       // Auto submit when 6 digits are entered
       if (otpCode.length == 6) {
         _autoVerifyOtp();
@@ -79,7 +81,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
 
     try {
       // Call actual API through AuthController
-      final error = await _authController.verifyOtp(
+      final error = await _authController.verifyOtp( // TODO replace with actual API call
         email: widget.email,
         otp: otpCode,
       );
@@ -101,22 +103,30 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
             duration: Duration(seconds: 3),
           );
         } else {
-          // Forgot password flow - go to reset password
-          Get.off(
-            () => ResetPasswordPage(
-              email: widget.email,
-              otp: otpCode, // Pass OTP to reset password page
-            ),
-            transition: Transition.rightToLeft,
-            duration: Duration(milliseconds: 300),
+          Get.snackbar(
+            'Gagal',
+            'Ada masalah! Silakan coba lagi',
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+            duration: Duration(seconds: 3),
           );
+
+          // // Forgot password flow - go to reset password
+          // Get.off(
+          //   () => ResetPasswordPage(
+          //     email: widget.email,
+          //     otp: otpCode, // Pass OTP to reset password page
+          //   ),
+          //   transition: Transition.rightToLeft,
+          //   duration: Duration(milliseconds: 300),
+          // );
         }
       } else {
         // Error
         setState(() {
           otpCode = ''; // Clear OTP on error
         });
-        
+
         Get.snackbar(
           'Error',
           error,
@@ -124,13 +134,13 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
           colorText: Colors.white,
         );
       }
-      
+
     } catch (e) {
       setState(() {
         isLoading = false;
         otpCode = ''; // Clear OTP on error
       });
-      
+
       Get.snackbar(
         'Error',
         'Terjadi kesalahan: $e',
@@ -147,7 +157,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       isLoading = true;
     });
 
-    final error = await _authController.resendOtp(email: widget.email);
+    final error = await _authController.resendOtp(widget.email); // TODO create api
 
     setState(() {
       isLoading = false;
@@ -209,7 +219,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(height: 40),
-                        
+
                         // Title
                         Text(
                           'Verifikasi Kode',
@@ -219,7 +229,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                           ),
                         ),
                         SizedBox(height: 30),
-                        
+
                         // Subtitle
                         Text(
                           'Konfirmasi OTP',
@@ -229,7 +239,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                           ),
                         ),
                         SizedBox(height: 12),
-                        
+
                         // Description
                         Text(
                           widget.isFromRegistration
@@ -242,7 +252,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                           ),
                         ),
                         SizedBox(height: 8),
-                        
+
                         // Email display
                         Text(
                           widget.email,
@@ -253,7 +263,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                           ),
                         ),
                         SizedBox(height: 40),
-                        
+
                         // OTP Boxes
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -270,7 +280,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                           ),
                         ),
                         SizedBox(height: 30),
-                        
+
                         // Resend OTP Button
                         TextButton(
                           onPressed: _canResend && !isLoading ? _resendOtp : null,
@@ -291,7 +301,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                     ),
                   ),
                 ),
-                
+
                 // Numeric Keyboard
                 OtpWidgets.buildNumericKeyboard(
                   onNumberTap: _onNumberTap,
@@ -299,12 +309,12 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                   buttonSize: 70,
                   spacing: 15,
                 ),
-                
+
                 SizedBox(height: 20),
               ],
             ),
           ),
-          
+
           // Loading Overlay
           if (isLoading)
             Container(

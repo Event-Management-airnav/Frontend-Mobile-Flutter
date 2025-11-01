@@ -54,48 +54,45 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Container(
-        color: Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(
-              width: 35, // TODO extract to constants
-              height: 35,
-              child: Image(
-                image: AssetImage('assets/images/appbar_logo_airnav.png'),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const SizedBox(
+            width: 35, // TODO extract to constants
+            height: 35,
+            child: Image(
+              image: AssetImage('assets/images/appbar_logo_airnav.png'),
+            ),
+          ),
+          const SizedBox(width: 10.0),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Event Management',
+                style: TextStyle(
+                  color: AppColors.primary,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(width: 10.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Event Management',
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                  ),
+              Text(
+                'AirNav Indonesia',
+                style: TextStyle(
+                  color: Colors.grey[700], // TODO use style color
+                  fontSize: 14.0,
                 ),
-                Text(
-                  'AirNav Indonesia',
-                  style: TextStyle(
-                    color: Colors.grey[700], // TODO use style color
-                    fontSize: 14.0,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
       actions: [
-        NotificationButton(
-          notificationCount: 1,
-          onPressed: () => {},
-        ), // TODO add new notification indicator
-        const SizedBox(width: 8.0),
+        // NotificationButton(
+        //   notificationCount: 1,
+        //   onPressed: () => {},
+        // ), // TODO add new notification indicator
+        // const SizedBox(width: 8.0),
         const SizedBox(
           width: 40,
           height: 40,
