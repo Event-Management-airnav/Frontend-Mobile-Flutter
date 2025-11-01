@@ -122,7 +122,7 @@ class ActivityPage extends GetView<ActivityController> {
                         eventName: name,
                         eventDate: date,
                         status: status,
-                        onTap: () => Get.toNamed(Routes.DETAIL, arguments: d.id),
+                        onTap: () => Get.toNamed(Routes.DETAIL, arguments: d.modulAcaraId),
                         onActionTap: (){
                           if (status == 'Selesai'){
                             Get.snackbar('Sertifikat', 'Fitur Unduh sertifikat akan segera hadir.');
