@@ -105,4 +105,17 @@ class Utils {
     }
     return null;
   }
+
+  // Util converter untuk format:
+  // - ISO: 2025-10-31T08:59:06.000000Z
+  // - Non-ISO: 2025-11-08 20:09:39
+  DateTime? toDateTimeFlexible(String? raw) {
+    if (raw == null || raw.isEmpty) return null;
+    final iso = DateTime.tryParse(raw);
+    if (iso != null) return iso;
+    return DateTime.tryParse(raw.replaceFirst(' ', 'T'));
+  }
+
+  String? fromDateTimeIso(DateTime? dt) => dt?.toIso8601String();
+
 }

@@ -34,10 +34,10 @@ Data _$DataFromJson(Map<String, dynamic> json) => Data(
   links: (json['links'] as List<dynamic>?)
       ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
       .toList(),
-  nextPageUrl: json['next_page_url'] as String,
+  nextPageUrl: json['next_page_url'] as String?,
   path: json['path'] as String,
   perPage: (json['per_page'] as num).toInt(),
-  prevPageUrl: json['prev_page_url'],
+  prevPageUrl: json['prev_page_url'] as String?,
   to: (json['to'] as num).toInt(),
   total: (json['total'] as num).toInt(),
 );
@@ -99,7 +99,7 @@ ModulAcara _$ModulAcaraFromJson(Map<String, dynamic> json) => ModulAcara(
   mdlNama: json['mdl_nama'] as String,
   mdlKategori: json['mdl_kategori'] as String,
   mdlTipe: json['mdl_tipe'] as String,
-  mdlLokasi: json['mdl_lokasi'] as String,
+  mdlLokasi: json['mdl_lokasi'] as String?,
   mdlAcaraMulai: json['mdl_acara_mulai'] == null
       ? null
       : DateTime.parse(json['mdl_acara_mulai'] as String),
@@ -107,10 +107,10 @@ ModulAcara _$ModulAcaraFromJson(Map<String, dynamic> json) => ModulAcara(
       ? null
       : DateTime.parse(json['mdl_acara_selesai'] as String),
   mdlStatus: json['mdl_status'] as String,
-  mdlKodeQr: json['mdl_kode_qr'] as String,
-  mdlBannerAcaraUrl: json['mdl_banner_acara_url'] as String,
-  mdlFileAcaraUrl: json['mdl_file_acara_url'] as String,
-  mdlFileRundownUrl: json['mdl_file_rundown_url'] as String,
+  mdlKodeQr: json['mdl_kode_qr'] as String?,
+  mdlBannerAcaraUrl: json['mdl_banner_acara_url'] as String?,
+  mdlFileAcaraUrl: json['mdl_file_acara_url'] as String?,
+  mdlFileRundownUrl: json['mdl_file_rundown_url'] as String?,
 );
 
 Map<String, dynamic> _$ModulAcaraToJson(ModulAcara instance) =>
@@ -132,9 +132,9 @@ Map<String, dynamic> _$ModulAcaraToJson(ModulAcara instance) =>
     };
 
 Link _$LinkFromJson(Map<String, dynamic> json) => Link(
-  url: json['url'] as String,
+  url: json['url'] as String?,
   label: json['label'] as String,
-  page: (json['page'] as num).toInt(),
+  page: (json['page'] as num?)?.toInt(),
   active: json['active'] as bool,
 );
 
