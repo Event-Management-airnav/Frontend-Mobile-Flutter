@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:frontend_mobile_flutter/data/network/services/activity_service.dart';
 import 'package:frontend_mobile_flutter/data/models/event/followed_event.dart';
 import 'package:frontend_mobile_flutter/data/models/event/presence.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../../core/utils.dart';
 import '../../../data/models/event/scan_response.dart';
@@ -11,7 +12,9 @@ import '../../../data/models/event/scan_response.dart';
 class ActivityController extends GetxController {
   final ActivityService service = Get.find<ActivityService>();
   final _utils = Utils();
+  final _storage = GetStorage();
 
+  final isLoggedIn = false.obs;
   final isLoading = false.obs;
   final error = RxnString();
   final followedEvents = <Datum>[].obs;
@@ -20,7 +23,18 @@ class ActivityController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
     loadFollowed();
+
+    _storage.listenKey('access_token', (value) {
+      checkLoginStatus();
+    });
+    checkLoginStatus();
+
+  }
+  void checkLoginStatus() {
+    final token = _storage.read('access_token');
+    isLoggedIn.value = token != null && token.isNotEmpty;
   }
 
   void selectFilter(ActivityFilter f) {
