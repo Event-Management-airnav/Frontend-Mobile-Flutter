@@ -70,7 +70,14 @@ class ActivityPage extends GetView<ActivityController> {
                         eventDate: date,
                         status: status,
                         onTap: () => Get.toNamed(Routes.DETAIL, arguments: d.id),
-                        onActionTap: () => Get.snackbar('Aksi', 'Presensi/Unduh Sertifikat'),
+                        onActionTap: (){
+                          if (status == 'Selesai'){
+                            Get.snackbar('Sertifikat', 'Fitur Unduh sertifikat akan segera hadir.');
+                          } else if (status == 'Berlangsung'){
+                            Get.snackbar('Scan QR Code', 'Scan untuk absensi kegiatan.');
+                            Get.toNamed(Routes.SCAN);
+                          }
+                        },
                       );
                     },
                   ),

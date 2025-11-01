@@ -7,6 +7,7 @@ import 'package:frontend_mobile_flutter/modules/main_container/main_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_binding.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_page.dart';
 import 'package:frontend_mobile_flutter/modules/event_detail/detail_page.dart';
+import 'package:frontend_mobile_flutter/modules/participant/activity/scan/scan_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_binding.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_page.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/profile_binding.dart';
@@ -24,6 +25,7 @@ class AppPages {
   static const INITIAL = Routes.MAIN;
 
   static final routes = [
+    GetPage(name: _Paths.SCAN, page: () => const ScanPage(),),
     GetPage(
       name: _Paths.ACTIVITY,
       page: () => const ActivityPage(),
