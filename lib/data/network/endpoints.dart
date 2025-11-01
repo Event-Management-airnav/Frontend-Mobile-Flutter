@@ -26,4 +26,6 @@ class Endpoints {
   // Event Detail
   static const eventDetail = "/api/events";
 
+  // Pendaftaran
+  static const mePendaftaran = "/api/me/pendaftaran";
 }
