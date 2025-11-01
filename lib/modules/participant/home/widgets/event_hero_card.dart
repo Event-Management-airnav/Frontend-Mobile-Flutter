@@ -4,7 +4,7 @@ class EventHeroCard extends StatelessWidget {
   final String title;
   final String location;
   final String dateTimeText;
-  final String imageAsset;
+  final String? imageUrl;
   final Color borderColor;
 
   const EventHeroCard({
@@ -12,9 +12,42 @@ class EventHeroCard extends StatelessWidget {
     required this.title,
     required this.location,
     required this.dateTimeText,
-    required this.imageAsset,
+    this.imageUrl,
     this.borderColor = const Color(0xFF005EA2),
   });
+
+  Widget _buildImage() {
+    if (imageUrl != null && imageUrl!.isNotEmpty) {
+      return Image.network(
+        imageUrl!,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return const Center(
+            child: CircularProgressIndicator(
+              color: Colors.white,
+            ),
+          );
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return Image.asset(
+            'assets/images/placeholder-img.jpg',
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          );
+        },
+      );
+    }
+    return Image.asset(
+      'assets/images/placeholder-img.jpg',
+      fit: BoxFit.cover,
+      width: double.infinity,
+      height: double.infinity,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +63,7 @@ class EventHeroCard extends StatelessWidget {
         children: [
           // Gambar full
           Positioned.fill(
-            child: Image.asset(
-              imageAsset,
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: double.infinity,
-            ),
+            child: _buildImage(),
           ),
 
           // Overlay gelap

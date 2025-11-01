@@ -24,6 +24,6 @@ class Endpoints {
   static const eventsPast = "/api/events/past";
 
   // Event Detail
-  static const eventDetail = "/api/event/{id}";
+  static const eventDetail = "/api/events";
 
 }
