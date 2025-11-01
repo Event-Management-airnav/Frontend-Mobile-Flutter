@@ -18,7 +18,7 @@ class MainView extends GetView<MainController> {
     ActivityPage(),
     ProfilePage(),
     // NotificationPage(),
-    DetailPage(),
+    // DetailPage(),
     AuthPage(),
   ];
 
@@ -39,10 +39,10 @@ class MainView extends GetView<MainController> {
     //   icon: const Icon(Icons.person),
     //   title: 'Notification',
     // ),
-    PersistentBottomNavBarItem(
-      icon: const Icon(Icons.details),
-      title: 'Detail',
-    ),
+    // PersistentBottomNavBarItem(
+    //   icon: const Icon(Icons.details),
+    //   title: 'Detail',
+    // ),
     PersistentBottomNavBarItem(icon: const Icon(Icons.login), title: 'Auth'),
   ];
 

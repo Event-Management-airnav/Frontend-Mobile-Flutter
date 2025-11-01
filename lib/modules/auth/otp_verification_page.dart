@@ -94,7 +94,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
         // Success
         if (widget.isFromRegistration) {
           // Registration flow - go back to login
-          Get.offAllNamed('/login'); // atau sesuaikan dengan route Anda
+          Get.offAllNamed('/auth'); // atau sesuaikan dengan route Anda
           Get.snackbar(
             'Berhasil',
             'Registrasi berhasil! Silakan login',
@@ -157,7 +157,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       isLoading = true;
     });
 
-    final error = await _authController.resendOtp(widget.email); // TODO create api
+    final error = await _authController.resendOtp(widget.email);
 
     setState(() {
       isLoading = false;
@@ -270,7 +270,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                           children: List.generate(
                             6,
                             (index) => Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 6),
+                              padding: EdgeInsets.symmetric(horizontal: 3),
                               child: OtpWidgets.buildOtpBox(
                                 position: index,
                                 otpCode: otpCode,

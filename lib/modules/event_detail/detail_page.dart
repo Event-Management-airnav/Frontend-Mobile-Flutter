@@ -52,19 +52,26 @@ class DetailPage extends GetView<EventDetailController> {
                     titleWidget: RichText(
                       text: TextSpan(
                         style: Theme.of(context).textTheme.titleLarge,
-                        children: [
-                          const TextSpan(text: 'Tentang Acara'),
+                        children: const [
+                          TextSpan(text: 'Tentang Acara'),
                         ],
                       ),
                     ),
+                    isRegistered: controller.isRegistered.value,
                     description: event.deskripsi,
                     primaryColor: AppColors.primary,
-                    onRegister: () {
-                      RegisterEventPopup.show(
-                        context,
-                        onSubmit: (agree, offline, online) {},
-                      );
-                    },
+                    registerButtonText: controller.isUserLoggedIn.value
+                        ? null
+                        : 'Login Untuk Mendaftar',
+                    onRegister: controller.isUserLoggedIn.value
+                        ? () {
+                            RegisterEventPopup.show(
+                              context,
+                              onSubmit: (agree, offline, online) {},
+                              eventId: controller.eventDetail.value!.id,
+                            );
+                          }
+                        : null,
                     onShareWhatsapp: () {},
                     onShareFacebook: () {},
                     onCopyLink: () {},

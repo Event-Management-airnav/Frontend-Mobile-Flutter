@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/widgets/fail_register.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/widgets/success_register.dart';
+import 'package:get/get.dart';
+
+import '../../../event_detail/event_detail_controller.dart';
 
 class RegisterEventPopup extends StatefulWidget {
   final void Function(bool agree, bool offline, bool online)? onSubmit;
+  final int eventId;
+
   final bool initialAgree;
   final bool initialOffline;
   final bool initialOnline;
@@ -11,6 +16,7 @@ class RegisterEventPopup extends StatefulWidget {
   const RegisterEventPopup({
     super.key,
     this.onSubmit,
+    required this.eventId,
     this.initialAgree = true, // sesuai mockup: sudah tercentang
     this.initialOffline = false,
     this.initialOnline = false,
@@ -19,6 +25,7 @@ class RegisterEventPopup extends StatefulWidget {
   /// Helper untuk menampilkan dialog
   static Future<void> show(
     BuildContext context, {
+    required int eventId,
     void Function(bool, bool, bool)? onSubmit,
   }) {
     return showDialog(
@@ -27,7 +34,7 @@ class RegisterEventPopup extends StatefulWidget {
       builder: (_) => Dialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         backgroundColor: Colors.transparent,
-        child: RegisterEventPopup(onSubmit: onSubmit),
+        child: RegisterEventPopup(onSubmit: onSubmit, eventId: eventId),
       ),
     );
   }
@@ -37,6 +44,7 @@ class RegisterEventPopup extends StatefulWidget {
 }
 
 class _RegisterEventPopupState extends State<RegisterEventPopup> {
+  final EventDetailController controller = Get.find<EventDetailController>();
   // Warna2 yang mirip desain
   static const _primaryBlue = Color(0xFF135CB5);
   static const _checkGreen = Color(0xFF22C55E);
@@ -123,24 +131,20 @@ class _RegisterEventPopupState extends State<RegisterEventPopup> {
                 width: double.infinity,
                 height: 48,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // SuccessRegister.show(
-                    //   context,
-                    //   title: 'SUCCESS',
-                    //   subtitle: 'Pendaftaran Berhasil',
-                    // );
-                    FailRegister.show(
-                      context,
-                      title: 'FAILED',
-                      subtitle: 'Pendaftaran Gagal',
-                    );
-                  },
-                  // onPressed: agree
-                  //     ? () {
-                  //         widget.onSubmit?.call(agree, offline, online);
-                  //         Navigator.of(context).pop();
-                  //       }
-                  //     : null,
+                  onPressed: agree
+                      ? () async {
+                          bool success = await controller.register(
+                            widget.eventId,
+                          ) != null;
+                          if (mounted) {
+                            if (success) {
+                              SuccessRegister.show(context, title: 'SUCCESS', subtitle: 'Pendaftaran Berhasil');
+                            } else {
+                              FailRegister.show(context, title: 'FAILED', subtitle: 'Pendaftaran Gagal');
+                            }
+                          }
+                        }
+                      : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _primaryBlue,
                     disabledBackgroundColor: _primaryBlue.withOpacity(.4),

@@ -2,11 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
 // Controller untuk mengelola state dan logika halaman profil.
 class ProfileController extends GetxController {
+  // -- DEPENDENCIES --
+  final _storage = GetStorage();
+
   // -- STATE REAKTIF (.obs) --
+  final RxBool isLoggedIn = false.obs;
   final RxString profileImageUrl = ''.obs; // Menyimpan URL gambar dari server.
   final Rx<File?> profileImageFile = Rx<File?>(null); // Menyimpan file gambar lokal yang aktif.
   final RxString name = ''.obs; // Menyimpan nama pengguna.
@@ -37,7 +42,21 @@ class ProfileController extends GetxController {
     emailController = TextEditingController();
     passwordController = TextEditingController();
     confirmPasswordController = TextEditingController();
-    fetchUserProfile(); // Mengambil data profil awal.
+    
+    // Listen for changes in the access_token and update login status
+    _storage.listenKey('access_token', (value) {
+      checkLoginStatus();
+    });
+    
+    checkLoginStatus();
+  }
+  
+  void checkLoginStatus() {
+    final token = _storage.read('access_token');
+    isLoggedIn.value = token != null && token.isNotEmpty;
+    if (isLoggedIn.value) {
+      fetchUserProfile(); // Mengambil data profil awal jika sudah login.
+    }
   }
 
   // Metode yang dijalankan saat controller akan dihapus.
@@ -51,7 +70,7 @@ class ProfileController extends GetxController {
     super.onClose();
   }
 
-  // --- FUNGSI-FUNGSI LOGIKA ---
+  // --- FUNGSI-FUNGSI LOGIKA --
 
   // Mengambil data profil awal (saat ini masih simulasi).
   void fetchUserProfile() {
