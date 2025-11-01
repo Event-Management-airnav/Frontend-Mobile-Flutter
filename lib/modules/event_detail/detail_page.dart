@@ -39,10 +39,8 @@ class DetailPage extends GetView<EventDetailController> {
                 EventHeroCard(
                   title: event.nama,
                   location: event.lokasi ?? 'N/A',
-                  // Combine start and end time for the display
                   dateTimeText:
                       '${event.acara?.mulai ?? ''} - ${event.acara?.selesai ?? ''}',
-                  // Use the banner from the API, with a fallback
                   imageUrl: event.banner,
                   borderColor: AppColors.primary,
                 ),
@@ -57,14 +55,18 @@ class DetailPage extends GetView<EventDetailController> {
                   isRegistered: controller.isRegistered.value,
                   description: event.deskripsi,
                   primaryColor: AppColors.primary,
-                  registerButtonText: controller.isUserLoggedIn.value
-                      ? (controller.isRegistered.value
-                            ? 'Sudah Daftar'
-                            : 'Daftar Sekarang')
-                      : 'Login Untuk Mendaftar',
+                  registerButtonText:
+                      controller.eventDetail.value?.statusAcara != "Akan Datang"
+                      ? 'Pendaftaran Ditutup'
+                      : (controller.isUserLoggedIn.value
+                            ? (controller.isRegistered.value
+                                  ? 'Sudah Daftar'
+                                  : 'Daftar Sekarang')
+                            : 'Login Untuk Mendaftar'),
                   onRegister:
                       controller.isUserLoggedIn.value &&
-                          !controller.isRegistered.value
+                          !controller.isRegistered.value &&
+                          controller.eventDetail.value?.statusAcara != "Akan Datang"
                       ? () {
                           RegisterEventPopup.show(
                             context,
@@ -126,11 +128,9 @@ class DetailPage extends GetView<EventDetailController> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                // Display additional info if it exists
                 if (event.catatan != null && event.catatan!.isNotEmpty)
                   AdditionalInfoCard(
                     title: 'Informasi Tambahan',
-                    // Split the notes by newline characters for the list
                     contentLines: event.catatan!.split('\n'),
                   ),
               ],
@@ -138,7 +138,6 @@ class DetailPage extends GetView<EventDetailController> {
           );
         }
 
-        // Fallback case, should not be reached if logic is correct
         return const Center(child: Text('No event data available.'));
       }),
     );
