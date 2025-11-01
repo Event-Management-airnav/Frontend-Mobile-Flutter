@@ -17,7 +17,8 @@ import '../api_client.dart';
 import '../endpoints.dart';
 
 class AuthService extends GetxService {
-  final storage = GetStorage();
+  // Use Get.find() to ensure the same instance is used everywhere.
+  final storage = Get.find<GetStorage>();
   final secure = const FlutterSecureStorage();
 
   Future<LoginResponse> login(LoginRequest req) async {
