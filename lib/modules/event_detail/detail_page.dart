@@ -4,9 +4,7 @@ import 'package:frontend_mobile_flutter/modules/event_detail/event_detail_contro
 import 'package:frontend_mobile_flutter/modules/participant/home/widgets/register_event_popup.dart';
 import 'package:get/get.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
-import 'package:frontend_mobile_flutter/modules/participant/home/home_controller.dart';
 
-import '../participant/home/widgets/greeting_header.dart';
 import '../participant/home/widgets/event_hero_card.dart';
 import '../participant/home/widgets/about_event_card.dart';
 import '../participant/home/widgets/section_tile_card.dart';
@@ -18,131 +16,118 @@ class DetailPage extends GetView<EventDetailController> {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xFF005EA2);
-
-
-
-    // TODO: ambil data dari controller kalau sudah ada
-    const userName = 'Akbar';
-    const registeredCount = 2;
-    const totalEvents = 6;
+    controller.loadEventDetail(Get.arguments);
 
     return Scaffold(
       appBar: TAppBar(),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GreetingHeader(
-              userName: userName,
-              subtitle:
-                  'Kamu terdaftar di $registeredCount dari $totalEvents event yang tersedia',
-            ),
-            const SizedBox(height: 16),
+      body: Obx(
+        () {
+          if (controller.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-            const EventHeroCard(
-              title: 'Smart & Precision Event Management System',
-              location: 'AirNav, Tangerang',
-              dateTimeText: '25 Oktober 2026, 09:00 - 12:00 WIB',
-              imageAsset: 'assets/images/event-image.jpg',
-              borderColor: Color(0xFF005EA2),
-            ),
+          if (controller.hasError) {
+            return Center(child: Text(controller.errorMessage.value));
+          }
 
-            const SizedBox(height: 20),
-
-            AboutEventCard(
-              titleWidget: RichText(
-                text: TextSpan(
-                  style: Theme.of(context).textTheme.titleLarge,
-                  children: [
-                    const TextSpan(text: 'Tentang '),
-                    TextSpan(
-                      text: 'Smart & Precision',
-                      style: TextStyle(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.bold,
+          if (controller.hasData) {
+            final event = controller.eventDetail.value!;
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  EventHeroCard(
+                    title: event.nama,
+                    location: event.lokasi ?? 'N/A',
+                    // Combine start and end time for the display
+                    dateTimeText:
+                        '${event.acara?.mulai ?? ''} - ${event.acara?.selesai ?? ''}',
+                    // Use the banner from the API, with a fallback
+                    imageUrl: event.banner,
+                    borderColor: AppColors.primary,
+                  ),
+                  const SizedBox(height: 20),
+                  AboutEventCard(
+                    titleWidget: RichText(
+                      text: TextSpan(
+                        style: Theme.of(context).textTheme.titleLarge,
+                        children: [
+                          const TextSpan(text: 'Tentang Acara'),
+                        ],
                       ),
                     ),
-                    const TextSpan(text: '\nEvent Management'),
-                  ],
-                ),
+                    description: event.deskripsi,
+                    primaryColor: AppColors.primary,
+                    onRegister: () {
+                      RegisterEventPopup.show(
+                        context,
+                        onSubmit: (agree, offline, online) {},
+                      );
+                    },
+                    onShareWhatsapp: () {},
+                    onShareFacebook: () {},
+                    onCopyLink: () {},
+                  ),
+                  const SizedBox(height: 16),
+                  SectionTileCard(
+                    leadingIcon: Icons.description_outlined,
+                    iconColor: AppColors.primary,
+                    title: 'Susunan Acara',
+                    trailing: TextButton(
+                      onPressed: () {},
+                      child: const Text('Lihat Detail'),
+                    ),
+                    onTap: () {},
+                  ),
+                  const SizedBox(height: 10),
+                  SectionTileCard(
+                    leadingIcon: Icons.menu_book_outlined,
+                    iconColor: AppColors.primary,
+                    title: 'Modul Acara',
+                    trailing: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.download_rounded),
+                      color: AppColors.primary,
+                    ),
+                    onTap: () {},
+                  ),
+                  const SizedBox(height: 16),
+                  InfoListCard(
+                    title: 'Informasi Acara',
+                    items: [
+                      InfoItem(
+                          label: 'Alamat', value: event.lokasi ?? 'N/A'),
+                      InfoItem(
+                        label: 'Pendaftaran',
+                        value:
+                            '${event.pendaftaran?.mulai ?? ''} - ${event.pendaftaran?.selesai ?? ''}',
+                      ),
+                      InfoItem(
+                          label: 'Jam Acara',
+                          value:
+                              '${event.acara?.mulaiRaw ?? ''} - ${event.acara?.selesaiRaw ?? ''}'),
+                      InfoItem(
+                          label: 'Tanggal Acara',
+                          value: event.acara?.mulai ?? ''),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  // Display additional info if it exists
+                  if (event.catatan != null && event.catatan!.isNotEmpty)
+                    AdditionalInfoCard(
+                      title: 'Informasi Tambahan',
+                      // Split the notes by newline characters for the list
+                      contentLines: event.catatan!.split('\n'),
+                    ),
+                ],
               ),
-              description:
-                  'AirNav Event Management is a smart and integrated system designed to ensure efficiency, precision, and professionalism in every event. With advanced technology and an intuitive interface, it simplifies scheduling, participant management, and progress monitoring.',
-              primaryColor: primaryColor,
-              onRegister: () {
-                // TODO: aksi daftar
-                RegisterEventPopup.show(
-                  context,
-                  onSubmit: (agree, offline, online) {},
-                );
-              },
-              onShareWhatsapp: () {},
-              onShareFacebook: () {},
-              onCopyLink: () {},
-            ),
+            );
+          }
 
-            const SizedBox(height: 16),
-
-            SectionTileCard(
-              leadingIcon: Icons.description_outlined,
-              iconColor: primaryColor,
-              title: 'Susunan Acara',
-              trailing: TextButton(
-                onPressed: () {
-                  // TODO: buka detail susunan
-                },
-                child: const Text('Lihat Detail'),
-              ),
-              onTap: () {
-                // TODO: optional tap
-              },
-            ),
-
-            const SizedBox(height: 10),
-
-            SectionTileCard(
-              leadingIcon: Icons.menu_book_outlined,
-              iconColor: primaryColor,
-              title: 'Modul Acara',
-              trailing: IconButton(
-                onPressed: () {
-                  // TODO: download modul
-                },
-                icon: const Icon(Icons.download_rounded),
-                color: primaryColor,
-              ),
-              onTap: () {},
-            ),
-
-            const SizedBox(height: 16),
-
-            const InfoListCard(
-              title: 'Informasi Acara',
-              items: [
-                InfoItem(label: 'Alamat', value: 'Airnav, Tangerang'),
-                InfoItem(
-                  label: 'Pendaftaran',
-                  value: '11 Okt 2026 - 20 Okt 2026',
-                ),
-                InfoItem(label: 'Jam Acara', value: '09.00 - 12.00 WIB'),
-                InfoItem(label: 'Tanggal Acara', value: '25 Oktober 2026'),
-              ],
-            ),
-
-            const SizedBox(height: 16),
-
-            const AdditionalInfoCard(
-              title: 'Informasi Tambahan',
-              contentLines: [
-                'Dress Code :',
-                'Baju warna putih',
-                'Celana/Rok berwarna hitam',
-              ],
-            ),
-          ],
-        ),
+          // Fallback case, should not be reached if logic is correct
+          return const Center(child: Text('No event data available.'));
+        },
       ),
     );
   }
