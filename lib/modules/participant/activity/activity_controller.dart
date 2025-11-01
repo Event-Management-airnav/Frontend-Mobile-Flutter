@@ -91,7 +91,6 @@ class ActivityController extends GetxController {
     }
   }
 
-  // ===== Helpers untuk UI (pakai Utils) =====
 
   /// Nama event atau '-'
   String eventNameOf(Datum d) => d.modulAcara?.mdlNama ?? '-';
@@ -101,12 +100,6 @@ class ActivityController extends GetxController {
   DateTime? eventDateOf(Datum d) {
     final mulai = d.modulAcara?.mdlAcaraMulai; // bisa DateTime? (model baru) atau null
     if (mulai is DateTime) return mulai;
-    if (mulai != null) {
-      // jika suatu saat tipe berubah jadi String
-      final parsed = _utils.toDateTimeFlexible(mulai.toString());
-      if (parsed != null) return parsed;
-    }
-
     final daftar = d.waktuDaftar;
     if (daftar is DateTime) return daftar;
     if (daftar != null) {
