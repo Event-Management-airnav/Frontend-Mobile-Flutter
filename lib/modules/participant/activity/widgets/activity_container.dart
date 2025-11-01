@@ -24,16 +24,10 @@ class ActivityContainer extends StatelessWidget {
     const headerBlue = Color(0xFFDDF3FF);
     const darkBlue = Color(0xFF10498D);
 
-    final Color statusBg = _isSelesai
-        ? const Color(0xFFEFFFF9) // hijau lembut
-        : const Color(0xFFFFF6E0); // kuning lembut
-    final Color statusText = _isSelesai
-        ? const Color(0xFF049E67) // hijau teks
-        : const Color(0xFFD79A00); // kuning teks
-    final Color dotColor =
-        _isSelesai ? const Color(0xFF02C26A) : const Color(0xFF9AA3AF);
-    final Color buttonBg =
-        _isSelesai ? const Color(0xFF175FA4) : const Color(0xFFD1D5DB);
+    final Color statusBg = _isSelesai ? const Color(0xFFEFFFF9) : const Color(0xFFFFF6E0);
+    final Color statusText = _isSelesai ? const Color(0xFF049E67) : const Color(0xFFD79A00);
+    final Color dotColor = _isSelesai ? const Color(0xFF02C26A) : const Color(0xFF9AA3AF);
+    final Color buttonBg = _isSelesai ? const Color(0xFF175FA4) : const Color(0xFFD1D5DB);
     final Color buttonFg = _isSelesai ? Colors.white : Colors.black;
 
     return Padding(
@@ -54,14 +48,15 @@ class ActivityContainer extends StatelessWidget {
               children: [
                 // ===== Header biru =====
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   decoration: BoxDecoration(
                     color: headerBlue,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start, // penting agar date tetap di pojok saat title tinggi
                     children: [
+                      // Judul event: multi-line
                       Expanded(
                         child: Text(
                           eventName,
@@ -70,11 +65,18 @@ class ActivityContainer extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                             color: darkBlue,
                           ),
-                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          // `maxLines: null` = tanpa batas baris (boleh tinggi)
+                          // Bisa juga batasi misal 3 baris: maxLines: 3, overflow: TextOverflow.ellipsis,
+                          // tapi permintaanmu ingin melebar ke bawah, jadi biar null.
+                          maxLines: null,
                         ),
                       ),
+                      const SizedBox(width: 8),
+                      // Tanggal di kanan, tetap satu baris
                       Text(
                         eventDate,
+                        textAlign: TextAlign.right,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -84,7 +86,9 @@ class ActivityContainer extends StatelessWidget {
                     ],
                   ),
                 ),
+
                 const SizedBox(height: 14),
+
                 // ===== Bawah =====
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,10 +102,10 @@ class ActivityContainer extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
+
                     // chip status
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 6),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                       decoration: BoxDecoration(
                         color: statusBg,
                         borderRadius: BorderRadius.circular(30),
@@ -114,7 +118,9 @@ class ActivityContainer extends StatelessWidget {
                         ),
                       ),
                     ),
+
                     const SizedBox(width: 12),
+
                     // bulatan hijau/abu
                     Container(
                       width: 20,
@@ -126,10 +132,7 @@ class ActivityContainer extends StatelessWidget {
                     ),
 
                     // tombol kanan
-                    SizedBox(
-                      width: 140,
-                      height: 45,
-                      child: TextButton.icon(
+                   TextButton.icon(
                         onPressed: onActionTap,
                         icon: Icon(
                           _isSelesai ? Icons.download : Icons.qr_code_scanner,
@@ -144,14 +147,13 @@ class ActivityContainer extends StatelessWidget {
                         ),
                         style: TextButton.styleFrom(
                           backgroundColor: buttonBg,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 18, vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18),
                           ),
                         ),
                       ),
-                    ),
+
                   ],
                 ),
               ],
@@ -162,3 +164,4 @@ class ActivityContainer extends StatelessWidget {
     );
   }
 }
+
