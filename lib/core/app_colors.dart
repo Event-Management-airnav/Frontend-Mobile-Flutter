@@ -41,5 +41,5 @@ class AppColors {
   // Accent
   static const Color accent = Color(0xFFFF9800);
   // Disable state
-  static const Color disabled = Color(0xFFBDBDBD);
+  static const Color disabled = Color(0xFFACACAC);
 }
