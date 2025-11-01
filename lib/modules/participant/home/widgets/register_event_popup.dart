@@ -135,7 +135,7 @@ class _RegisterEventPopupState extends State<RegisterEventPopup> {
                       ? () async {
                           bool success = await controller.register(
                             widget.eventId,
-                          ) != null;
+                          ) == null;
                           if (mounted) {
                             if (success) {
                               SuccessRegister.show(context, title: 'SUCCESS', subtitle: 'Pendaftaran Berhasil');
