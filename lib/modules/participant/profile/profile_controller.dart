@@ -4,64 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../data/models/profile/change_password_request.dart';
-import '../../../data/models/profile/profile_model.dart';
-import '../../../data/models/profile/update_profile_request.dart';
-import '../../../data/network/services/profile_service.dart';
-
-class ProfileController extends GetxController {
-  final service = Get.find<ProfileService>();
-
-  final isLoading = false.obs;
-  final profile = Rxn<ProfileModel>();
-  final message = "".obs;
-
-  @override
-  void onInit() {
-    super.onInit();
-    loadProfile();
-  }
-
-  Future<void> loadProfile() async {
-    try {
-      isLoading.value = true;
-      final res = await service.getProfile();
-
-      message.value = res.message;
-      if (res.success && res.data != null) {
-        profile.value = res.data!;
-      }
-
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  Future<void> updateProfile(UpdateProfileRequest req) async {
-    try {
-      isLoading.value = true;
-      final res = await service.updateProfile(req);
-
-      message.value = res.message;
-      if (res.success && res.data != null) {
-        profile.value = res.data!;
-      }
-
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  Future<void> changePassword(ChangePasswordRequest req) async {
-    try {
-      isLoading.value = true;
-      final res = await service.changePassword(req);
-
-      message.value = res.message;
-
-    } finally {
-      isLoading.value = false;
-    }
 // Controller untuk mengelola state dan logika halaman profil.
 class ProfileController extends GetxController {
   // -- STATE REAKTIF (.obs) --
@@ -72,7 +14,7 @@ class ProfileController extends GetxController {
   final RxString email = ''.obs; // Menyimpan email pengguna.
 
   // State untuk pratinjau gambar di dialog.
-  final Rx<File?> selectedImageFile = Rx<File?>(null); 
+  final Rx<File?> selectedImageFile = Rx<File?>(null);
 
   // State untuk visibilitas password di dialog.
   final RxBool isPasswordObscured1 = true.obs;
@@ -151,7 +93,7 @@ class ProfileController extends GetxController {
   void updateProfile() {
     if (selectedImageFile.value != null) {
       profileImageFile.value = selectedImageFile.value;
-      profileImageUrl.value = ''; 
+      profileImageUrl.value = '';
       print('API UPDATE PROFILE: Mengunggah gambar baru: ${selectedImageFile.value!.path}');
     }
 

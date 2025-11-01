@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_mobile_flutter/core/app_colors.dart';
+import 'package:frontend_mobile_flutter/modules/event_detail/event_detail_controller.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/widgets/register_event_popup.dart';
 import 'package:get/get.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_controller.dart';
 
-import 'widgets/greeting_header.dart';
-import 'widgets/event_hero_card.dart';
-import 'widgets/about_event_card.dart';
-import 'widgets/section_tile_card.dart';
-import 'widgets/info_list_card.dart';
-import 'widgets/additional_info_card.dart';
+import '../participant/home/widgets/greeting_header.dart';
+import '../participant/home/widgets/event_hero_card.dart';
+import '../participant/home/widgets/about_event_card.dart';
+import '../participant/home/widgets/section_tile_card.dart';
+import '../participant/home/widgets/info_list_card.dart';
+import '../participant/home/widgets/additional_info_card.dart';
 
-class DetailPage extends GetView<HomeController> {
+class DetailPage extends GetView<EventDetailController> {
   const DetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     const primaryColor = Color(0xFF005EA2);
+
+
 
     // TODO: ambil data dari controller kalau sudah ada
     const userName = 'Akbar';
