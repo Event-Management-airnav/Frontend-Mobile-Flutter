@@ -3,15 +3,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AboutEventCard extends StatelessWidget {
   final Widget titleWidget;
+  final bool isRegistered;
   final String description;
-  final VoidCallback onRegister;
+  final VoidCallback? onRegister;
   final VoidCallback onShareWhatsapp;
   final VoidCallback onShareFacebook;
   final VoidCallback onCopyLink;
   final Color primaryColor;
+  final Color secondaryColor;
+  final String? registerButtonText;
 
   const AboutEventCard({
     super.key,
+    required this.isRegistered,
     required this.titleWidget,
     required this.description,
     required this.onRegister,
@@ -19,6 +23,8 @@ class AboutEventCard extends StatelessWidget {
     required this.onShareFacebook,
     required this.onCopyLink,
     this.primaryColor = const Color(0xFF005EA2),
+    this.secondaryColor = const Color(0xff075f47),
+    this.registerButtonText,
   });
 
   @override
@@ -47,15 +53,15 @@ class AboutEventCard extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: onRegister,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: primaryColor,
+                  backgroundColor: isRegistered ? secondaryColor : primaryColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
-                child: const Text(
-                  'Daftar Sekarang',
-                  style: TextStyle(fontSize: 15, color: Colors.white),
+                child: Text(
+                  registerButtonText ?? (isRegistered ? 'Sudah Daftar' : 'Daftar Sekarang'),
+                  style: const TextStyle(fontSize: 15, color: Colors.white),
                 ),
               ),
             ),
