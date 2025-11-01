@@ -23,7 +23,7 @@ class PendaftaranService extends GetxService {
 
   Future<List<MyRegistration>> fetchMyEvents() async {
     try {
-      final resp = await _dio.get(Endpoints.mePendaftaran);
+      final resp = await _dio.get(Endpoints.followedEvents);
 
       final list = (resp.data["data"]["data"] as List<dynamic>)
           .map((e) => MyRegistration.fromJson(e))
