@@ -91,7 +91,7 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
         // NotificationButton(
         //   notificationCount: 1,
         //   onPressed: () => {},
-        // ), // TODO add new notification indicator
+        // ),
         // const SizedBox(width: 8.0),
         const SizedBox(
           width: 40,
