@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 import 'package:frontend_mobile_flutter/data/models/event/presence.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_controller.dart';
@@ -24,12 +25,36 @@ class _ScanPageState extends State<ScanPage> {
   );
 
   bool _handled = false;
+
+  // State hasil
+  bool? _lastOk;                 // true/false/null
+  String? _feedbackTitle;        // "Berhasil Absen" / "Sudah Absen" / "Gagal Absen" / dll
+  String? _feedbackSubtitle;     // pesan dari API
+
+  // Payload terakhir untuk ditampilkan sebagai QR di kotak
   String? _lastCode;
 
   @override
   void dispose() {
     _scanner.dispose();
     super.dispose();
+  }
+
+  String _titleFrom(bool ok, String message) {
+    final m = message.toLowerCase();
+    if (!ok && m.contains('sudah')) return 'Sudah Absen';
+    if (!ok && m.contains('belum dibuka')) return 'Presensi belum dibuka';
+    return ok ? 'Berhasil Absen' : 'Gagal Absen';
+  }
+
+  Color _titleColor(bool? ok) {
+    if (ok == null) return Colors.white;
+    return ok ? const Color(0xFF049E67) : const Color(0xFFB42318);
+  }
+
+  Color _panelBg(bool? ok) {
+    if (ok == null) return Colors.white24;
+    return ok ? const Color(0xFFEFFFF9) : const Color(0xFFFFF1F0);
   }
 
   Future<void> _onDetect(BarcodeCapture capture) async {
@@ -40,7 +65,7 @@ class _ScanPageState extends State<ScanPage> {
 
     setState(() {
       _handled = true;
-      _lastCode = code;
+      _lastCode = code; // simpan payload untuk dirender sebagai QR
     });
     await _scanner.stop();
 
@@ -52,6 +77,12 @@ class _ScanPageState extends State<ScanPage> {
       final msg = res.message.isNotEmpty
           ? res.message
           : (ok ? 'Presensi berhasil' : 'Presensi gagal');
+
+      setState(() {
+        _lastOk = ok;
+        _feedbackTitle = _titleFrom(ok, msg);
+        _feedbackSubtitle = msg;
+      });
 
       Get.snackbar(
         'Presensi',
@@ -68,6 +99,12 @@ class _ScanPageState extends State<ScanPage> {
         });
       }
     } catch (e) {
+      setState(() {
+        _lastOk = false;
+        _feedbackTitle = 'Gagal Absen';
+        _feedbackSubtitle = 'Gagal memproses: $e';
+      });
+
       Get.snackbar(
         'Presensi',
         'Gagal memproses: $e',
@@ -82,6 +119,9 @@ class _ScanPageState extends State<ScanPage> {
   Future<void> _restartScan() async {
     setState(() {
       _handled = false;
+      _lastOk = null;
+      _feedbackTitle = null;
+      _feedbackSubtitle = null;
       _lastCode = null;
     });
     try {
@@ -100,20 +140,24 @@ class _ScanPageState extends State<ScanPage> {
           IconButton(
             icon: const Icon(Icons.flash_on),
             onPressed: () => _scanner.toggleTorch(),
+            tooltip: 'Senter',
           ),
           IconButton(
             icon: const Icon(Icons.cameraswitch),
             onPressed: () => _scanner.switchCamera(),
+            tooltip: 'Ganti kamera',
           ),
         ],
       ),
       body: Stack(
         children: [
+          // Preview kamera
           MobileScanner(
             controller: _scanner,
             onDetect: _onDetect,
           ),
 
+          // Judul di atas kotak
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
@@ -143,46 +187,89 @@ class _ScanPageState extends State<ScanPage> {
             ),
           ),
 
+          // Kotak target + (preview QR dari payload) + panel hasil + tombol ulang
           Align(
             alignment: Alignment.center,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
+                // Kotak target dengan scrim tipis & corner guides
+                SizedBox(
                   width: 260,
                   height: 260,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width: 2),
-                    borderRadius: BorderRadius.circular(12),
+                  child: Stack(
+                    children: [
+                      // scrim tipis agar kotak terlihat di atas preview kamera
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.12),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: const Color(0xFF0E3977),
+                            width: 2,
+                          ),
+                        ),
+                      ),
+
+                      // Jika sudah kebaca, render QR dari payload di tengah kotak
+                      if (_lastCode != null)
+                        Center(
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white, // supaya kontras
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: QrImageView(
+                              data: _lastCode!,
+                              size: 200,
+                              gapless: true,
+                            ),
+                          ),
+                        ),
+
+                      // corner guides
+                      _CornerGuide.topLeft(),
+                      _CornerGuide.topRight(),
+                      _CornerGuide.bottomLeft(),
+                      _CornerGuide.bottomRight(),
+                    ],
                   ),
                 ),
 
-                if (_lastCode != null) ...[
+                // Panel hasil (muncul hanya setelah ada respons)
+                if (_feedbackTitle != null) ...[
                   const SizedBox(height: 18),
-                  const Text(
-                    "QR Code terbaca:",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
                   Container(
-                    padding: const EdgeInsets.all(10),
+                    width: 260,
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                     decoration: BoxDecoration(
-                      color: Colors.white24,
-                      borderRadius: BorderRadius.circular(10),
+                      color: _panelBg(_lastOk),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Text(
-                      _lastCode!,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    child: Column(
+                      children: [
+                        Text(
+                          _feedbackTitle!,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                            color: _titleColor(_lastOk),
+                          ),
+                        ),
+                        if (_feedbackSubtitle != null && _feedbackSubtitle!.isNotEmpty) ...[
+                          const SizedBox(height: 6),
+                          Text(
+                            _feedbackSubtitle!,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                              color: _titleColor(_lastOk),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ),
                 ],
@@ -217,3 +304,61 @@ class _ScanPageState extends State<ScanPage> {
     );
   }
 }
+
+/// Widget helper untuk garis sudut kotak
+class _CornerGuide extends StatelessWidget {
+  final Alignment alignment;
+  const _CornerGuide._(this.alignment);
+
+  factory _CornerGuide.topLeft() => const _CornerGuide._(Alignment.topLeft);
+  factory _CornerGuide.topRight() => const _CornerGuide._(Alignment.topRight);
+  factory _CornerGuide.bottomLeft() => const _CornerGuide._(Alignment.bottomLeft);
+  factory _CornerGuide.bottomRight() => const _CornerGuide._(Alignment.bottomRight);
+
+  @override
+  Widget build(BuildContext context) {
+    const guideLen = 26.0;
+    const guideThick = 4.0;
+    const guideColor = Color(0xFF0E3977);
+
+    return Align(
+      alignment: alignment,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: SizedBox(
+          width: guideLen,
+          height: guideLen,
+          child: Stack(
+            children: [
+              // garis horizontal
+              Positioned(
+                left: 0,
+                right: alignment == Alignment.topLeft || alignment == Alignment.bottomLeft ? null : 0,
+                top: alignment == Alignment.topLeft || alignment == Alignment.topRight ? 0 : null,
+                bottom: alignment == Alignment.bottomLeft || alignment == Alignment.bottomRight ? 0 : null,
+                child: Container(
+                  width: guideLen,
+                  height: guideThick,
+                  color: guideColor,
+                ),
+              ),
+              // garis vertikal
+              Positioned(
+                top: 0,
+                bottom: alignment == Alignment.topLeft || alignment == Alignment.topRight ? null : 0,
+                left: alignment == Alignment.topLeft || alignment == Alignment.bottomLeft ? 0 : null,
+                right: alignment == Alignment.topRight || alignment == Alignment.bottomRight ? 0 : null,
+                child: Container(
+                  width: guideThick,
+                  height: guideLen,
+                  color: guideColor,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
