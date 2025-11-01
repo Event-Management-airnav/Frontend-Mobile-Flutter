@@ -15,7 +15,11 @@ class ScanPage extends StatefulWidget {
 
 class _ScanPageState extends State<ScanPage> {
   final ActivityController c = Get.find<ActivityController>();
-  final MobileScannerController _scanner = MobileScannerController();
+  final MobileScannerController _scanner = MobileScannerController(
+    facing: CameraFacing.back,
+    formats: [BarcodeFormat.qrCode],
+    detectionSpeed: DetectionSpeed.noDuplicates
+  );
   bool _handled = false;
 
   @override
