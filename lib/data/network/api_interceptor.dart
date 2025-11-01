@@ -8,7 +8,8 @@ class ApiInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    final storage = GetStorage(); // Get storage instance here
+    // Use Get.find() to ensure the same instance is used everywhere.
+    final storage = Get.find<GetStorage>();
     final token = storage.read("access_token");
 
     if (token != null && token.isNotEmpty) {
