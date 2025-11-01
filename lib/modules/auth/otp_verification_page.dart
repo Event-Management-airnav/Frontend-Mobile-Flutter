@@ -157,7 +157,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       isLoading = true;
     });
 
-    final error = await _authController.resendOtp(widget.email); // TODO create api
+    final error = await _authController.resendOtp(widget.email);
 
     setState(() {
       isLoading = false;

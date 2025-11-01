@@ -19,6 +19,8 @@ class AuthPage extends GetView<AuthController> {
 
     Future<String?> _onLogin(LoginData data) async {
       final result = await controller.login(data.name, data.password);
+
+      Get.offAllNamed('/main');
       if (result == null) {
         SuccessRegister.show(context, title: 'LOGIN SUCCESS', subtitle: 'Selamat Datang Kembali!');
       } else {
@@ -273,7 +275,7 @@ class AuthPage extends GetView<AuthController> {
                         },
 
                         scrollable: false,
-                        hideForgotPasswordButton: false,
+                        hideForgotPasswordButton: true, // TODO implement flow forgot password
                         hideProvidersTitle: true,
                       ),
                     ),
