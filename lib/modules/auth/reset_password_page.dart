@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/app_colors.dart';
 import '../../core/text_styles.dart';
+import 'auth_controller.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   final String email;
+  final String otp; // Add this parameter
   
   const ResetPasswordPage({
     Key? key,
     required this.email,
+    required this.otp, // Add this parameter
   }) : super(key: key);
 
   @override
@@ -16,6 +19,7 @@ class ResetPasswordPage extends StatefulWidget {
 }
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
+  final AuthController _authController = Get.find<AuthController>();
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -38,38 +42,48 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       });
 
       try {
-        // TODO: Replace with your actual API call
-        // Example:
-        // await controller.resetPassword(
-        //   email: widget.email,
-        //   newPassword: _passwordController.text,
-        // );
-        
-        // Simulate API call
-        await Future.delayed(Duration(seconds: 2));
-
-        Get.snackbar(
-          'Success',
-          'Password berhasil diubah',
-          backgroundColor: AppColors.primary,
-          colorText: Colors.white,
+        // Call actual API through AuthController
+        final error = await _authController.resetPassword(
+          email: widget.email,
+          otp: widget.otp,
+          newPassword: _passwordController.text.trim(),
         );
 
-        // Navigate back to login
-        Get.back();
-        Get.back();
-        
-      } catch (e) {
-        Get.snackbar(
-          'Error',
-          'Gagal mengubah password',
-          backgroundColor: AppColors.error,
-          colorText: Colors.white,
-        );
-      } finally {
         setState(() {
           _isLoading = false;
         });
+
+        if (error == null) {
+          // Success
+          Get.offAllNamed('/login'); // atau sesuaikan dengan route Anda
+          Get.snackbar(
+            'Berhasil',
+            'Password berhasil diubah! Silakan login dengan password baru.',
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+            duration: Duration(seconds: 3),
+          );
+        } else {
+          // Error
+          Get.snackbar(
+            'Error',
+            error,
+            backgroundColor: AppColors.error,
+            colorText: Colors.white,
+          );
+        }
+        
+      } catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
+        
+        Get.snackbar(
+          'Error',
+          'Terjadi kesalahan: $e',
+          backgroundColor: AppColors.error,
+          colorText: Colors.white,
+        );
       }
     }
   }
@@ -107,7 +121,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               children: [
                 SizedBox(height: 20),
                 
-                // Title
                 Text(
                   'Masukkan Kata Sandi Baru',
                   style: TextStyles.headerLarge.copyWith(
@@ -117,7 +130,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 ),
                 SizedBox(height: 12),
                 
-                // Description
                 Text(
                   'Buat kata sandi baru. Demi keamanan Anda, hindari penggunaan kata sandi lama',
                   style: TextStyles.bodyMedium.copyWith(
@@ -127,7 +139,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 ),
                 SizedBox(height: 40),
                 
-                // Label Kata Sandi
                 Text(
                   'Kata Sandi',
                   style: TextStyles.bodyMedium.copyWith(
@@ -137,7 +148,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 ),
                 SizedBox(height: 8),
                 
-                // Password Input
                 TextFormField(
                   controller: _passwordController,
                   obscureText: !_isPasswordVisible,
@@ -197,7 +207,15 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 ),
                 SizedBox(height: 24),
                 
-                // Confirm Password Input
+                Text(
+                  'Konfirmasi Kata Sandi',
+                  style: TextStyles.bodyMedium.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                SizedBox(height: 8),
+                
                 TextFormField(
                   controller: _confirmPasswordController,
                   obscureText: !_isConfirmPasswordVisible,

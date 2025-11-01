@@ -31,11 +31,7 @@ class LoginHeaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    
-    // Header height
     final headerHeight = screenHeight * 0.40;
-    
-    // Font sizes
     final titleFontSize = screenWidth * 0.105;
     final descFontSize = screenWidth * 0.032;
     final logoFontSize = screenWidth * 0.022;
@@ -53,7 +49,6 @@ class LoginHeaderWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
           child: Stack(
             children: [
-              // Background Image - Full Cover
               if (imagePath != null)
                 Positioned.fill(
                   child: Image.asset(
