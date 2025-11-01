@@ -133,14 +133,14 @@ class _RegisterEventPopupState extends State<RegisterEventPopup> {
                 child: ElevatedButton(
                   onPressed: agree
                       ? () async {
-                          bool success = await controller.register(
+                          final errorMessage = await controller.register(
                             widget.eventId,
-                          ) != null;
+                          );
                           if (mounted) {
-                            if (success) {
+                            if (errorMessage == null) {
                               SuccessRegister.show(context, title: 'SUCCESS', subtitle: 'Pendaftaran Berhasil');
                             } else {
-                              FailRegister.show(context, title: 'FAILED', subtitle: 'Pendaftaran Gagal');
+                              FailRegister.show(context, title: 'FAILED', subtitle: errorMessage);
                             }
                           }
                         }
