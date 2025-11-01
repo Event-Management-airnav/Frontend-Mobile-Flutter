@@ -37,7 +37,7 @@ class AuthPage extends GetView<AuthController> {
       }
 
       try {
-        await controller.register(
+        final error = await controller.register(
           name: name,
           username: username,
           email: data.name!,
@@ -46,6 +46,14 @@ class AuthPage extends GetView<AuthController> {
           confirmPassword: data.password!,
           statusKaryawan: 0,
         );
+
+        if (error != null) {
+          FailRegister.show(
+            context,
+            title: 'REGISTER FAILED',
+            subtitle: error,
+          );
+        }
 
         SuccessRegister.show(
           context,
@@ -69,7 +77,6 @@ class AuthPage extends GetView<AuthController> {
           title: 'REGISTER FAILED',
           subtitle: e.toString(),
         );
-        return e.toString();
       }
     }
 
