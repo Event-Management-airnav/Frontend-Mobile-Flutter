@@ -3,14 +3,17 @@ import 'package:get/get.dart';
 import '../../core/app_colors.dart';
 import '../../core/text_styles.dart';
 import '../../core/widgets/otp_widgets.dart';
+import 'auth_controller.dart';
 import 'reset_password_page.dart';
 
 class OtpVerificationPage extends StatefulWidget {
   final String email;
+  final bool isFromRegistration;
   
   const OtpVerificationPage({
     Key? key,
     required this.email,
+    this.isFromRegistration = false,
   }) : super(key: key);
 
   @override
@@ -18,8 +21,35 @@ class OtpVerificationPage extends StatefulWidget {
 }
 
 class _OtpVerificationPageState extends State<OtpVerificationPage> {
+  final AuthController _authController = Get.find<AuthController>();
   String otpCode = '';
   bool isLoading = false;
+  int _resendCountdown = 60;
+  bool _canResend = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _startResendTimer();
+  }
+
+  void _startResendTimer() {
+    _canResend = false;
+    _resendCountdown = 60;
+
+    Future.doWhile(() async {
+      await Future.delayed(const Duration(seconds: 1));
+      if (mounted) {
+        setState(() {
+          _resendCountdown--;
+          if (_resendCountdown <= 0) {
+            _canResend = true;
+          }
+        });
+      }
+      return _resendCountdown > 0 && mounted;
+    });
+  }
 
   void _onNumberTap(String value) {
     if (otpCode.length < 6) {
@@ -48,22 +78,52 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     });
 
     try {
-      // TODO: Replace with your actual API call
-      // Example:
-      // final response = await controller.verifyOtp(
-      //   email: widget.email,
-      //   code: otpCode,
-      // );
-      
-      // Simulate API call
-      await Future.delayed(Duration(seconds: 1));
-
-      // Navigate to Reset Password Page
-      Get.off(
-        () => ResetPasswordPage(email: widget.email),
-        transition: Transition.rightToLeft,
-        duration: Duration(milliseconds: 300),
+      // Call actual API through AuthController
+      final error = await _authController.verifyOtp(
+        email: widget.email,
+        otp: otpCode,
       );
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if (error == null) {
+        // Success
+        if (widget.isFromRegistration) {
+          // Registration flow - go back to login
+          Get.offAllNamed('/login'); // atau sesuaikan dengan route Anda
+          Get.snackbar(
+            'Berhasil',
+            'Registrasi berhasil! Silakan login',
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+            duration: Duration(seconds: 3),
+          );
+        } else {
+          // Forgot password flow - go to reset password
+          Get.off(
+            () => ResetPasswordPage(
+              email: widget.email,
+              otp: otpCode, // Pass OTP to reset password page
+            ),
+            transition: Transition.rightToLeft,
+            duration: Duration(milliseconds: 300),
+          );
+        }
+      } else {
+        // Error
+        setState(() {
+          otpCode = ''; // Clear OTP on error
+        });
+        
+        Get.snackbar(
+          'Error',
+          error,
+          backgroundColor: AppColors.error,
+          colorText: Colors.white,
+        );
+      }
       
     } catch (e) {
       setState(() {
@@ -73,7 +133,38 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       
       Get.snackbar(
         'Error',
-        'Kode OTP tidak valid',
+        'Terjadi kesalahan: $e',
+        backgroundColor: AppColors.error,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  Future<void> _resendOtp() async {
+    if (!_canResend || isLoading) return;
+
+    setState(() {
+      isLoading = true;
+    });
+
+    final error = await _authController.resendOtp(email: widget.email);
+
+    setState(() {
+      isLoading = false;
+    });
+
+    if (error == null) {
+      Get.snackbar(
+        'Berhasil',
+        'Kode OTP telah dikirim ulang ke email Anda',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+      _startResendTimer();
+    } else {
+      Get.snackbar(
+        'Error',
+        error,
         backgroundColor: AppColors.error,
         colorText: Colors.white,
       );
@@ -141,14 +232,27 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                         
                         // Description
                         Text(
-                          'Kami telah mengirim kode ke email\nAnda. Silakan masukkan di sini',
+                          widget.isFromRegistration
+                              ? 'Kami telah mengirim kode verifikasi ke email\nAnda untuk menyelesaikan registrasi'
+                              : 'Kami telah mengirim kode ke email\nAnda. Silakan masukkan di sini',
                           textAlign: TextAlign.center,
                           style: TextStyles.bodyMedium.copyWith(
                             color: AppColors.textSecondary,
                             height: 1.5,
                           ),
                         ),
-                        SizedBox(height: 50),
+                        SizedBox(height: 8),
+                        
+                        // Email display
+                        Text(
+                          widget.email,
+                          textAlign: TextAlign.center,
+                          style: TextStyles.bodyMedium.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(height: 40),
                         
                         // OTP Boxes
                         Row(
@@ -165,7 +269,24 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 60),
+                        SizedBox(height: 30),
+                        
+                        // Resend OTP Button
+                        TextButton(
+                          onPressed: _canResend && !isLoading ? _resendOtp : null,
+                          child: Text(
+                            _canResend
+                                ? 'Kirim Ulang Kode'
+                                : 'Kirim Ulang dalam $_resendCountdown detik',
+                            style: TextStyles.bodyMedium.copyWith(
+                              color: _canResend
+                                  ? AppColors.primary
+                                  : AppColors.textSecondary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20),
                       ],
                     ),
                   ),
