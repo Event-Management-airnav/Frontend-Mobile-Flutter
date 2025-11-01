@@ -31,7 +31,8 @@ class MainView extends GetView<MainController> {
     PersistentBottomNavBarItem(
       icon: const Icon(Icons.person),
       title: 'Profile',
-    )
+    ),
+
   ];
 
   @override
