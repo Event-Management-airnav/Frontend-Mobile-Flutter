@@ -10,7 +10,9 @@ class ApiInterceptor extends Interceptor {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     // Use Get.find() to ensure the same instance is used everywhere.
     final storage = Get.find<GetStorage>();
-    final token = "92|cbOz59FWbl6Fepvm8KropaEIrKuvIs6GVJPjgdMo50c14b01";//storage.read("access_token");
+    final token = storage.read("access_token");
+    // final token = "92|cbOz59FWbl6Fepvm8KropaEIrKuvIs6GVJPjgdMo50c14b01";
+
 
     if (token != null && token.isNotEmpty) {
       options.headers["Authorization"] = "Bearer $token";
