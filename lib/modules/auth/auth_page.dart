@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
-import 'package:frontend_mobile_flutter/data/models/auth/register_request.dart';
 import 'package:frontend_mobile_flutter/modules/auth/auth_controller.dart';
 import 'package:frontend_mobile_flutter/modules/auth/otp_verification_page.dart';
+import 'package:frontend_mobile_flutter/modules/participant/home/widgets/fail_register.dart';
+import 'package:frontend_mobile_flutter/modules/participant/home/widgets/success_register.dart';
 import 'package:get/get.dart';
 import '../../core/widgets/login_header_widget.dart';
 import '../../core/app_colors.dart';
@@ -17,9 +18,13 @@ class AuthPage extends GetView<AuthController> {
     final headerHeight = screenHeight * 0.10;
 
     Future<String?> _onLogin(LoginData data) async {
-      // Get.snackbar('login', 'email: ${data.name}, password: ${data.password}');
-      // return null;
-      return controller.login(data.name, data.password);
+      final result = await controller.login(data.name, data.password);
+      if (result == null) {
+        SuccessRegister.show(context, title: 'LOGIN SUCCESS', subtitle: 'Selamat Datang Kembali!');
+      } else {
+        FailRegister.show(context, title: 'LOGIN FAILED', subtitle: result);
+      }
+      return result;
     }
 
     Future<String?> _onSignup(SignupData data) async {
@@ -31,7 +36,8 @@ class AuthPage extends GetView<AuthController> {
         return 'Nama lengkap, nomor telepon, dan nama pengguna harus diisi';
       }
 
-      await controller.register(
+      try {
+        await controller.register(
           name: name,
           username: username,
           email: data.name!,
@@ -39,19 +45,32 @@ class AuthPage extends GetView<AuthController> {
           password: data.password!,
           confirmPassword: data.password!,
           statusKaryawan: 0,
-      );
+        );
 
-      // Navigate to OTP verification for registration
-      Get.to(
-        () => OtpVerificationPage(
-          email: data.name ?? '',
-          isFromRegistration: true,
-        ),
-        transition: Transition.rightToLeft,
-        duration: Duration(milliseconds: 300),
-      );
+        SuccessRegister.show(
+          context,
+          title: 'REGISTER SUCCESS',
+          subtitle: 'Akun berhasil dibuat, silahkan cek email untuk verifikasi',
+        );
 
-      return null;
+        // Navigate to OTP verification for registration
+        Get.to(
+              () => OtpVerificationPage(
+            email: data.name ?? '',
+            isFromRegistration: true,
+          ),
+          transition: Transition.rightToLeft,
+          duration: Duration(milliseconds: 300),
+        );
+        return null;
+      } catch (e) {
+        FailRegister.show(
+          context,
+          title: 'REGISTER FAILED',
+          subtitle: e.toString(),
+        );
+        return e.toString();
+      }
     }
 
     Future<String?> _onRecoverPassword(String email) async {
