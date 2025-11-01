@@ -83,15 +83,15 @@ class _ScanPageState extends State<ScanPage> {
         _feedbackTitle = _titleFrom(ok, msg);
         _feedbackSubtitle = msg;
       });
-
-      Get.snackbar(
-        'Presensi',
-        msg,
-        backgroundColor: ok ? const Color(0xFFEFFFF9) : const Color(0xFFFFF1F0),
-        colorText: ok ? const Color(0xFF049E67) : const Color(0xFFB42318),
-        snackPosition: SnackPosition.BOTTOM,
-        duration: const Duration(seconds: 2),
-      );
+      //
+      // Get.snackbar(
+      //   'Presensi',
+      //   msg,
+      //   backgroundColor: ok ? const Color(0xFFEFFFF9) : const Color(0xFFFFF1F0),
+      //   colorText: ok ? const Color(0xFF049E67) : const Color(0xFFB42318),
+      //   snackPosition: SnackPosition.BOTTOM,
+      //   duration: const Duration(seconds: 2),
+      // );
 
       if (ok) {
         Future.delayed(const Duration(milliseconds: 300), () {
@@ -105,14 +105,14 @@ class _ScanPageState extends State<ScanPage> {
         _feedbackSubtitle = 'Gagal memproses: $e';
       });
 
-      Get.snackbar(
-        'Presensi',
-        'Gagal memproses: $e',
-        backgroundColor: const Color(0xFFFFF1F0),
-        colorText: const Color(0xFFB42318),
-        snackPosition: SnackPosition.BOTTOM,
-        duration: const Duration(seconds: 2),
-      );
+      // Get.snackbar(
+      //   'Presensi',
+      //   'Gagal memproses: $e',
+      //   backgroundColor: const Color(0xFFFFF1F0),
+      //   colorText: const Color(0xFFB42318),
+      //   snackPosition: SnackPosition.BOTTOM,
+      //   duration: const Duration(seconds: 2),
+      // );
     }
   }
 
