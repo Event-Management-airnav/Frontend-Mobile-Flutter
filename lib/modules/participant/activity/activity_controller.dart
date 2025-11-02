@@ -103,9 +103,6 @@ class ActivityController extends GetxController {
     if (mulai is DateTime) return mulai;
     final daftar = d.waktuDaftar;
     if (daftar is DateTime) return daftar;
-    if (daftar != null) {
-      return _utils.toDateTimeFlexible(daftar.toString());
-    }
     return null;
   }
 
