@@ -3,12 +3,10 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'event_detail.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class EventDetailResponse extends Equatable {
   final bool success;
   final String message;
-
-  @JsonKey(name: 'data')
   final EventDetailData data;
 
   const EventDetailResponse({
@@ -26,7 +24,7 @@ class EventDetailResponse extends Equatable {
   List<Object?> get props => [success, message, data];
 }
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class EventDetailData extends Equatable {
   final EventDetail event;
 
@@ -43,7 +41,7 @@ class EventDetailData extends Equatable {
   List<Object?> get props => [event];
 }
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class EventDetail extends Equatable {
   final int id;
   final String kode;
@@ -55,7 +53,7 @@ class EventDetail extends Equatable {
   final String? mdlKodeQr;
 
   @JsonKey(name: 'mdl_presensi_aktif')
-  final int mdlPresensiAktif;
+  final int presensiAktif;
 
   final String tipe;
 
@@ -66,12 +64,10 @@ class EventDetail extends Equatable {
   final String? latitude;
   final String? longitude;
   final int? radius;
-
   final Pendaftaran? pendaftaran;
   final Acara? acara;
   final Kapasitas? kapasitas;
-
-  final String status;
+  final String? status;
 
   @JsonKey(name: 'sertifikat_aktif')
   final int sertifikatAktif;
@@ -82,32 +78,28 @@ class EventDetail extends Equatable {
   final String? banner;
   final String? catatan;
 
-  @JsonKey(name: 'created_at')
-  final String createdAt;
-
   const EventDetail({
     required this.id,
     required this.kode,
     required this.slug,
     required this.nama,
     required this.deskripsi,
-    required this.mdlKodeQr,
-    required this.mdlPresensiAktif,
+    this.mdlKodeQr,
+    required this.presensiAktif,
     required this.tipe,
     required this.statusAcara,
-    required this.lokasi,
-    required this.latitude,
-    required this.longitude,
-    required this.radius,
-    required this.pendaftaran,
-    required this.acara,
-    required this.kapasitas,
-    required this.status,
+    this.lokasi,
+    this.latitude,
+    this.longitude,
+    this.radius,
+    this.pendaftaran,
+    this.acara,
+    this.kapasitas,
+    this.status,
     required this.sertifikatAktif,
     required this.doorprizeAktif,
-    required this.banner,
-    required this.catatan,
-    required this.createdAt,
+    this.banner,
+    this.catatan,
   });
 
   factory EventDetail.fromJson(Map<String, dynamic> json) =>
@@ -123,7 +115,7 @@ class EventDetail extends Equatable {
     nama,
     deskripsi,
     mdlKodeQr,
-    mdlPresensiAktif,
+    presensiAktif,
     tipe,
     statusAcara,
     lokasi,
@@ -138,30 +130,29 @@ class EventDetail extends Equatable {
     doorprizeAktif,
     banner,
     catatan,
-    createdAt,
   ];
 }
 
 @JsonSerializable()
 class Pendaftaran extends Equatable {
-  final String mulai;
-  final String selesai;
+  final String? mulai;
+  final String? selesai;
 
   @JsonKey(name: 'mulai_raw')
-  final String mulaiRaw;
+  final String? mulaiRaw;
 
   @JsonKey(name: 'selesai_raw')
-  final String selesaiRaw;
+  final String? selesaiRaw;
 
   @JsonKey(name: 'is_open')
-  final bool isOpen;
+  final bool? isOpen;
 
   const Pendaftaran({
-    required this.mulai,
-    required this.selesai,
-    required this.mulaiRaw,
-    required this.selesaiRaw,
-    required this.isOpen,
+    this.mulai,
+    this.selesai,
+    this.mulaiRaw,
+    this.selesaiRaw,
+    this.isOpen,
   });
 
   factory Pendaftaran.fromJson(Map<String, dynamic> json) =>
@@ -175,20 +166,20 @@ class Pendaftaran extends Equatable {
 
 @JsonSerializable()
 class Acara extends Equatable {
-  final String mulai;
-  final String selesai;
+  final String? mulai;
+  final String? selesai;
 
   @JsonKey(name: 'mulai_raw')
-  final String mulaiRaw;
+  final String? mulaiRaw;
 
   @JsonKey(name: 'selesai_raw')
-  final String selesaiRaw;
+  final String? selesaiRaw;
 
   const Acara({
-    required this.mulai,
-    required this.selesai,
-    required this.mulaiRaw,
-    required this.selesaiRaw,
+    this.mulai,
+    this.selesai,
+    this.mulaiRaw,
+    this.selesaiRaw,
   });
 
   factory Acara.fromJson(Map<String, dynamic> json) =>
@@ -206,8 +197,8 @@ class Kapasitas extends Equatable {
   final int? online;
 
   const Kapasitas({
-    required this.offline,
-    required this.online,
+    this.offline,
+    this.online,
   });
 
   factory Kapasitas.fromJson(Map<String, dynamic> json) =>

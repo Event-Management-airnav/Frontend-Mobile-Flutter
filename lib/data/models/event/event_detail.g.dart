@@ -18,7 +18,7 @@ Map<String, dynamic> _$EventDetailResponseToJson(
 ) => <String, dynamic>{
   'success': instance.success,
   'message': instance.message,
-  'data': instance.data.toJson(),
+  'data': instance.data,
 };
 
 EventDetailData _$EventDetailDataFromJson(Map<String, dynamic> json) =>
@@ -27,7 +27,7 @@ EventDetailData _$EventDetailDataFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$EventDetailDataToJson(EventDetailData instance) =>
-    <String, dynamic>{'event': instance.event.toJson()};
+    <String, dynamic>{'event': instance.event};
 
 EventDetail _$EventDetailFromJson(Map<String, dynamic> json) => EventDetail(
   id: (json['id'] as num).toInt(),
@@ -36,7 +36,7 @@ EventDetail _$EventDetailFromJson(Map<String, dynamic> json) => EventDetail(
   nama: json['nama'] as String,
   deskripsi: json['deskripsi'] as String,
   mdlKodeQr: json['mdl_kode_qr'] as String?,
-  mdlPresensiAktif: (json['mdl_presensi_aktif'] as num).toInt(),
+  presensiAktif: (json['mdl_presensi_aktif'] as num).toInt(),
   tipe: json['tipe'] as String,
   statusAcara: json['status_acara'] as String,
   lokasi: json['lokasi'] as String?,
@@ -52,12 +52,11 @@ EventDetail _$EventDetailFromJson(Map<String, dynamic> json) => EventDetail(
   kapasitas: json['kapasitas'] == null
       ? null
       : Kapasitas.fromJson(json['kapasitas'] as Map<String, dynamic>),
-  status: json['status'] as String,
+  status: json['status'] as String?,
   sertifikatAktif: (json['sertifikat_aktif'] as num).toInt(),
   doorprizeAktif: (json['doorprize_aktif'] as num).toInt(),
   banner: json['banner'] as String?,
   catatan: json['catatan'] as String?,
-  createdAt: json['created_at'] as String,
 );
 
 Map<String, dynamic> _$EventDetailToJson(EventDetail instance) =>
@@ -68,30 +67,29 @@ Map<String, dynamic> _$EventDetailToJson(EventDetail instance) =>
       'nama': instance.nama,
       'deskripsi': instance.deskripsi,
       'mdl_kode_qr': instance.mdlKodeQr,
-      'mdl_presensi_aktif': instance.mdlPresensiAktif,
+      'mdl_presensi_aktif': instance.presensiAktif,
       'tipe': instance.tipe,
       'status_acara': instance.statusAcara,
       'lokasi': instance.lokasi,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
       'radius': instance.radius,
-      'pendaftaran': instance.pendaftaran?.toJson(),
-      'acara': instance.acara?.toJson(),
-      'kapasitas': instance.kapasitas?.toJson(),
+      'pendaftaran': instance.pendaftaran,
+      'acara': instance.acara,
+      'kapasitas': instance.kapasitas,
       'status': instance.status,
       'sertifikat_aktif': instance.sertifikatAktif,
       'doorprize_aktif': instance.doorprizeAktif,
       'banner': instance.banner,
       'catatan': instance.catatan,
-      'created_at': instance.createdAt,
     };
 
 Pendaftaran _$PendaftaranFromJson(Map<String, dynamic> json) => Pendaftaran(
-  mulai: json['mulai'] as String,
-  selesai: json['selesai'] as String,
-  mulaiRaw: json['mulai_raw'] as String,
-  selesaiRaw: json['selesai_raw'] as String,
-  isOpen: json['is_open'] as bool,
+  mulai: json['mulai'] as String?,
+  selesai: json['selesai'] as String?,
+  mulaiRaw: json['mulai_raw'] as String?,
+  selesaiRaw: json['selesai_raw'] as String?,
+  isOpen: json['is_open'] as bool?,
 );
 
 Map<String, dynamic> _$PendaftaranToJson(Pendaftaran instance) =>
@@ -104,10 +102,10 @@ Map<String, dynamic> _$PendaftaranToJson(Pendaftaran instance) =>
     };
 
 Acara _$AcaraFromJson(Map<String, dynamic> json) => Acara(
-  mulai: json['mulai'] as String,
-  selesai: json['selesai'] as String,
-  mulaiRaw: json['mulai_raw'] as String,
-  selesaiRaw: json['selesai_raw'] as String,
+  mulai: json['mulai'] as String?,
+  selesai: json['selesai'] as String?,
+  mulaiRaw: json['mulai_raw'] as String?,
+  selesaiRaw: json['selesai_raw'] as String?,
 );
 
 Map<String, dynamic> _$AcaraToJson(Acara instance) => <String, dynamic>{
