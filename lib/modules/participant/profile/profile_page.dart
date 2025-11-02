@@ -23,7 +23,7 @@ class ProfilePage extends GetView<ProfileController> {
             return const Center(child: CircularProgressIndicator());
           }
           if (!controller.isLoggedIn.value) {
-            return CallToLogin();
+            return CallToLogin(page: "profile");
           }
 
           return Padding(
