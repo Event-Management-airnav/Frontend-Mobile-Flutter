@@ -1,9 +1,12 @@
-import 'package:frontend_mobile_flutter/modules/participant/profile/profile_controller.dart';
 import 'package:get/get.dart';
+
+import '../../../data/network/services/profile_service.dart';
+import 'profile_controller.dart';
 
 class ProfileBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<ProfileController>(() => ProfileController());
+    Get.lazyPut(() => ProfileService());
+    Get.lazyPut(() => ProfileController());
   }
 }

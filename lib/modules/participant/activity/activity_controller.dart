@@ -37,6 +37,7 @@ class ActivityController extends GetxController {
     isLoggedIn.value = token != null && token.isNotEmpty;
   }
 
+
   void selectFilter(ActivityFilter f) {
     if (selectedFilter.value == f) {
       selectedFilter.value = null;
