@@ -20,23 +20,24 @@ class HomePage extends GetView<HomeController> {
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
-            // const SizedBox(height: 16),
-            // TextField(
-            //   decoration: InputDecoration(
-            //     hintText: "Cari acara...",
-            //     prefixIcon: const Icon(Icons.search),
-            //     border: OutlineInputBorder(
-            //       borderRadius: BorderRadius.circular(30),
-            //       borderSide: BorderSide.none,
-            //     ),
-            //     filled: true,
-            //     fillColor: Colors.white,
-            //     contentPadding: const EdgeInsets.symmetric(
-            //       horizontal: 16,
-            //       vertical: 0,
-            //     ),
-            //   ),
-            // ),
+            const SizedBox(height: 16),
+            TextField(
+              onChanged: (value) => controller.searchQuery.value = value,
+              decoration: InputDecoration(
+                hintText: "Cari nama, deskripsi, atau lokasi acara",
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 0,
+                ),
+              ),
+            ),
             const SizedBox(height: 16),
             Obx(() {
               final active = controller.activeFilter.value;
@@ -44,7 +45,6 @@ class HomePage extends GetView<HomeController> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  spacing: 8.0,
                   children: [
                     ChoiceChip.elevated(
                       elevation: 1,
@@ -57,6 +57,7 @@ class HomePage extends GetView<HomeController> {
                         controller.activeFilter.value = null;
                       },
                     ),
+                    const SizedBox(width: 8),
                     // ChoiceChip.elevated(
                     //   elevation: 1,
                     //   backgroundColor: const Color(0xFFEBFAFF),
@@ -75,6 +76,7 @@ class HomePage extends GetView<HomeController> {
                       onSelected: (_) =>
                           controller.toggleFilter(HomeFilter.upcoming),
                     ),
+                    const SizedBox(width: 8),
                     ChoiceChip.elevated(
                       elevation: 1,
                       backgroundColor: const Color(0xFFEBFAFF),
@@ -109,7 +111,7 @@ class HomePage extends GetView<HomeController> {
                   itemBuilder: (context, index) {
 
                     final Event e = list[index];
-                    return _EventListTile(event: e);
+                    return _EventListTile(event: e, bisaDaftar: controller.canRegister(e));
                   },
                 );
 
@@ -124,8 +126,9 @@ class HomePage extends GetView<HomeController> {
 
 class _EventListTile extends StatelessWidget {
   final Event event;
+  final bool bisaDaftar;
 
-  const _EventListTile({required this.event});
+  const _EventListTile({required this.event,required this.bisaDaftar});
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +139,6 @@ class _EventListTile extends StatelessWidget {
 
     Color statusColor;
 
-    final bisaDaftar = event.kategori == "public" && event.status == "active";
     switch (bisaDaftar) {
       case true:
         statusColor = Colors.green.shade200;
