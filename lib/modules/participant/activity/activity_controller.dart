@@ -24,13 +24,14 @@ class ActivityController extends GetxController {
   void onInit() {
     super.onInit();
 
-    loadFollowed();
-
     _storage.listenKey('access_token', (value) {
       checkLoginStatus();
     });
     checkLoginStatus();
 
+    if (isLoggedIn.value) {
+      loadFollowed();
+    }
   }
   void checkLoginStatus() {
     final token = _storage.read('access_token');
@@ -50,6 +51,7 @@ class ActivityController extends GetxController {
     final f = selectedFilter.value;
     if (f == null) return followedEvents;
 
+    // TODO filter here
     return followedEvents.where((d) {
       final s = d.modulAcara?.mdlStatus?.toLowerCase();
       if (f == ActivityFilter.selesai) return s == 'selesai' || s == 'closed';
