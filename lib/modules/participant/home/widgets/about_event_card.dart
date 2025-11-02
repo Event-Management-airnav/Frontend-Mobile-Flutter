@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../../../../core/utils.dart';
 
 class AboutEventCard extends StatelessWidget {
   final Widget titleWidget;
   final bool isRegistered;
   final String description;
   final VoidCallback? onRegister;
-  final VoidCallback onShareWhatsapp;
-  final VoidCallback onShareFacebook;
-  final VoidCallback onCopyLink;
   final Color primaryColor;
   final Color secondaryColor;
   final String registerButtonText;
+
+  ///(contoh: https://airnav-event.vercel.app/user/event/21)
+  final String shareUrl;
+
+
+  final String? shareMessage;
 
   const AboutEventCard({
     super.key,
@@ -19,12 +24,11 @@ class AboutEventCard extends StatelessWidget {
     required this.titleWidget,
     required this.description,
     required this.onRegister,
-    required this.onShareWhatsapp,
-    required this.onShareFacebook,
-    required this.onCopyLink,
+    required this.registerButtonText,
+    required this.shareUrl,
+    this.shareMessage,
     this.primaryColor = const Color(0xFF005EA2),
     this.secondaryColor = const Color(0xff075f47),
-    required this.registerButtonText,
   });
 
   @override
@@ -75,11 +79,13 @@ class AboutEventCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  onPressed: onCopyLink,
+                  tooltip: 'Salin Link',
+                  onPressed: () => _copyLink(context),
                   icon: const FaIcon(FontAwesomeIcons.copy),
                 ),
                 IconButton(
-                  onPressed: onShareWhatsapp,
+                  tooltip: 'Bagikan ke WhatsApp',
+                  onPressed: _shareToWhatsApp,
                   icon: const FaIcon(
                     FontAwesomeIcons.whatsapp,
                     color: Colors.green,
@@ -87,13 +93,23 @@ class AboutEventCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 4),
                 IconButton(
-                  onPressed: onShareFacebook,
+                  tooltip: 'Bagikan ke Facebook',
+                  onPressed: _shareToFacebook,
                   icon: const FaIcon(
                     FontAwesomeIcons.facebook,
                     color: Colors.blue,
                   ),
                 ),
                 const SizedBox(width: 4),
+                IconButton(
+                  tooltip: 'Bagikan ke X',
+                  onPressed: _shareToX,
+                  icon: const FaIcon(
+                    FontAwesomeIcons.xTwitter,
+                    color: Colors.black,
+                  ),
+                ),
+
               ],
             ),
           ],
@@ -101,4 +117,56 @@ class AboutEventCard extends StatelessWidget {
       ),
     );
   }
+
+
+
+  void _copyLink(BuildContext context) async {
+    final link = shareUrl.trim();
+    if (link.isEmpty) return;
+    await Clipboard.setData(ClipboardData(text: link));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Link disalin')),
+    );
+  }
+
+  void _shareToWhatsApp() {
+    final link = shareUrl.trim();
+    if (link.isEmpty) return;
+    final message = (shareMessage?.trim().isNotEmpty ?? false)
+        ? '${shareMessage!.trim()} $link'
+        : link;
+    final waUrl = 'https://wa.me/?text=${Uri.encodeComponent(message)}';
+
+    Utils.openUrl(waUrl);
+  }
+
+  void _shareToFacebook() {
+    final link = shareUrl.trim();
+    if (link.isEmpty) return;
+
+    final message = (shareMessage?.trim().isNotEmpty ?? false)
+        ? shareMessage!.trim()
+        : link;
+
+    final fbUrl =
+        'https://www.facebook.com/sharer/sharer.php?u=${Uri.encodeComponent(link)}&quote=${Uri.encodeComponent(message)}';
+
+    Utils.openUrl(fbUrl);
+  }
+
+
+  void _shareToX() {
+    final link = shareUrl.trim();
+    if (link.isEmpty) return;
+
+    final message = (shareMessage?.trim().isNotEmpty ?? false)
+        ? shareMessage!.trim()
+        : '';
+
+    final xUrl =
+        'https://twitter.com/intent/tweet?text=${Uri.encodeComponent(message)}&url=${Uri.encodeComponent(link)}';
+
+    Utils.openUrl(xUrl);
+  }
+
 }
