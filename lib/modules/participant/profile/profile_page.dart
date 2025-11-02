@@ -163,7 +163,7 @@ class ProfilePage extends GetView<ProfileController> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  Get.back();
+                                  Get.offAllNamed('/main');
                                   controller.logout();
                                 },
                                 child: const Text('Logout', style: TextStyle(color: Colors.red)),
