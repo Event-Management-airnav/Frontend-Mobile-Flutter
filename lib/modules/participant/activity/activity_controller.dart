@@ -1,4 +1,4 @@
-// lib/modules/participant/activity/activity_controller.dart
+import 'package:frontend_mobile_flutter/data/models/event/event_detail.dart';
 import 'package:get/get.dart';
 import 'package:frontend_mobile_flutter/data/network/services/activity_service.dart';
 import 'package:frontend_mobile_flutter/data/models/event/followed_event.dart';
@@ -24,19 +24,19 @@ class ActivityController extends GetxController {
   void onInit() {
     super.onInit();
 
-    loadFollowed();
-
     _storage.listenKey('access_token', (value) {
       checkLoginStatus();
     });
     checkLoginStatus();
 
+    if (isLoggedIn.value) {
+      loadFollowed();
+    }
   }
   void checkLoginStatus() {
     final token = _storage.read('access_token');
     isLoggedIn.value = token != null && token.isNotEmpty;
   }
-
 
   void selectFilter(ActivityFilter f) {
     if (selectedFilter.value == f) {
@@ -46,16 +46,76 @@ class ActivityController extends GetxController {
     }
   }
 
+  /// Safely parse a date that can be a String, DateTime, or null.
+  DateTime? _parseDate(dynamic date) {
+    if (date == null) return null;
+    if (date is DateTime) return date;
+    if (date is String) {
+      try {
+        return DateTime.parse(date);
+      } catch (_) {
+        return null; // Return null if parsing fails
+      }
+    }
+    return null;
+  }
+
   List<Datum> get filteredFollowed {
     final f = selectedFilter.value;
-    if (f == null) return followedEvents;
+    if (f == null) return followedEvents.toList();
+
+    final now = DateTime.now();
 
     return followedEvents.where((d) {
-      final s = d.modulAcara?.mdlStatus?.toLowerCase();
-      if (f == ActivityFilter.selesai) return s == 'selesai' || s == 'closed';
-      if (f == ActivityFilter.berlangsung) return s == 'active' || s == 'ongoing';
-      return true;
+      return eventStatus(d) == f;
+      // // Assumes `modulAcara` has `mdlAcaraMulai` and `mdlAcaraSelesai` fields,
+      // // similar to the Acara object in event_detail.dart.
+      // final startTime = _parseDate(d.modulAcara?.mdlAcaraMulai);
+      // final endTime = _parseDate(d.modulAcara?.mdlAcaraSelesai);
+      //
+      // switch (f) {
+      //   case ActivityFilter.mendatang:
+      //     if (startTime == null) return false;
+      //     return startTime.isAfter(now);
+      //   case ActivityFilter.berlangsung:
+      //     if (startTime == null) return false;
+      //     // Event is ongoing if it started and has not ended.
+      //     // If no end time, it's considered ongoing forever after it starts.
+      //     return startTime.isBefore(now) && (endTime == null || endTime.isAfter(now));
+      //   case ActivityFilter.selesai:
+      //     // Event is finished only if an end time is specified and it's in the past.
+      //     if (endTime == null) return false;
+      //     return endTime.isBefore(now);
+      // }
     }).toList();
+  }
+
+
+  ActivityFilter eventStatus(Datum d) {
+    final startTime = _parseDate(d.modulAcara?.mdlAcaraMulai);
+    final endTime = _parseDate(d.modulAcara?.mdlAcaraSelesai);
+    final now = DateTime.now();
+
+    if (startTime == null) return ActivityFilter.selesai;
+
+    if (startTime.isAfter(now)) return ActivityFilter.mendatang;
+    if (endTime == null || endTime.isAfter(now)) return ActivityFilter.berlangsung;
+    return ActivityFilter.selesai;
+
+    // switch (f) {
+    //   case ActivityFilter.mendatang:
+    //     if (startTime == null) return false;
+    //     return startTime.isAfter(now);
+    //   case ActivityFilter.berlangsung:
+    //     if (startTime == null) return false;
+    //     // Event is ongoing if it started and has not ended.
+    //     // If no end time, it's considered ongoing forever after it starts.
+    //     return startTime.isBefore(now) && (endTime == null || endTime.isAfter(now));
+    //   case ActivityFilter.selesai:
+    //   // Event is finished only if an end time is specified and it's in the past.
+    //     if (endTime == null) return false;
+    //     return endTime.isBefore(now);
+    // }
   }
 
   Future<void> loadFollowed({int page = 1}) async {
@@ -119,4 +179,4 @@ class ActivityController extends GetxController {
   }
 }
 
-enum ActivityFilter { selesai, berlangsung }
+enum ActivityFilter { mendatang, berlangsung, selesai }

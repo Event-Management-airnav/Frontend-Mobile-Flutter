@@ -26,4 +26,6 @@ class EventDetailService extends GetxService {
       throw Exception('An unexpected error occurred. Please try again.');
     }
   }
+
+
 }
