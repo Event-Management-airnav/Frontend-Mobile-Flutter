@@ -28,30 +28,43 @@ class TSearchBar extends StatelessWidget {
         Obx(() {
           final selected = c.selectedFilter.value;
 
-          return Row(
-            children: [
-              FilterButton(
-                icon: Icon(
-                  Icons.check_circle,
-                  color: selected == ActivityFilter.selesai ? Colors.white : Colors.black,
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                FilterButton(
+                  icon: Icon(
+                    Icons.check_circle,
+                    color: selected == ActivityFilter.mendatang ? Colors.white : Colors.black,
+                  ),
+                  text: 'Belum Mulai',
+                  onPressed: () => c.selectFilter(ActivityFilter.mendatang),
+                  isSelected: selected == ActivityFilter.mendatang,
                 ),
-                text: 'Selesai',
-                onPressed: () => c.selectFilter(ActivityFilter.selesai),
-                isSelected: selected == ActivityFilter.selesai,
-              ),
+                const SizedBox(width: 10),
 
-              const SizedBox(width: 10),
-
-              FilterButton(
-                icon: Icon(
-                  Icons.pending,
-                  color: selected == ActivityFilter.berlangsung ? Colors.white : Colors.black,
+                FilterButton(
+                  icon: Icon(
+                    Icons.check_circle,
+                    color: selected == ActivityFilter.berlangsung ? Colors.white : Colors.black,
+                  ),
+                  text: 'Berlangsung',
+                  onPressed: () => c.selectFilter(ActivityFilter.berlangsung),
+                  isSelected: selected == ActivityFilter.berlangsung,
                 ),
-                text: 'Berlangsung',
-                onPressed: () => c.selectFilter(ActivityFilter.berlangsung),
-                isSelected: selected == ActivityFilter.berlangsung,
-              ),
-            ],
+                const SizedBox(width: 10),
+
+                FilterButton(
+                  icon: Icon(
+                    Icons.pending,
+                    color: selected == ActivityFilter.selesai ? Colors.white : Colors.black,
+                  ),
+                  text: 'Selesai',
+                  onPressed: () => c.selectFilter(ActivityFilter.selesai),
+                  isSelected: selected == ActivityFilter.selesai,
+                ),
+              ],
+            ),
           );
         }),
       ],
