@@ -6,68 +6,143 @@ part 'event.g.dart';
 @JsonSerializable()
 class Event extends Equatable {
   final int id;
-  final String slug;
-  final String nama;
-  final String tipe;
-  final String? lokasi;
 
-  @JsonKey(name: 'tanggal_mulai')
-  final String? tanggalMulai;
-
-  @JsonKey(name: 'tanggal_mulai_raw')
-  final String? tanggalMulaiRaw;
-
-  @JsonKey(name: 'status_acara')
-  final String? statusAcara;
-
-  @JsonKey(name: 'status_event')
-  final String? statusEvent;
-
-  final String? banner;
-
-  @JsonKey(name: 'deskripsi_singkat')
-  final String? deskripsiSingkat;
+  @JsonKey(name: 'user_id')
+  final int? userId;
 
   @JsonKey(name: 'mdl_kode')
-  final String? mdlKode;
+  final String kode;
+
+  @JsonKey(name: 'mdl_slug')
+  final String slug;
+
+  @JsonKey(name: 'mdl_nama')
+  final String nama;
+
+  @JsonKey(name: 'mdl_deskripsi')
+  final String deskripsi;
+
+  @JsonKey(name: 'mdl_tipe')
+  final String tipe;
+
+  @JsonKey(name: 'mdl_kategori')
+  final String kategori;
+
+  @JsonKey(name: 'mdl_lokasi')
+  final String? lokasi;
+
+  @JsonKey(name: 'mdl_latitude')
+  final String? latitude;
+
+  @JsonKey(name: 'mdl_longitude')
+  final String? longitude;
+
+  @JsonKey(name: 'mdl_radius')
+  final int? radius;
+
+  @JsonKey(name: 'mdl_pendaftaran_mulai')
+  final String pendaftaranMulai;
+
+  @JsonKey(name: 'mdl_pendaftaran_selesai')
+  final String pendaftaranSelesai;
+
+  @JsonKey(name: 'mdl_maks_peserta_eksternal')
+  final int? maksPesertaEksternal;
+
+  @JsonKey(name: 'mdl_acara_mulai')
+  final String acaraMulai;
+
+  @JsonKey(name: 'mdl_acara_selesai')
+  final String? acaraSelesai;
+
+  @JsonKey(name: 'mdl_status')
+  final String status;
+
+  @JsonKey(name: 'is_public')
+  final int isPublic;
 
   @JsonKey(name: 'mdl_presensi_aktif')
-  final int? mdlPresensiAktif;
+  final int presensiAktif;
+
+  @JsonKey(name: 'mdl_sertifikat_aktif')
+  final int sertifikatAktif;
+
+  @JsonKey(name: 'mdl_doorprize_aktif')
+  final int doorprizeAktif;
+
+  @JsonKey(name: 'media_urls')
+  final MediaUrls? mediaUrls;
 
   const Event({
     required this.id,
+    this.userId,
+    required this.kode,
     required this.slug,
     required this.nama,
+    required this.deskripsi,
     required this.tipe,
+    required this.kategori,
     this.lokasi,
-    this.tanggalMulai,
-    this.tanggalMulaiRaw,
-    this.statusAcara,
-    this.statusEvent,
-    this.banner,
-    this.deskripsiSingkat,
-    this.mdlKode,
-    this.mdlPresensiAktif,
+    this.latitude,
+    this.longitude,
+    this.radius,
+    required this.pendaftaranMulai,
+    required this.pendaftaranSelesai,
+    this.maksPesertaEksternal,
+    required this.acaraMulai,
+    this.acaraSelesai,
+    required this.status,
+    required this.isPublic,
+    required this.presensiAktif,
+    required this.sertifikatAktif,
+    required this.doorprizeAktif,
+    this.mediaUrls,
   });
 
-  factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
+  factory Event.fromJson(Map<String, dynamic> json) =>
+      _$EventFromJson(json);
 
   Map<String, dynamic> toJson() => _$EventToJson(this);
 
   @override
   List<Object?> get props => [
-    id,
-    slug,
-    nama,
-    tipe,
-    lokasi,
-    tanggalMulai,
-    tanggalMulaiRaw,
-    statusAcara,
-    statusEvent,
-    banner,
-    deskripsiSingkat,
-    mdlKode,
-    mdlPresensiAktif,
-  ];
+        id,
+        userId,
+        kode,
+        slug,
+        nama,
+        deskripsi,
+        tipe,
+        kategori,
+        lokasi,
+        latitude,
+        longitude,
+        radius,
+        pendaftaranMulai,
+        pendaftaranSelesai,
+        maksPesertaEksternal,
+        acaraMulai,
+        acaraSelesai,
+        status,
+        isPublic,
+        presensiAktif,
+        sertifikatAktif,
+        doorprizeAktif,
+        mediaUrls,
+      ];
+}
+
+@JsonSerializable()
+class MediaUrls extends Equatable {
+  final String? banner;
+
+  const MediaUrls({this.banner});
+
+  factory MediaUrls.fromJson(Map<String, dynamic> json) =>
+      _$MediaUrlsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MediaUrlsToJson(this);
+
+  @override
+  List<Object?> get props => [banner];
 }

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../data/models/event/event.dart';
 
-enum HomeFilter { none, active, upcoming, past }
+enum HomeFilter { none, /*active,*/ upcoming, past }
 
 class HomeController extends GetxController {
   final service = Get.find<HomeService>();
@@ -12,7 +12,7 @@ class HomeController extends GetxController {
 
   // Cached lists in controller (backed by service cache too)
   final allEvents = <Event>[].obs;
-  final activeEvents = <Event>[].obs;
+  // final activeEvents = <Event>[].obs;
   final upcomingEvents = <Event>[].obs;
   final pastEvents = <Event>[].obs;
 
@@ -35,8 +35,8 @@ class HomeController extends GetxController {
       final d = await service.fetchPastEvents();
 
       allEvents.assignAll(a);
-      activeEvents.assignAll(b);
-      upcomingEvents.assignAll(c);
+      upcomingEvents.addAll(b);
+      upcomingEvents.addAll(c);
       pastEvents.assignAll(d);
     } catch (e) {
       Get.snackbar("Error loading data", "An unexpected error occurred: ${e.toString()}");
@@ -59,8 +59,8 @@ class HomeController extends GetxController {
     final f = activeFilter.value;
     if (f == null) return allEvents;
     switch (f) {
-      case HomeFilter.active:
-        return activeEvents;
+      // case HomeFilter.active:
+      //   return activeEvents;
       case HomeFilter.upcoming:
         return upcomingEvents;
       case HomeFilter.past:
