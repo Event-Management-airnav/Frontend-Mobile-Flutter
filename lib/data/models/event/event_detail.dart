@@ -135,8 +135,8 @@ class EventDetail extends Equatable {
 
 @JsonSerializable()
 class Pendaftaran extends Equatable {
-  final String? mulai;
-  final String? selesai;
+  final String mulai;
+  final String selesai;
 
   @JsonKey(name: 'mulai_raw')
   final String? mulaiRaw;
@@ -148,8 +148,8 @@ class Pendaftaran extends Equatable {
   final bool? isOpen;
 
   const Pendaftaran({
-    this.mulai,
-    this.selesai,
+    required this.mulai,
+    required this.selesai,
     this.mulaiRaw,
     this.selesaiRaw,
     this.isOpen,
@@ -166,7 +166,7 @@ class Pendaftaran extends Equatable {
 
 @JsonSerializable()
 class Acara extends Equatable {
-  final String? mulai;
+  final String mulai;
   final String? selesai;
 
   @JsonKey(name: 'mulai_raw')
@@ -176,7 +176,7 @@ class Acara extends Equatable {
   final String? selesaiRaw;
 
   const Acara({
-    this.mulai,
+    required this.mulai,
     this.selesai,
     this.mulaiRaw,
     this.selesaiRaw,
