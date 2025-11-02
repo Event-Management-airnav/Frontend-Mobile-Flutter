@@ -77,10 +77,9 @@ class DetailPage extends GetView<EventDetailController> {
                             eventId: controller.eventDetail.value!.id,
                           );
                         }
-                      : null,
-                  onShareWhatsapp: () {},
-                  onShareFacebook: () {},
-                  onCopyLink: () {},
+                      : null, shareUrl: 'https://airnav-event.vercel.app/user/event/${arg.modulAcaraId}',
+
+
                 ),
                 const SizedBox(height: 16),
                 controller.isRegistered.value
