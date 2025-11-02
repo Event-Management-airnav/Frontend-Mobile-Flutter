@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_mobile_flutter/core/utils.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_controller.dart';
 import 'package:get/get.dart';
@@ -56,20 +57,20 @@ class HomePage extends GetView<HomeController> {
                         controller.activeFilter.value = null;
                       },
                     ),
+                    // ChoiceChip.elevated(
+                    //   elevation: 1,
+                    //   backgroundColor: const Color(0xFFEBFAFF),
+                    //   selectedColor: Colors.blue[200],
+                    //   label: const Text('Berlangsung'),
+                    //   selected: active == HomeFilter.active,
+                    //   onSelected: (_) =>
+                    //       controller.toggleFilter(HomeFilter.active),
+                    // ),
                     ChoiceChip.elevated(
                       elevation: 1,
                       backgroundColor: const Color(0xFFEBFAFF),
                       selectedColor: Colors.blue[200],
-                      label: const Text('Berlangsung'),
-                      selected: active == HomeFilter.active,
-                      onSelected: (_) =>
-                          controller.toggleFilter(HomeFilter.active),
-                    ),
-                    ChoiceChip.elevated(
-                      elevation: 1,
-                      backgroundColor: const Color(0xFFEBFAFF),
-                      selectedColor: Colors.blue[200],
-                      label: const Text('Akan Datang'),
+                      label: const Text('Bisa Daftar'),
                       selected: active == HomeFilter.upcoming,
                       onSelected: (_) =>
                           controller.toggleFilter(HomeFilter.upcoming),
@@ -78,7 +79,7 @@ class HomePage extends GetView<HomeController> {
                       elevation: 1,
                       backgroundColor: const Color(0xFFEBFAFF),
                       selectedColor: Colors.blue[200],
-                      label: const Text('Selesai'),
+                      label: const Text('Ditutup'),
                       selected: active == HomeFilter.past,
                       onSelected: (_) =>
                           controller.toggleFilter(HomeFilter.past),
@@ -128,25 +129,23 @@ class _EventListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final waktu = event.tanggalMulai!;
-    final tanggal = waktu.substring(0, 11);
-    final jam = waktu.substring(waktu.length - 5);
+    final waktu = event.acaraMulai;
+    final tanggal = Utils.fromDateTimeToIndonesiaDate(waktu);
+    final jam = Utils.jamMenitSafe(waktu);
     final lokasi = event.lokasi;
 
     Color statusColor;
-    switch (event.statusAcara) {
-      case 'Sedang Berlangsung':
+
+    final bisaDaftar = event.kategori == "public" && event.status == "active";
+    switch (bisaDaftar) {
+      case true:
         statusColor = Colors.green.shade200;
         break;
-      case 'Akan Datang':
-        statusColor = Colors.yellow.shade200;
-        break;
-      case 'Selesai':
+      case false:
         statusColor = Colors.red.shade200;
         break;
-      default:
-        statusColor = Colors.grey.shade200;
-    }
+      }
+
 
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
@@ -169,9 +168,9 @@ class _EventListTile extends StatelessWidget {
                       .width * 0.3,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    child: event.banner != null && event.banner!.isNotEmpty
+                    child: event.mediaUrls?.banner != null
                         ? Image.network(
-                      event.banner!,
+                      event.mediaUrls!.banner!,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Image.asset(
@@ -222,7 +221,7 @@ class _EventListTile extends StatelessWidget {
                           ),
                           _buildEventInfo(
                             Icons.circle,
-                            event.statusAcara ?? 'Status N/A',
+                            bisaDaftar? "Bisa Daftar" : "Ditutup",
                             backgroundColor: statusColor,
                             iconSize: 10,
                             textColor: Colors.black87,
