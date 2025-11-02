@@ -118,4 +118,24 @@ class Utils {
 
   String? fromDateTimeIso(DateTime? dt) => dt?.toIso8601String();
 
+  static String fromDateTimeToIndonesiaDate(String raw) {
+    // Try to parse both "2025-10-31 03:01:28" and ISO "2025-10-31T03:01:28Z"
+    DateTime? dt = DateTime.tryParse(raw) ??
+        DateTime.tryParse(raw.replaceFirst(' ', 'T'));
+
+    const bulan = [
+      "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
+      "Jul", "Agt", "Sep", "Okt", "Nov", "Des"
+    ];
+
+    String? day = dt?.day.toString().padLeft(2, '0');
+    String month = bulan[dt!.month - 1];
+    String? year = dt.year.toString();
+
+    return "$day $month $year";
+  }
+
+  static String jamMenitSafe(String raw) {
+    return raw.substring(11, 16);
+  }
 }
