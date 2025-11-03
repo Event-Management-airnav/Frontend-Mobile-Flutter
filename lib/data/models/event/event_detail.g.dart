@@ -85,8 +85,8 @@ Map<String, dynamic> _$EventDetailToJson(EventDetail instance) =>
     };
 
 Pendaftaran _$PendaftaranFromJson(Map<String, dynamic> json) => Pendaftaran(
-  mulai: json['mulai'] as String?,
-  selesai: json['selesai'] as String?,
+  mulai: json['mulai'] as String,
+  selesai: json['selesai'] as String,
   mulaiRaw: json['mulai_raw'] as String?,
   selesaiRaw: json['selesai_raw'] as String?,
   isOpen: json['is_open'] as bool?,
@@ -102,7 +102,7 @@ Map<String, dynamic> _$PendaftaranToJson(Pendaftaran instance) =>
     };
 
 Acara _$AcaraFromJson(Map<String, dynamic> json) => Acara(
-  mulai: json['mulai'] as String?,
+  mulai: json['mulai'] as String,
   selesai: json['selesai'] as String?,
   mulaiRaw: json['mulai_raw'] as String?,
   selesaiRaw: json['selesai_raw'] as String?,

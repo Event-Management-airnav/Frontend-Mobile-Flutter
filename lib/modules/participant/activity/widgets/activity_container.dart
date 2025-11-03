@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_mobile_flutter/modules/participant/activity/activity_controller.dart';
 
 class ActivityContainer extends StatelessWidget {
   final String eventName;
   final String eventDate;
-  final String status;
+  final ActivityFilter status;
   final VoidCallback? onTap;
   final VoidCallback? onActionTap;
 
@@ -16,7 +17,19 @@ class ActivityContainer extends StatelessWidget {
     this.onActionTap,
   });
 
-  bool get _isSelesai => status.toLowerCase() == 'selesai';
+  // bool get _isSelesai => status == ActivityFilter.selesai;
+  bool get _isBerlangsung => status == ActivityFilter.berlangsung;
+
+  String statusMap(ActivityFilter status) {
+    switch (status) {
+      case ActivityFilter.mendatang:
+        return 'Belum Mulai';
+      case ActivityFilter.berlangsung:
+        return 'Berlangsung';
+      case ActivityFilter.selesai:
+        return 'Selesai';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +37,11 @@ class ActivityContainer extends StatelessWidget {
     const headerBlue = Color(0xFFDDF3FF);
     const darkBlue = Color(0xFF10498D);
 
-    final Color statusBg = _isSelesai ? const Color(0xFFEFFFF9) : const Color(0xFFFFF6E0);
-    final Color statusText = _isSelesai ? const Color(0xFF049E67) : const Color(0xFFD79A00);
-    final Color dotColor = _isSelesai ? const Color(0xFF02C26A) : const Color(0xFF9AA3AF);
-    final Color buttonBg = _isSelesai ? const Color(0xFF175FA4) : const Color(0xFFD1D5DB);
-    final Color buttonFg = _isSelesai ? Colors.white : Colors.black;
+    final Color statusBg = _isBerlangsung ? const Color(0xFFEFFFF9) : const Color(0xFFFFF6E0);
+    final Color statusText = _isBerlangsung ? const Color(0xFF049E67) : const Color(0xFFD79A00);
+    final Color dotColor = _isBerlangsung ? const Color(0xFF02C26A) : const Color(0xFF9AA3AF);
+    final Color buttonBg = _isBerlangsung ? const Color(0xFF175FA4) : const Color(0xFFD1D5DB);
+    final Color buttonFg = _isBerlangsung ? Colors.white : Colors.black;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -111,7 +124,7 @@ class ActivityContainer extends StatelessWidget {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: Text(
-                        status,
+                        statusMap(status),
                         style: TextStyle(
                           color: statusText,
                           fontWeight: FontWeight.w700,
@@ -135,11 +148,25 @@ class ActivityContainer extends StatelessWidget {
                    TextButton.icon(
                         onPressed: onActionTap,
                         icon: Icon(
-                          _isSelesai ? Icons.download : Icons.qr_code_scanner,
+                          switch (status) {
+                            ActivityFilter.mendatang =>
+                              Icons.calendar_month,
+                            ActivityFilter.berlangsung =>
+                              Icons.qr_code_scanner,
+                            ActivityFilter.selesai =>
+                              Icons.download,
+                          },
                           color: buttonFg,
                         ),
                         label: Text(
-                          _isSelesai ? 'Sertifikat' : 'Scan',
+                          switch (status) {
+                            ActivityFilter.mendatang =>
+                            "Tunggu",
+                            ActivityFilter.berlangsung =>
+                            "Scan",
+                            ActivityFilter.selesai =>
+                            "Sertif",
+                          },
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
                             color: buttonFg,

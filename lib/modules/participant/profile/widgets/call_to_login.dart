@@ -4,8 +4,9 @@ import 'package:get/get.dart';
 import '../../../../app_pages.dart';
 
 class CallToLogin extends StatelessWidget {
+  final String page;
   const CallToLogin({
-    super.key,
+    super.key, required this.page,
   });
 
   @override
@@ -29,7 +30,7 @@ class CallToLogin extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              'Silakan login atau daftar untuk melihat profil Anda.',
+              'Silakan login atau daftar untuk melihat $page Anda.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,

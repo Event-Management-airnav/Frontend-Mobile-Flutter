@@ -1,6 +1,7 @@
 import 'package:frontend_mobile_flutter/data/network/services/home_service.dart';
 import 'package:get/get.dart';
 
+import '../../../core/utils.dart';
 import '../../../data/models/event/event.dart';
 
 enum HomeFilter { none, /*active,*/ upcoming, past }
@@ -12,17 +13,42 @@ class HomeController extends GetxController {
 
   // Cached lists in controller (backed by service cache too)
   final allEvents = <Event>[].obs;
+
   // final activeEvents = <Event>[].obs;
   final upcomingEvents = <Event>[].obs;
   final pastEvents = <Event>[].obs;
+  DateTime dateTimeNow = DateTime.now();
 
   // current active chip index: null (none) => show all
   final Rxn<HomeFilter> activeFilter = Rxn<HomeFilter>(null);
+  final searchQuery = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
-    _loadAll(); // strategy B: fetch once on init
+    _loadAll();
+  }
+
+  bool canRegister(Event event) {
+    DateTime? startRegistration = Utils.toDateTimeFlexible(
+      event.pendaftaranMulai,
+    );
+    DateTime? endRegistration = Utils.toDateTimeFlexible(
+      event.pendaftaranSelesai,
+    );
+    DateTime? startEvent = Utils.toDateTimeFlexible(event.acaraMulai);
+
+    if (startEvent == null) {
+      return false;
+    }
+
+    return ["public", "private"].contains(event.kategori) &&
+        event.status == "active" &&
+        startEvent.isAfter(dateTimeNow);
+    /*
+        && (startRegistration.isAfter(dateTimeNow))
+        && (endRegistration.isBefore(dateTimeNow));
+*/
   }
 
   Future<void> _loadAll() async {
@@ -30,22 +56,25 @@ class HomeController extends GetxController {
       isLoading.value = true;
 
       final a = await service.fetchAllEvents();
-      final b = await service.fetchActiveEvents();
-      final c = await service.fetchUpcomingEvents();
-      final d = await service.fetchPastEvents();
+      // final b = await service.fetchActiveEvents();
+      // final c = await service.fetchUpcomingEvents();
+      // final d = await service.fetchPastEvents();
 
       allEvents.assignAll(a);
-      upcomingEvents.addAll(b);
-      upcomingEvents.addAll(c);
-      pastEvents.assignAll(d);
+      // upcomingEvents.addAll(b.where((e) => e.));
+      upcomingEvents.assignAll(a.where((e) => canRegister(e)));
+      pastEvents.assignAll(a.where((e) => !canRegister(e)));
     } catch (e) {
-      Get.snackbar("Error loading data", "An unexpected error occurred: ${e.toString()}");
+      Get.snackbar(
+        "Error loading data",
+        "An unexpected error occurred: ${e.toString()}",
+      );
     } finally {
       isLoading.value = false;
     }
   }
 
-  /// Toggle filter chips. If same filter tapped twice -> deactivate (null -> show ALL)
+  /// Toggle filter chips. If same filter tapped twice -> deactivate (null -> show all)
   void toggleFilter(HomeFilter filter) {
     if (activeFilter.value == filter) {
       activeFilter.value = null; // show all
@@ -56,18 +85,37 @@ class HomeController extends GetxController {
 
   /// Returns the current visible list based on activeFilter (null => all)
   List<Event> get visibleEvents {
+    List<Event> events;
     final f = activeFilter.value;
-    if (f == null) return allEvents;
-    switch (f) {
-      // case HomeFilter.active:
-      //   return activeEvents;
-      case HomeFilter.upcoming:
-        return upcomingEvents;
-      case HomeFilter.past:
-        return pastEvents;
-      case HomeFilter.none:
-      default:
-        return allEvents;
+    if (f == null) {
+      events = allEvents;
+    } else {
+      switch (f) {
+        // case HomeFilter.active:
+        //   return activeEvents;
+        case HomeFilter.upcoming:
+          events = upcomingEvents;
+          break;
+        case HomeFilter.past:
+          events = pastEvents;
+          break;
+        case HomeFilter.none:
+        default:
+          events = allEvents;
+          break;
+      }
+    }
+
+    if (searchQuery.value.isEmpty) {
+      return events;
+    } else {
+      return events
+          .where(
+            (event) =>
+                "${event.nama.toLowerCase()} ${(event.lokasi == null) ? "" : event.lokasi?.toLowerCase()} ${event.deskripsi.toLowerCase()}"
+                    .contains(searchQuery.value.toLowerCase()),
+          )
+          .toList();
     }
   }
 }

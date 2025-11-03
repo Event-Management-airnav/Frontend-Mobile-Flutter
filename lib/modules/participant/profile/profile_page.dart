@@ -23,7 +23,7 @@ class ProfilePage extends GetView<ProfileController> {
             return const Center(child: CircularProgressIndicator());
           }
           if (!controller.isLoggedIn.value) {
-            return CallToLogin();
+            return CallToLogin(page: "profil");
           }
 
           return Padding(
@@ -163,7 +163,7 @@ class ProfilePage extends GetView<ProfileController> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  Get.back();
+                                  Get.offAllNamed('/main');
                                   controller.logout();
                                 },
                                 child: const Text('Logout', style: TextStyle(color: Colors.red)),

@@ -13,16 +13,6 @@ class ActivityPage extends GetView<ActivityController> {
   const ActivityPage({super.key});
 
 
-  String statusMap(String status) {
-    switch (status) {
-      case 'closed':
-        return 'Selesai';
-      case 'active':
-        return 'Berlangsung';
-      default:
-        return 'Unknown';
-    }
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,9 +20,8 @@ class ActivityPage extends GetView<ActivityController> {
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Obx(() {
-
           if (!controller.isLoggedIn.value) {
-            return CallToLogin();
+            return CallToLogin(page: "acara");
           }
 
           if (controller.isLoading.value) {
@@ -42,22 +31,6 @@ class ActivityPage extends GetView<ActivityController> {
             return Center(child: Text('Error: ${controller.error.value}'));
           }
           final items = controller.filteredFollowed;
-
-          if (items.isEmpty) {
-            return const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-              const TSearchBar(),
-              SizedBox(height: 10),
-              Text(
-                'Aktivitas',
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
-              ),
-              SizedBox(height: 10),
-                Expanded(child: Center(child: Text('Belum ada aktivitas')))
-            ],);
-          }
-
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -71,33 +44,48 @@ class ActivityPage extends GetView<ActivityController> {
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: controller.refreshFollowed,
-                  child: ListView.separated(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    itemCount: items.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 8),
-                    itemBuilder: (_, i) {
-                      final d = items[i];
-                      final name = controller.eventNameOf(d);
-                      final date = controller.formatDate(controller.eventDateOf(d));
-                      final status = statusMap(controller.statusOf(d));
-                      if (status == 'Unknown') return const SizedBox.shrink();
+                  child: items.isEmpty
+                      ? const Center(child: Text('Belum ada aktivitas'))
+                      : ListView.separated(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemCount: items.length,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(height: 8),
+                          itemBuilder: (_, i) {
+                            final d = items[i];
+                            final name = controller.eventNameOf(d);
+                            final date = controller.formatDate(
+                              controller.eventDateOf(d),
+                            );
+                            final status = controller.eventStatus(d);
+                            if (status == 'Unknown')
+                              return const SizedBox.shrink();
 
-                      return ActivityContainer(
-                        eventName: name,
-                        eventDate: date,
-                        status: status,
-                        onTap: () => Get.toNamed(Routes.DETAIL, arguments: d),
-                        onActionTap: (){
-                          if (status == 'Selesai'){
-                            Get.snackbar('Sertifikat', 'Fitur Unduh sertifikat akan segera hadir.');
-                          } else if (status == 'Berlangsung'){
-                            Get.snackbar('Scan QR Code', 'Scan untuk absensi kegiatan.');
-                            Get.toNamed(Routes.SCAN);
-                          }
-                        },
-                      );
-                    },
-                  ),
+                            return ActivityContainer(
+                              eventName: name,
+                              eventDate: date,
+                              status: status,
+                              onTap: () => Get.toNamed(
+                                Routes.DETAIL,
+                                arguments: d.modulAcaraId,
+                              ),
+                              onActionTap: () {
+                                if (status == ActivityFilter.selesai) {
+                                  Get.snackbar(
+                                    'Sertifikat',
+                                    'Fitur Unduh sertifikat akan segera hadir.',
+                                  );
+                                } else if (status == ActivityFilter.berlangsung) {
+                                  Get.snackbar(
+                                    'Scan QR Code',
+                                    'Scan untuk absensi kegiatan.',
+                                  );
+                                  Get.toNamed(Routes.SCAN);
+                                }
+                              },
+                            );
+                          },
+                        ),
                 ),
               ),
             ],
