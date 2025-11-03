@@ -58,14 +58,15 @@ class ProfileController extends GetxController {
     });
 
     checkLoginStatus();
+
+    if (isLoggedIn.value) {
+      fetchUserProfile(); // Mengambil data profil awal jika sudah login.
+    }
   }
 
   void checkLoginStatus() {
     final token = _storage.read('access_token');
     isLoggedIn.value = token != null && token.isNotEmpty;
-    if (isLoggedIn.value) {
-      fetchUserProfile(); // Mengambil data profil awal jika sudah login.
-    }
   }
 
   // Metode yang dijalankan saat controller akan dihapus.

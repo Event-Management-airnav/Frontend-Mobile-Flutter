@@ -19,9 +19,7 @@ class MainApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'NavEvent',
       theme: AppThemes.lightTheme,
-      initialRoute: (GetStorage().read('access_token') != null)
-          ? AppPages.INITIAL
-          : AppPages.AUTH,
+      initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
     );
   }
