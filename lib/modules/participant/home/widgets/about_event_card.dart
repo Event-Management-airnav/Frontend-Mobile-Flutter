@@ -124,6 +124,7 @@ class AboutEventCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 14),
+                  disabledBackgroundColor: Colors.grey.shade500,
                 ),
                 child: Text(
                   buttonText,
