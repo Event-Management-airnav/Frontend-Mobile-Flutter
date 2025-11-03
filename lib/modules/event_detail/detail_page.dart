@@ -69,7 +69,8 @@ class DetailPage extends GetView<EventDetailController> {
                   onRegister:
                       controller.isUserLoggedIn.value &&
                           !controller.isRegistered.value &&
-                          controller.eventDetail.value?.statusAcara != "Akan Datang"
+                          controller.eventDetail.value?.statusAcara !=
+                              "Akan Datang"
                       ? () {
                           RegisterEventPopup.show(
                             context,
@@ -77,9 +78,9 @@ class DetailPage extends GetView<EventDetailController> {
                             eventId: controller.eventDetail.value!.id,
                           );
                         }
-                      : null, shareUrl: 'https://airnav-event.vercel.app/user/event/${arg.modulAcaraId}',
-
-
+                      : null,
+                  shareUrl:
+                      'https://airnav-event.vercel.app/user/event/${arg.modulAcaraId}',
                 ),
                 const SizedBox(height: 16),
                 controller.isRegistered.value
@@ -89,8 +90,12 @@ class DetailPage extends GetView<EventDetailController> {
                         title: 'Susunan Acara',
                         trailing: IconButton(
                           onPressed: () {
-                            Get.snackbar('susunan acara', '${arg.modulAcara?.mdlFileRundownUrl}');
-                            Utils.openUrl(arg.modulAcara?.mdlFileRundownUrl);},
+                            Get.snackbar(
+                              'susunan acara',
+                              '${arg.modulAcara?.mdlFileRundownUrl}',
+                            );
+                            Utils.openUrl(arg.modulAcara?.mdlFileRundownUrl);
+                          },
                           icon: const Icon(Icons.download_rounded),
                           color: AppColors.primary,
                         ),
@@ -105,14 +110,16 @@ class DetailPage extends GetView<EventDetailController> {
                         title: 'Modul Acara',
                         trailing: IconButton(
                           onPressed: () {
-                            Get.snackbar('modul acara', '${arg.modulAcara?.mdlFileAcaraUrl}');
-                            Utils.openUrl(arg.modulAcara?.mdlFileAcaraUrl);},
+                            Get.snackbar(
+                              'modul acara',
+                              '${arg.modulAcara?.mdlFileAcaraUrl}',
+                            );
+                            Utils.openUrl(arg.modulAcara?.mdlFileAcaraUrl);
+                          },
                           icon: const Icon(Icons.download_rounded),
                           color: AppColors.primary,
                         ),
-                        onTap: () {
-
-                          },
+                        onTap: () {},
                       )
                     : const SizedBox.shrink(),
                 const SizedBox(height: 16),
