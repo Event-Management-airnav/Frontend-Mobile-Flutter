@@ -249,7 +249,10 @@ class _EventListTile extends StatelessWidget {
               ),
               child: ElevatedButton(
                 onPressed: () {
-                  Get.toNamed(Routes.DETAIL, arguments: event.id);
+                  Get.toNamed(Routes.DETAIL, arguments: {
+                    "id":event.id,
+                    "data":null
+                  });
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,

@@ -18,8 +18,10 @@ class DetailPage extends GetView<EventDetailController> {
 
   @override
   Widget build(BuildContext context) {
-    final arg = Get.arguments as Datum;
-    controller.loadEventDetail(arg.modulAcaraId);
+    final args = Get.arguments as Map;
+    final eventId = args["id"];
+    final data = args["data"];
+    controller.loadEventDetail(eventId);
 
     return Scaffold(
       appBar: TAppBar(),
@@ -80,7 +82,7 @@ class DetailPage extends GetView<EventDetailController> {
                         }
                       : null,
                   shareUrl:
-                      'https://airnav-event.vercel.app/user/event/${arg.modulAcaraId}',
+                      'https://airnav-event.vercel.app/user/event/${event.id}',
                 ),
                 const SizedBox(height: 16),
                 controller.isRegistered.value
@@ -89,13 +91,9 @@ class DetailPage extends GetView<EventDetailController> {
                         iconColor: AppColors.primary,
                         title: 'Susunan Acara',
                         trailing: IconButton(
-                          onPressed: () {
-                            Get.snackbar(
-                              'susunan acara',
-                              '${arg.modulAcara?.mdlFileRundownUrl}',
-                            );
-                            Utils.openUrl(arg.modulAcara?.mdlFileRundownUrl);
-                          },
+                          onPressed: () => data.modulAcara?.mdlFileRundownUrl != null
+                ? Get.snackbar('Susunan Acara', data.modulAcara!.mdlFileRundownUrl!)
+                    : null,
                           icon: const Icon(Icons.download_rounded),
                           color: AppColors.primary,
                         ),
@@ -109,13 +107,9 @@ class DetailPage extends GetView<EventDetailController> {
                         iconColor: AppColors.primary,
                         title: 'Modul Acara',
                         trailing: IconButton(
-                          onPressed: () {
-                            Get.snackbar(
-                              'modul acara',
-                              '${arg.modulAcara?.mdlFileAcaraUrl}',
-                            );
-                            Utils.openUrl(arg.modulAcara?.mdlFileAcaraUrl);
-                          },
+                          onPressed: () => data.modulAcara?.mdlFileAcaraUrl != null
+                              ? Get.snackbar('Susunan Acara', data.modulAcara!.mdlFileAcaraUrl!)
+                              : null,
                           icon: const Icon(Icons.download_rounded),
                           color: AppColors.primary,
                         ),
