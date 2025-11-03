@@ -62,7 +62,7 @@ class DetailPage extends GetView<EventDetailController> {
                   description: event.deskripsi,
                   primaryColor: AppColors.primary,
                   registerButtonText:
-                      controller.isUserLoggedIn.value? (controller.canRegister(event)?  "Daftar Acara" : "Batal Daftar")  : "Login Untuk Mendaftar",
+                      controller.isUserLoggedIn.value? (controller.canRegister(event)?  "Daftar Acara" : "Pendaftaran Ditutup")  : "Login Untuk Mendaftar",
                       // controller.eventDetail.value?.statusAcara != "Akan Datang"
                       // ? 'Pendaftaran Ditutup'
                       // : (controller.isUserLoggedIn.value
@@ -126,9 +126,12 @@ class DetailPage extends GetView<EventDetailController> {
                         iconColor: AppColors.primary,
                         title: 'Susunan Acara',
                         trailing: IconButton(
-                          onPressed: () => data.modulAcara?.mdlFileRundownUrl != null
-                ? Get.snackbar('Susunan Acara', data.modulAcara!.mdlFileRundownUrl!)
-                    : null,
+                          onPressed:(){
+                                    if (data.modulAcara?.mdlFileRundownUrl != null){
+                                      Get.snackbar('Susunan Acara', data.modulAcara!.mdlFileRundownUrl!);
+                                      Utils.openUrl(data.modulAcara!.mdlFileRundownUrl!);
+                                    }
+                          },
                           icon: const Icon(Icons.download_rounded),
                           color: AppColors.primary,
                         ),
@@ -142,9 +145,12 @@ class DetailPage extends GetView<EventDetailController> {
                         iconColor: AppColors.primary,
                         title: 'Modul Acara',
                         trailing: IconButton(
-                          onPressed: () => data.modulAcara?.mdlFileAcaraUrl != null
-                              ? Get.snackbar('Susunan Acara', data.modulAcara!.mdlFileAcaraUrl!)
-                              : null,
+                          onPressed:(){
+                            if (data.modulAcara?.mdlFileAcaraUrl != null){
+                              Get.snackbar('Modul Acara', data.modulAcara!.mdlFileAcaraUrl!);
+                              Utils.openUrl(data.modulAcara!.mdlFileAcaraUrl!);
+                            }
+                          },
                           icon: const Icon(Icons.download_rounded),
                           color: AppColors.primary,
                         ),
