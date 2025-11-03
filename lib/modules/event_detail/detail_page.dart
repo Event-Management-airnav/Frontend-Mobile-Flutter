@@ -5,6 +5,8 @@ import 'package:frontend_mobile_flutter/modules/participant/home/widgets/registe
 import 'package:get/get.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
 
+import '../../core/utils.dart';
+import '../../data/models/event/followed_event.dart';
 import '../participant/home/widgets/event_hero_card.dart';
 import '../participant/home/widgets/about_event_card.dart';
 import '../participant/home/widgets/section_tile_card.dart';
@@ -16,7 +18,8 @@ class DetailPage extends GetView<EventDetailController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.loadEventDetail(Get.arguments);
+    final arg = Get.arguments as Datum;
+    controller.loadEventDetail(arg.modulAcaraId);
 
     return Scaffold(
       appBar: TAppBar(),
@@ -74,10 +77,9 @@ class DetailPage extends GetView<EventDetailController> {
                             eventId: controller.eventDetail.value!.id,
                           );
                         }
-                      : null,
-                  onShareWhatsapp: () {},
-                  onShareFacebook: () {},
-                  onCopyLink: () {},
+                      : null, shareUrl: 'https://airnav-event.vercel.app/user/event/${arg.modulAcaraId}',
+
+
                 ),
                 const SizedBox(height: 16),
                 controller.isRegistered.value
@@ -85,9 +87,12 @@ class DetailPage extends GetView<EventDetailController> {
                         leadingIcon: Icons.description_outlined,
                         iconColor: AppColors.primary,
                         title: 'Susunan Acara',
-                        trailing: TextButton(
-                          onPressed: () {},
-                          child: const Text('Lihat Detail'),
+                        trailing: IconButton(
+                          onPressed: () {
+                            Get.snackbar('susunan acara', '${arg.modulAcara?.mdlFileRundownUrl}');
+                            Utils.openUrl(arg.modulAcara?.mdlFileRundownUrl);},
+                          icon: const Icon(Icons.download_rounded),
+                          color: AppColors.primary,
                         ),
                         onTap: () {},
                       )
@@ -99,11 +104,15 @@ class DetailPage extends GetView<EventDetailController> {
                         iconColor: AppColors.primary,
                         title: 'Modul Acara',
                         trailing: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.snackbar('modul acara', '${arg.modulAcara?.mdlFileAcaraUrl}');
+                            Utils.openUrl(arg.modulAcara?.mdlFileAcaraUrl);},
                           icon: const Icon(Icons.download_rounded),
                           color: AppColors.primary,
                         ),
-                        onTap: () {},
+                        onTap: () {
+
+                          },
                       )
                     : const SizedBox.shrink(),
                 const SizedBox(height: 16),
