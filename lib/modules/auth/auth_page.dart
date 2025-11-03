@@ -77,6 +77,7 @@ class AuthPage extends GetView<AuthController> {
           subtitle: e.toString(),
         );
       }
+      return null;
     }
 
     Future<String?> _onRecoverPassword(String email) async {
