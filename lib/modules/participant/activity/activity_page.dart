@@ -67,7 +67,10 @@ class ActivityPage extends GetView<ActivityController> {
                               status: status,
                               onTap: () => Get.toNamed(
                                 Routes.DETAIL,
-                                arguments: d,
+                                arguments: {
+                                  "id" : d.modulAcaraId,
+                                  "data" : d,
+                                },
                               ),
                               onActionTap: () {
                                 if (status == ActivityFilter.selesai) {
