@@ -19,6 +19,7 @@ class ActivityController extends GetxController {
   final error = RxnString();
   final followedEvents = <Datum>[].obs;
   final selectedFilter = Rxn<ActivityFilter>();
+  final searchQuery = ''.obs;
 
   @override
   void onInit() {
@@ -33,6 +34,11 @@ class ActivityController extends GetxController {
       loadFollowed();
     }
   }
+
+  void updateSearchQuery(String query) {
+    searchQuery.value = query;
+  }
+
   void checkLoginStatus() {
     final token = _storage.read('access_token');
     isLoggedIn.value = token != null && token.isNotEmpty;
@@ -62,32 +68,21 @@ class ActivityController extends GetxController {
 
   List<Datum> get filteredFollowed {
     final f = selectedFilter.value;
-    if (f == null) return followedEvents.toList();
+    final query = searchQuery.value.toLowerCase();
+    var events = followedEvents.toList();
 
-    final now = DateTime.now();
+    if (f != null) {
+      events = events.where((d) => eventStatus(d) == f).toList();
+    }
 
-    return followedEvents.where((d) {
-      return eventStatus(d) == f;
-      // // Assumes `modulAcara` has `mdlAcaraMulai` and `mdlAcaraSelesai` fields,
-      // // similar to the Acara object in event_detail.dart.
-      // final startTime = _parseDate(d.modulAcara?.mdlAcaraMulai);
-      // final endTime = _parseDate(d.modulAcara?.mdlAcaraSelesai);
-      //
-      // switch (f) {
-      //   case ActivityFilter.mendatang:
-      //     if (startTime == null) return false;
-      //     return startTime.isAfter(now);
-      //   case ActivityFilter.berlangsung:
-      //     if (startTime == null) return false;
-      //     // Event is ongoing if it started and has not ended.
-      //     // If no end time, it's considered ongoing forever after it starts.
-      //     return startTime.isBefore(now) && (endTime == null || endTime.isAfter(now));
-      //   case ActivityFilter.selesai:
-      //     // Event is finished only if an end time is specified and it's in the past.
-      //     if (endTime == null) return false;
-      //     return endTime.isBefore(now);
-      // }
-    }).toList();
+    if (query.isNotEmpty) {
+      events = events.where((d) {
+        final eventName = eventNameOf(d).toLowerCase();
+        return eventName.contains(query);
+      }).toList();
+    }
+    
+    return events;
   }
 
 
@@ -101,21 +96,6 @@ class ActivityController extends GetxController {
     if (startTime.isAfter(now)) return ActivityFilter.mendatang;
     if (endTime == null || endTime.isAfter(now)) return ActivityFilter.berlangsung;
     return ActivityFilter.selesai;
-
-    // switch (f) {
-    //   case ActivityFilter.mendatang:
-    //     if (startTime == null) return false;
-    //     return startTime.isAfter(now);
-    //   case ActivityFilter.berlangsung:
-    //     if (startTime == null) return false;
-    //     // Event is ongoing if it started and has not ended.
-    //     // If no end time, it's considered ongoing forever after it starts.
-    //     return startTime.isBefore(now) && (endTime == null || endTime.isAfter(now));
-    //   case ActivityFilter.selesai:
-    //   // Event is finished only if an end time is specified and it's in the past.
-    //     if (endTime == null) return false;
-    //     return endTime.isBefore(now);
-    // }
   }
 
   Future<void> loadFollowed({int page = 1}) async {
