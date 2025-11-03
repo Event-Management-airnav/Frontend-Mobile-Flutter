@@ -182,7 +182,7 @@ class DetailPage extends GetView<EventDetailController> {
                 if (event.catatan != null && event.catatan!.isNotEmpty)
                   AdditionalInfoCard(
                     title: 'Informasi Tambahan',
-                    contentLines: event.catatan!.split(''),
+                    contentLines: event.catatan!.split('\n'),
                   ),
               ],
             ),
