@@ -4,6 +4,7 @@ import 'package:frontend_mobile_flutter/modules/event_detail/event_detail_contro
 import 'package:frontend_mobile_flutter/modules/participant/home/widgets/register_event_popup.dart';
 import 'package:get/get.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../core/utils.dart';
 import '../../data/models/event/followed_event.dart';
@@ -61,26 +62,60 @@ class DetailPage extends GetView<EventDetailController> {
                   description: event.deskripsi,
                   primaryColor: AppColors.primary,
                   registerButtonText:
-                      controller.eventDetail.value?.statusAcara != "Akan Datang"
-                      ? 'Pendaftaran Ditutup'
-                      : (controller.isUserLoggedIn.value
-                            ? (controller.isRegistered.value
-                                  ? 'Sudah Daftar'
-                                  : 'Daftar Sekarang')
-                            : 'Login Untuk Mendaftar'),
+                      controller.isUserLoggedIn.value? (controller.canRegister(event)?  "Daftar Acara" : "Batal Daftar")  : "Login Untuk Mendaftar",
+                      // controller.eventDetail.value?.statusAcara != "Akan Datang"
+                      // ? 'Pendaftaran Ditutup'
+                      // : (controller.isUserLoggedIn.value
+                      //       ? (controller.isRegistered.value
+                      //             ? 'Sudah Daftar'
+                      //             : 'Daftar Sekarang')
+                      //       : 'Login Untuk Mendaftar'),
                   onRegister:
-                      controller.isUserLoggedIn.value &&
-                          !controller.isRegistered.value &&
-                          controller.eventDetail.value?.statusAcara !=
-                              "Akan Datang"
-                      ? () {
-                          RegisterEventPopup.show(
-                            context,
-                            onSubmit: (agree, offline, online) {},
-                            eventId: controller.eventDetail.value!.id,
-                          );
-                        }
-                      : null,
+                      // controller.isUserLoggedIn.value &&
+                      //     !controller.isRegistered.value &&
+                      //     controller.eventDetail.value?.statusAcara !=
+                      //         "Akan Datang"
+                      // ? () {
+                      //     RegisterEventPopup.show(
+                      //       context,
+                      //       onSubmit: (agree, offline, online) {},
+                      //       eventId: controller.eventDetail.value!.id,
+                      //     );
+                      //   }
+                      // : null,
+                      controller.isUserLoggedIn.value? (controller.canRegister(event)? (){
+                        RegisterEventPopup.show(
+                                context,
+                                onSubmit: (agree, offline, online) {},
+                                eventId: controller.eventDetail.value!.id,
+                              );
+                      } : (){
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("Konfirmasi"),
+                              content: const Text("Anda yakin membatalkan acara ini?"),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: const Text("Tidak"),
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                ),
+                                TextButton(
+                                  child: const Text("Ya"),
+                                  onPressed: () {
+                                    // TODO: call controller to cancel registration
+                                    Get.back();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }) : null,
+
                   shareUrl:
                       'https://airnav-event.vercel.app/user/event/${event.id}',
                 ),
@@ -141,7 +176,7 @@ class DetailPage extends GetView<EventDetailController> {
                 if (event.catatan != null && event.catatan!.isNotEmpty)
                   AdditionalInfoCard(
                     title: 'Informasi Tambahan',
-                    contentLines: event.catatan!.split('\n'),
+                    contentLines: event.catatan!.split(''),
                   ),
               ],
             ),

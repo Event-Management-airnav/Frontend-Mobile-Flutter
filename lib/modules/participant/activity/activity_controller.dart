@@ -52,19 +52,7 @@ class ActivityController extends GetxController {
     }
   }
 
-  /// Safely parse a date that can be a String, DateTime, or null.
-  DateTime? _parseDate(dynamic date) {
-    if (date == null) return null;
-    if (date is DateTime) return date;
-    if (date is String) {
-      try {
-        return DateTime.parse(date);
-      } catch (_) {
-        return null; // Return null if parsing fails
-      }
-    }
-    return null;
-  }
+
 
   List<Datum> get filteredFollowed {
     final f = selectedFilter.value;
@@ -87,8 +75,8 @@ class ActivityController extends GetxController {
 
 
   ActivityFilter eventStatus(Datum d) {
-    final startTime = _parseDate(d.modulAcara?.mdlAcaraMulai);
-    final endTime = _parseDate(d.modulAcara?.mdlAcaraSelesai);
+    final startTime = Utils.parseDate(d.modulAcara?.mdlAcaraMulai);
+    final endTime = Utils.parseDate(d.modulAcara?.mdlAcaraSelesai);
     final now = DateTime.now();
 
     if (startTime == null) return ActivityFilter.selesai;
