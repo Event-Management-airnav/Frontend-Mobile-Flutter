@@ -153,6 +153,7 @@ class ProfileController extends GetxController {
         name.value = nameController.text;
         whatsapp.value = whatsappController.text;
         email.value = emailController.text;
+        _storage.write("status_karyawan", response.data?.statusKaryawan ?? 0);
 
         Get.back(); // Menutup dialog.
         Get.snackbar('Berhasil', 'Profil berhasil diperbarui.', backgroundColor: Colors.green, colorText: Colors.white);
