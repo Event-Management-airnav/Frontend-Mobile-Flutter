@@ -33,7 +33,7 @@ class AuthPage extends GetView<AuthController> {
       final name = data.additionalSignupData?['name'];
       final telp = data.additionalSignupData?['telp'];
       final username = data.additionalSignupData?['username'];
-      final statusKaryawan = data.termsOfService[0].accepted;
+      final statusKaryawan = data.termsOfService[0].accepted? 1 : 0;
 
 
       if (name == null || telp == null || username == null || data.name == null || data.password == null) {
@@ -48,7 +48,7 @@ class AuthPage extends GetView<AuthController> {
           telp: telp,
           password: data.password!,
           confirmPassword: data.password!,
-          statusKaryawan: statusKaryawan? 1 : 0,
+          statusKaryawan: statusKaryawan,
         );
 
         if (error != null) {
@@ -175,7 +175,7 @@ class AuthPage extends GetView<AuthController> {
                           TermOfService(
                             id: "karyawan",
                             mandatory: false,
-                            text: "Karyawan",
+                            text: "Saya adalah karyawan AirNav Indonesia?",
                           )
                         ],
 
@@ -275,6 +275,15 @@ class AuthPage extends GetView<AuthController> {
                           }
                           if (value.length < 8) {
                             return 'Password minimal 8 karakter';
+                          }
+                          if (!RegExp(r'(?=.*[A-Z])').hasMatch(value)) {
+                            return 'Password harus memiliki setidaknya satu huruf kapital';
+                          }
+                          if (!RegExp(r'(?=.*[0-9])').hasMatch(value)) {
+                            return 'Password harus memiliki setidaknya satu angka';
+                          }
+                          if (!RegExp(r'(?=.*[!@#$%^&*(),.?":{}|<>])').hasMatch(value)) {
+                            return 'Password harus memiliki setidaknya satu karakter khusus';
                           }
                           return null;
                         },
