@@ -276,15 +276,15 @@ class AuthPage extends GetView<AuthController> {
                           if (value.length < 8) {
                             return 'Password minimal 8 karakter';
                           }
-                          if (!RegExp(r'(?=.*[A-Z])').hasMatch(value)) {
-                            return 'Password harus memiliki setidaknya satu huruf kapital';
-                          }
-                          if (!RegExp(r'(?=.*[0-9])').hasMatch(value)) {
-                            return 'Password harus memiliki setidaknya satu angka';
-                          }
-                          if (!RegExp(r'(?=.*[!@#$%^&*(),.?":{}|<>])').hasMatch(value)) {
-                            return 'Password harus memiliki setidaknya satu karakter khusus';
-                          }
+                          // if (!RegExp(r'(?=.*[A-Z])').hasMatch(value)) {
+                          //   return 'Password harus memiliki setidaknya satu huruf kapital';
+                          // }
+                          // if (!RegExp(r'(?=.*[0-9])').hasMatch(value)) {
+                          //   return 'Password harus memiliki setidaknya satu angka';
+                          // }
+                          // if (!RegExp(r'(?=.*[!@#$%^&*(),.?":{}|<>])').hasMatch(value)) {
+                          //   return 'Password harus memiliki setidaknya satu karakter khusus';
+                          // }
                           return null;
                         },
 
