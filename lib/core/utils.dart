@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Utils {
   // Spacing constants
@@ -138,4 +139,17 @@ class Utils {
   static String jamMenitSafe(String raw) {
     return raw.substring(11, 16);
   }
+
+  static Future<void> openUrl(String? url) async {
+    print('Opening URL: $url');
+    if (url == null || url.isEmpty) return;
+
+    final uri = Uri.parse(url);
+
+    if (!await canLaunchUrl(uri)) return;
+
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
+
 }

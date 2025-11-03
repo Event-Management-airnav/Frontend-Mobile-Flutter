@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/utils.dart';
 
 class AdditionalInfoCard extends StatelessWidget {
   final String title;
@@ -32,14 +33,29 @@ class AdditionalInfoCard extends StatelessWidget {
 
   Widget _buildRichText() {
     if (contentLines.isEmpty) return const SizedBox.shrink();
-    final first = contentLines.first;
-    final rest = contentLines.skip(1).toList();
 
-    return Text.rich(
-      TextSpan(
-        text: '$first ',
-        style: const TextStyle(fontWeight: FontWeight.w500),
-        children: [TextSpan(text: '\n${rest.join('\n')}')],
+    final text = contentLines.join('\n');
+
+    final regex = RegExp(r'(https?://[^\s]+)');
+    String? url;
+    final match = regex.firstMatch(text);
+    if (match != null) {
+      url = match.group(0);
+    }
+
+    return GestureDetector(
+      onTap: () {
+        if (url != null) {
+          Utils.openUrl(url);
+        }
+      },
+      child: Text(
+        text,
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          color: url != null ? Colors.blue : Colors.black,
+          decoration: url != null ? TextDecoration.underline : TextDecoration.none,
+        ),
       ),
     );
   }
