@@ -151,5 +151,18 @@ class Utils {
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
+  /// Safely parse a date that can be a String, DateTime, or null.
+  static DateTime? parseDate(dynamic date) {
+    if (date == null) return null;
+    if (date is DateTime) return date;
+    if (date is String) {
+      try {
+        return DateTime.parse(date);
+      } catch (_) {
+        return null; // Return null if parsing fails
+      }
+    }
+    return null;
+  }
 
 }
