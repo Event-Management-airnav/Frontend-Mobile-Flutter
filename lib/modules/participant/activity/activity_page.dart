@@ -27,9 +27,6 @@ class ActivityPage extends GetView<ActivityController> {
           if (controller.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (controller.error.value != null) {
-            return Center(child: Text('Error: ${controller.error.value}'));
-          }
           final items = controller.filteredFollowed;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,8 +55,9 @@ class ActivityPage extends GetView<ActivityController> {
                               controller.eventDateOf(d),
                             );
                             final status = controller.eventStatus(d);
-                            if (status == 'Unknown')
+                            if (status == 'Unknown') {
                               return const SizedBox.shrink();
+                            }
 
                             return ActivityContainer(
                               eventName: name,
