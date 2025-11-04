@@ -63,13 +63,16 @@ class ActivityPage extends GetView<ActivityController> {
                               eventName: name,
                               eventDate: date,
                               status: status,
-                              onTap: () => Get.toNamed(
-                                Routes.DETAIL,
-                                arguments: {
-                                  "id" : d.modulAcaraId,
-                                  "data" : d,
-                                },
-                              ),
+                              onTap: () async {
+                                await Get.toNamed(
+                                  Routes.DETAIL,
+                                  arguments: {
+                                    "id" : d.modulAcaraId,
+                                    "data" : d,
+                                  },
+                                );
+                                controller.refreshFollowed();
+                              },
                               onActionTap: () {
                                 if (status == ActivityFilter.selesai) {
                                   Get.snackbar(
