@@ -39,7 +39,7 @@ class ApiInterceptor extends Interceptor {
           Get.snackbar("Forbidden", response.data["message"] ?? "Not allowed");
           break;
         case 404:
-          Get.snackbar("Not Found", response.data["message"] ?? "Not found");
+          // Get.snackbar("Not Found", response.data["message"] ?? "Not found"); DISABLE SEMENTARA KARENA DETAIL ADA DIBILANG 404
           break;
         case 422:
           Get.snackbar("Unprocessable Entity", response.data["message"] ?? "Invalid request");
