@@ -7,6 +7,7 @@ import '../../core/text_styles.dart';
 import '../../core/widgets/otp_widgets.dart';
 import 'auth_controller.dart';
 import 'reset_password_page.dart';
+import 'forget_password_page.dart';
 
 class OtpVerificationPage extends StatefulWidget {
   final String email;
