@@ -55,6 +55,21 @@ class EventDetail extends Equatable {
   @JsonKey(name: 'mdl_presensi_aktif')
   final int presensiAktif;
 
+  @JsonKey(name: 'mdl_file_acara')
+  final String? fileAcara;
+
+  @JsonKey(name: 'mdl_file_rundown')
+  final String? fileRundown;
+
+  @JsonKey(name: 'mdl_template_sertifikat')
+  final String? templateSertifikat;
+
+  @JsonKey(name: 'mdl_link_wa')
+  final String? linkWa;
+
+  @JsonKey(name: 'mdl_kategori')
+  final String? kategori;
+
   final String tipe;
 
   @JsonKey(name: 'status_acara')
@@ -64,9 +79,9 @@ class EventDetail extends Equatable {
   final String? latitude;
   final String? longitude;
   final int? radius;
-  final Pendaftaran? pendaftaran;
-  final Acara? acara;
-  final Kapasitas? kapasitas;
+  final Pendaftaran pendaftaran;
+  final Acara acara;
+  final Kapasitas kapasitas;
   final String? status;
 
   @JsonKey(name: 'sertifikat_aktif')
@@ -86,15 +101,20 @@ class EventDetail extends Equatable {
     required this.deskripsi,
     this.mdlKodeQr,
     required this.presensiAktif,
+    this.fileAcara,
+    this.fileRundown,
+    this.templateSertifikat,
+    this.linkWa,
+    this.kategori,
     required this.tipe,
     required this.statusAcara,
     this.lokasi,
     this.latitude,
     this.longitude,
     this.radius,
-    this.pendaftaran,
-    this.acara,
-    this.kapasitas,
+    required this.pendaftaran,
+    required this.acara,
+    required this.kapasitas,
     this.status,
     required this.sertifikatAktif,
     required this.doorprizeAktif,
@@ -116,6 +136,11 @@ class EventDetail extends Equatable {
     deskripsi,
     mdlKodeQr,
     presensiAktif,
+    fileAcara,
+    fileRundown,
+    templateSertifikat,
+    linkWa,
+    kategori,
     tipe,
     statusAcara,
     lokasi,
@@ -139,10 +164,10 @@ class Pendaftaran extends Equatable {
   final String selesai;
 
   @JsonKey(name: 'mulai_raw')
-  final String? mulaiRaw;
+  final DateTime mulaiRaw;
 
   @JsonKey(name: 'selesai_raw')
-  final String? selesaiRaw;
+  final DateTime selesaiRaw;
 
   @JsonKey(name: 'is_open')
   final bool? isOpen;
@@ -150,8 +175,8 @@ class Pendaftaran extends Equatable {
   const Pendaftaran({
     required this.mulai,
     required this.selesai,
-    this.mulaiRaw,
-    this.selesaiRaw,
+    required this.mulaiRaw,
+    required this.selesaiRaw,
     this.isOpen,
   });
 
@@ -170,15 +195,15 @@ class Acara extends Equatable {
   final String? selesai;
 
   @JsonKey(name: 'mulai_raw')
-  final String? mulaiRaw;
+  final DateTime mulaiRaw;
 
   @JsonKey(name: 'selesai_raw')
-  final String? selesaiRaw;
+  final DateTime? selesaiRaw;
 
   const Acara({
     required this.mulai,
     this.selesai,
-    this.mulaiRaw,
+    required this.mulaiRaw,
     this.selesaiRaw,
   });
 

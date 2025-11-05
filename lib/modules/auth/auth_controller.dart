@@ -58,13 +58,13 @@ class AuthController extends GetxController {
         email: email,
         telp: telp,
         password: password,
-        passwordConfirmation: password,
-        statusKaryawan: 0,
+        passwordConfirmation: confirmPassword,
+        statusKaryawan: statusKaryawan,
       ),
     );
 
     if (!result.success) {
-      return result.message;
+      return result.message + result.errors.toString();
     }
 
     return null;
@@ -91,7 +91,7 @@ class AuthController extends GetxController {
     final result = await authService.verifyOtp(
       OtpVerifyRequest(email: email, otp: otp),
     );
-
+    print('otp result $result');
     if (!result.success) {
       return result.message;
     }

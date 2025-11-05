@@ -85,6 +85,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
         email: widget.email,
         otp: otpCode,
       );
+      print('otp verify $error');
 
       setState(() {
         isLoading = false;
