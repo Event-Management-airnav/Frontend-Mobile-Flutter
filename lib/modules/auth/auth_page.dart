@@ -114,20 +114,30 @@ class _AuthPageState extends State<AuthPage> {
                 TextField(
                   controller: _emailLogin,
                   decoration: InputDecoration(
-                    labelText: "Email",
+                    labelText: "Email/Username",
                     prefixIcon: const Icon(Icons.email_outlined),
                   ),
                 ),
                 const SizedBox(height: 16),
-
                 // Password
-                TextField(
+                TextFormField(
                   controller: _passwordLogin,
                   obscureText: true,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Password",
-                    prefixIcon: const Icon(Icons.lock_outline),
+                    prefixIcon: Icon(Icons.lock_outline),
                   ),
+                  validator: (v) {
+                    if(v == null || v.isEmpty) {
+                      return "Password tidak boleh kosong";
+                    }
+
+                    final pwdRegex = RegExp(r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$');
+                    if (!pwdRegex.hasMatch(v)) {
+                      return "Minimal 8 karakter, harus ada 1 uppercase, 1 simbol, dan 1 angka";
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: 24),
 
@@ -212,6 +222,7 @@ class _AuthPageState extends State<AuthPage> {
 
                   TextFormField(
                     controller: _emailReg,
+                    keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       labelText: "Email",
                       prefixIcon: Icon(Icons.email_outlined),
@@ -223,12 +234,23 @@ class _AuthPageState extends State<AuthPage> {
 
                   TextFormField(
                     controller: _telp,
+                    keyboardType: TextInputType.phone,
                     decoration: const InputDecoration(
                       labelText: "Nomor Telepon",
                       prefixIcon: Icon(Icons.phone_outlined),
                     ),
-                    validator: (v) =>
-                        v!.isEmpty ? "Nomor telepon tidak boleh kosong" : null,
+                    validator: (v) {
+                      if (v == null || v.isEmpty) {
+                        return "Nomor telepon tidak boleh kosong";
+                      }
+
+                      final phoneRegex = RegExp(r'^(?:\+62|0)[0-9]{9,}$');
+                      if (!phoneRegex.hasMatch(v)) {
+                        return "Format nomor tidak valid (contoh: 0812xxx atau +62812xxx)";
+                      }
+
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 16),
 
@@ -239,8 +261,17 @@ class _AuthPageState extends State<AuthPage> {
                       labelText: "Password",
                       prefixIcon: Icon(Icons.lock_outline),
                     ),
-                    validator: (v) =>
-                        v!.length < 6 ? "Minimal 6 karakter" : null,
+                    validator: (v) {
+                      if(v == null || v.isEmpty) {
+                        return "Password tidak boleh kosong";
+                      }
+
+                      final pwdRegex = RegExp(r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$');
+                      if (!pwdRegex.hasMatch(v)) {
+                        return "Minimal 8 karakter, harus ada 1 uppercase, 1 simbol, dan 1 angka";
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 16),
 
@@ -251,8 +282,18 @@ class _AuthPageState extends State<AuthPage> {
                       labelText: "Konfirmasi Password",
                       prefixIcon: Icon(Icons.lock_outline),
                     ),
-                    validator: (v) =>
-                        v != _passwordReg.text ? "Password tidak sama" : null,
+                    validator: (v) {
+                      if(v == null || v.isEmpty) {
+                        return "Password tidak boleh kosong";
+                      }
+
+                      final pwdRegex = RegExp(r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$');
+                      if (!pwdRegex.hasMatch(v)) {
+                        return "Minimal 8 karakter, harus ada 1 uppercase, 1 simbol, dan 1 angka";
+                      }
+
+                      return null;
+                    },
                   ),
 
                   const SizedBox(height: 24),
