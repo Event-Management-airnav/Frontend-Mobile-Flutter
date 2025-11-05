@@ -114,21 +114,22 @@ class AuthService extends GetxService {
     }
   }
 
-  Future<BasicResponse> verifyOtp(OtpVerifyRequest req) async {
+  Future<int?> verifyOtp(OtpVerifyRequest req) async {
     try {
       final response = await ApiClient.dio.post(
         Endpoints.verifyOtp,
         data: req.toJson(),
       );
-
-      return BasicResponse.fromJson(response.data);
+      if (response.statusCode == 200) {
+        return 200;
+      }
     } on DioException catch (e) {
       final res = e.response?.data;
 
-      return BasicResponse(
-        success: false,
-        message: res?["message"] ?? "Verification failed",
-      );
+      // return BasicResponse(
+      //   success: false,
+      //   message: res?["message"] ?? "Verification failed",
+      // );
     }
   }
 

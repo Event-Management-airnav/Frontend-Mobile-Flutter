@@ -15,7 +15,7 @@ class OtpVerificationPage extends StatefulWidget {
   const OtpVerificationPage({
     super.key,
     required this.email,
-    this.isFromRegistration = false,
+    this.isFromRegistration = true,
   });
 
   @override
@@ -85,13 +85,12 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
         email: widget.email,
         otp: otpCode,
       );
-      print('otp verify $error');
-
+      print('error otp $error');
       setState(() {
         isLoading = false;
       });
 
-      if (error == null) {
+      if (error == 'Success') {
         // Success
         if (widget.isFromRegistration) {
           // Registration flow - go back to login
@@ -128,12 +127,12 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
           otpCode = ''; // Clear OTP on error
         });
 
-        Get.snackbar(
-          'Error',
-          error,
-          backgroundColor: AppColors.error,
-          colorText: Colors.white,
-        );
+        // Get.snackbar(
+        //   'Error',
+        //   error!,
+        //   backgroundColor: AppColors.error,
+        //   colorText: Colors.white,
+        // );
       }
 
     } catch (e) {
