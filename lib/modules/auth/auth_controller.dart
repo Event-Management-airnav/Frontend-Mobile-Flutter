@@ -91,7 +91,7 @@ class AuthController extends GetxController {
     final result = await authService.verifyOtp(
       OtpVerifyRequest(email: email, otp: otp),
     );
-
+    print('otp result $result');
     if (!result.success) {
       return result.message;
     }
