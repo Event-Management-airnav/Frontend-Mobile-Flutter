@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -126,7 +127,9 @@ class Utils {
   }
 
   static Future<void> openUrl(String? url) async {
-    print('Opening URL: $url');
+    if (kDebugMode) {
+      print('Opening URL: $url');
+    }
     if (url == null || url.isEmpty) return;
 
     final uri = Uri.parse(url);

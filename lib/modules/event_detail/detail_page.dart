@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:frontend_mobile_flutter/core/app_colors.dart';
 import 'package:frontend_mobile_flutter/modules/event_detail/event_detail_controller.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/widgets/fail_register.dart';
-import 'package:frontend_mobile_flutter/modules/participant/home/widgets/register_event_popup.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/widgets/success_register.dart';
 import 'package:get/get.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/utils.dart';
-import '../../data/models/event/followed_event.dart';
 import '../participant/home/widgets/event_hero_card.dart';
 import '../participant/home/widgets/about_event_card.dart';
 import '../participant/home/widgets/section_tile_card.dart';
@@ -202,7 +200,7 @@ class DetailPage extends GetView<EventDetailController> {
                 ),
                 const SizedBox(height: 16),
                 if (controller.isRegistered.value) ...[
-                  SectionTileCard(
+                  if (event.fileRundown != null) SectionTileCard(
                     leadingIcon: Icons.description_outlined,
                     iconColor: AppColors.primary,
                     title: 'Susunan Acara',
@@ -218,7 +216,7 @@ class DetailPage extends GetView<EventDetailController> {
                     onTap: () {},
                   ),
                   const SizedBox(height: 10),
-                  SectionTileCard(
+                  if (event.fileAcara != null) SectionTileCard(
                     leadingIcon: Icons.menu_book_outlined,
                     iconColor: AppColors.primary,
                     title: 'Modul Acara',
@@ -239,23 +237,35 @@ class DetailPage extends GetView<EventDetailController> {
                   title: 'Informasi Acara',
                   items: [
                     InfoItem(
-                      leading: const Icon(Icons.location_on_outlined),
+                      leading: const Icon(
+                        Icons.location_on_outlined,
+                        size: 20,
+                      ),
                       label: 'Lokasi',
                       value: event.lokasi ?? 'N/A',
                     ),
                     InfoItem(
-                      leading: const Icon(Icons.how_to_reg_outlined),
+                      leading: const Icon(
+                        Icons.how_to_reg_outlined,
+                        size: 20,
+                      ),
                       label: 'Pendaftaran',
                       value:
                           '$eventRegStartShort $eventRegStartHour - $eventRegEndShort $eventRegEndHour',
                     ),
                     InfoItem(
-                      leading: const Icon(Icons.calendar_today_outlined),
+                      leading: const Icon(
+                        Icons.calendar_today_rounded,
+                        size: 20,
+                      ),
                       label: 'Tanggal Acara',
                       value: eventStartShort,
                     ),
                     InfoItem(
-                      leading: const Icon(Icons.access_time_outlined),
+                      leading: const Icon(
+                        Icons.access_time_rounded,
+                        size: 20,
+                      ),
                       label: 'Jam Acara',
                       value:
                           eventStartHour +

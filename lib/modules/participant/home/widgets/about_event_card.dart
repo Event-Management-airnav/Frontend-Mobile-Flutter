@@ -8,7 +8,6 @@ class AboutEventCard extends StatelessWidget {
   final String description;
   final Color primaryColor;
 
-  ///(contoh: https://airnav-event.vercel.app/user/event/21)
   final String shareUrl;
   final String? shareMessage;
 
