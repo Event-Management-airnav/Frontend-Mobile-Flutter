@@ -57,8 +57,8 @@ class _AuthPageState extends State<AuthPage> {
     setState(() => isLoading = false);
 
     if (result != null) {
-      Get.snackbar("Login Gagal", result,
-          backgroundColor: Colors.redAccent, colorText: Colors.white);
+      // Get.snackbar("Login Gagal", result,
+      //     backgroundColor: Colors.redAccent, colorText: Colors.white);
     } else {
       Get.snackbar("Berhasil", "Login sukses!",
           backgroundColor: Colors.green, colorText: Colors.white);
@@ -90,6 +90,26 @@ class _AuthPageState extends State<AuthPage> {
           backgroundColor: Colors.green, colorText: Colors.white);
     }
   }
+
+// Forget Password 
+  // Future<void> _onRegister() async {
+  //   if (!_formKey.currentState!.validate()) return;
+
+  //   setState(() => isLoading = true);
+  //   final result = await controller.forgetpassword(
+  //     email: _emailReg.text.trim(),
+  //   );
+  //   setState(() => isLoading = false);
+
+  //   if (result != null) {
+  //     Get.to(() => const FailRegister());
+  //   } else {
+  //     Get.to(() => OtpVerificationPage(email: _emailReg.text.trim()));
+  //     Get.snackbar("",
+  //         "Silakan verifikasi email kamu sebelum login.",
+  //         backgroundColor: Colors.green, colorText: Colors.white);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -204,7 +224,7 @@ class _AuthPageState extends State<AuthPage> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 26),
+                  const SizedBox(height: 16),
 
                   // Password
                   TextFormField( 
@@ -428,7 +448,7 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 30),
 
                   // Nama Lengkap
                   TextFormField(

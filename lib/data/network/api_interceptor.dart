@@ -29,6 +29,12 @@ class ApiInterceptor extends Interceptor {
     Color failColor = Colors.redAccent;
     if (response != null) {
       switch (response.statusCode) {
+        case 200:
+          Get.snackbar("Success", response.data["message"] ?? "Operation successful",backgroundColor: Colors.green);
+          break;
+        case 201:
+          Get.snackbar("Created", response.data["message"] ?? "Resource created successfully",backgroundColor: Colors.green);
+          break;
         case 400:
           // TODO make sure response data message never null
           Get.snackbar("Bad Request", response.data["message"] ?? "Invalid request",backgroundColor: failColor);
