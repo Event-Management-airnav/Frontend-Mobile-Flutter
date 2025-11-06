@@ -3,6 +3,7 @@ import 'package:frontend_mobile_flutter/core/utils.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_controller.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../app_pages.dart';
 import '../../../core/app_colors.dart';
@@ -61,7 +62,6 @@ class HomePage extends GetView<HomeController> {
                       label: const Text('Semua'),
                       selected: active == null,
                       onSelected: (_) {
-                        // Tapping "All" clears filter
                         controller.activeFilter.value = null;
                       },
                     ),
@@ -145,8 +145,8 @@ class _EventListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final waktu = event.acaraMulai;
-    final tanggal = Utils.fromDateTimeToIndonesiaDate(waktu);
-    final jam = Utils.jamMenitSafe(waktu);
+    final tanggal = DateFormat("d MMM yyy", "id_ID").format(waktu);
+    final jam = DateFormat("HH:mm", "id_ID").format(waktu);
     final lokasi = event.lokasi;
 
     Color statusColor;
@@ -166,7 +166,7 @@ class _EventListTile extends StatelessWidget {
         filterText = "Sudah Selesai";
         break;
       case HomeFilter.none:
-        filterText = "Segera Hadir";
+        filterText = "None";
         statusColor = Colors.grey.shade100;
         break;
     }
