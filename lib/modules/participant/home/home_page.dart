@@ -4,6 +4,7 @@ import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app
 import 'package:frontend_mobile_flutter/modules/participant/home/home_controller.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 import '../../../app_pages.dart';
 import '../../../core/app_colors.dart';
@@ -157,8 +158,8 @@ class _EventListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final waktu = event.acaraMulai;
-    final tanggal = Utils.fromDateTimeToIndonesiaDate(waktu);
-    final jam = Utils.jamMenitSafe(waktu);
+    final tanggal = DateFormat("d MMM yyy", "id_ID").format(waktu);
+    final jam = DateFormat("HH:mm", "id_ID").format(waktu);
     final lokasi = event.lokasi;
 
     Color statusColor;
