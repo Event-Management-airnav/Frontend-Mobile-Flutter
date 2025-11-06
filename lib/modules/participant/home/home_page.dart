@@ -52,7 +52,6 @@ class HomePage extends GetView<HomeController> {
                       label: const Text('Semua'),
                       selected: active == null,
                       onSelected: (_) {
-                        // Tapping "All" clears filter
                         controller.activeFilter.value = null;
                       },
                     ),
@@ -137,7 +136,7 @@ class _EventListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final waktu = event.acaraMulai;
     final tanggal = Utils.fromDateTimeToIndonesiaDate(waktu);
-    final jam = Utils.jamMenitSafe(waktu);
+    final jam = Utils.fromDateTimeToHHMM(waktu);
     final lokasi = event.lokasi;
 
     Color statusColor;
@@ -157,7 +156,7 @@ class _EventListTile extends StatelessWidget {
         filterText = "Sudah Selesai";
         break;
       case HomeFilter.none:
-        filterText = "Segera Hadir";
+        filterText = "None";
         statusColor = Colors.grey.shade100;
         break;
     }
