@@ -27,7 +27,7 @@ class ProfilePage extends GetView<ProfileController> {
           }
 
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+            padding: const EdgeInsets.all(16),
             child: Card(
               elevation: 0,
               color: Colors.white,
@@ -157,16 +157,39 @@ class ProfilePage extends GetView<ProfileController> {
                             title: const Text('Konfirmasi Logout'),
                             content: const Text('Apakah Anda yakin ingin keluar?'),
                             actions: [
-                              TextButton(
+                              // batal = outline biru
+                              ElevatedButton(
                                 onPressed: () => Get.back(),
-                                child: const Text('Batal'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.transparent,
+                                  foregroundColor: Colors.blue,
+                                  shadowColor: Colors.transparent,
+                                  side: const BorderSide(color: Colors.blue),
+                                  padding: const EdgeInsets.symmetric(vertical: 14),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                ),
+                                child: const Text("Tidak"),
                               ),
-                              TextButton(
+
+                              // logout = filled merah
+                              ElevatedButton(
                                 onPressed: () {
                                   Get.offAllNamed('/main');
                                   controller.logout();
                                 },
-                                child: const Text('Logout', style: TextStyle(color: Colors.red)),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  padding: const EdgeInsets.symmetric(vertical: 14),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                ),
+                                child: const Text(
+                                  "Ya",
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                             ],
                           ),
