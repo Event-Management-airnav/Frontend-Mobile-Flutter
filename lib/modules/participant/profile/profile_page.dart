@@ -1,5 +1,5 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/profile_widgets.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/widgets/call_to_login.dart';
 import 'package:get/get.dart';
@@ -8,8 +8,6 @@ import 'package:frontend_mobile_flutter/modules/participant/profile/profile_cont
 
 import '../../../app_pages.dart';
 import '../activity/widgets/app_bar.dart';
-
-
 
 class ProfilePage extends GetView<ProfileController> {
   const ProfilePage({super.key});
@@ -24,23 +22,22 @@ class ProfilePage extends GetView<ProfileController> {
             return const Center(child: CircularProgressIndicator());
           }
           if (!controller.isLoggedIn.value) {
-            return CallToLogin(page: "profil");
+            return const CallToLogin(page: "profil");
           }
 
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-              child: Card(
-                elevation: 0,
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Padding(
+          return Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  // pindahkan padding Card ke sini
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisSize: MainAxisSize.min,
+                  child: ListView(
+                    physics: const BouncingScrollPhysics(),
+                    shrinkWrap: true,
                     children: [
                       const Text(
                         'Informasi Profil',
@@ -52,14 +49,15 @@ class ProfilePage extends GetView<ProfileController> {
                         ),
                       ),
                       const SizedBox(height: 24),
+
                       Obx(() {
                         ImageProvider? backgroundImage;
                         if (controller.profileImageFile.value != null) {
                           backgroundImage = FileImage(controller.profileImageFile.value!);
-                        } else if (controller.profileImageUrl.isNotEmpty) {
+                        } else if (controller.profileImageUrl.value.isNotEmpty) {
                           backgroundImage = NetworkImage(controller.profileImageUrl.value);
                         }
-            
+
                         return GestureDetector(
                           onTap: () {
                             if (backgroundImage != null) {
@@ -73,7 +71,7 @@ class ProfilePage extends GetView<ProfileController> {
                                       minScale: 0.5,
                                       maxScale: 4,
                                       child: Center(
-                                        child: Image(image: backgroundImage),
+                                        child: Image(image: backgroundImage!),
                                       ),
                                     ),
                                   ),
@@ -93,12 +91,14 @@ class ProfilePage extends GetView<ProfileController> {
                           ),
                         );
                       }),
+
                       const SizedBox(height: 24),
                       Obx(() => ProfileInfoTile(label: 'Nama Lengkap', value: controller.name.value)),
                       const SizedBox(height: 12),
                       Obx(() => ProfileInfoTile(label: 'No. Whatsapp', value: controller.whatsapp.value)),
                       const SizedBox(height: 12),
                       Obx(() => ProfileInfoTile(label: 'Email', value: controller.email.value)),
+
                       const SizedBox(height: 24),
                       Row(
                         children: [
@@ -151,6 +151,7 @@ class ProfilePage extends GetView<ProfileController> {
                           ),
                         ],
                       ),
+
                       const SizedBox(height: 8),
                       ElevatedButton(
                         onPressed: () {
@@ -159,16 +160,34 @@ class ProfilePage extends GetView<ProfileController> {
                               title: const Text('Konfirmasi Logout'),
                               content: const Text('Apakah Anda yakin ingin keluar?'),
                               actions: [
-                                TextButton(
+                                OutlinedButton(
                                   onPressed: () => Get.back(),
-                                  child: const Text('Batal'),
+                                  style: OutlinedButton.styleFrom(
+                                    side: const BorderSide(color: Colors.blue),
+                                    foregroundColor: Colors.blue,
+                                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                  ),
+                                  child: const Text("Tidak"),
                                 ),
-                                TextButton(
+                                ElevatedButton(
                                   onPressed: () {
                                     Get.offAllNamed('/main');
                                     controller.logout();
                                   },
-                                  child: const Text('Logout', style: TextStyle(color: Colors.red)),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    "Ya",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
                               ],
                             ),
@@ -194,7 +213,7 @@ class ProfilePage extends GetView<ProfileController> {
                   ),
                 ),
               ),
-            ),
+            ],
           );
         }),
       ),
