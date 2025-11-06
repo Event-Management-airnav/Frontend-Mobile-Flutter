@@ -40,7 +40,7 @@ class _AuthPageState extends State<AuthPage> {
   final _loginFormKey = GlobalKey<FormState>();
   final _formKey = GlobalKey<FormState>();
 
-  int _statusKaryawan = 1; // 1 = Karyawan, 0 = Non Karyawan
+  String _statusKaryawan = "1";
 
   Future<void> _onLogin() async {
     if (!_loginFormKey.currentState!.validate()) return;
@@ -866,47 +866,38 @@ class _AuthPageState extends State<AuthPage> {
                       Expanded(
                         child: Row(
                           children: [
-                            Radio<int>(
-                              value: 1,
+                            Radio<String>(
+                              value: "1",
                               groupValue: _statusKaryawan,
                               onChanged: (value) {
-                                setState(() {
-                                  _statusKaryawan = value!;
-                                });
+                                setState(() => _statusKaryawan = value!);
                               },
-                              activeColor: Color(0xFF1565C0),
+                              activeColor: const Color(0xFF1565C0),
                             ),
-                            Text(
-                              "Karyawan",
-                              style: TextStyle(fontSize: 14),
-                            ),
+                            const Text("Karyawan", style: TextStyle(fontSize: 14)),
                           ],
                         ),
                       ),
                       Expanded(
                         child: Row(
                           children: [
-                            Radio<int>(
-                              value: 0,
+                            Radio<String>(
+                              value: "0",
                               groupValue: _statusKaryawan,
                               onChanged: (value) {
-                                setState(() {
-                                  _statusKaryawan = value!;
-                                });
+                                setState(() => _statusKaryawan = value!);
                               },
-                              activeColor: Color(0xFF1565C0),
+                              activeColor: const Color(0xFF1565C0),
                             ),
-                            Text(
-                              "Non Karyawan",
-                              style: TextStyle(fontSize: 14),
-                            ),
+                            const Text("Non Karyawan", style: TextStyle(fontSize: 14)),
                           ],
                         ),
                       ),
                     ],
                   ),
 
-                  const SizedBox(height: 24),
+
+                  SizedBox(height: 24),
 
                   // Button Daftar
                   SizedBox(
