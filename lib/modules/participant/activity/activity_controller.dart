@@ -12,7 +12,7 @@ import '../../../data/models/event/scan_response.dart';
 class ActivityController extends GetxController {
   final ActivityService service = Get.find<ActivityService>();
   final _utils = Utils();
-  final _storage = GetStorage();
+  final _storage = Get.find<GetStorage>();
 
   final isLoggedIn = false.obs;
   final isLoading = false.obs;
