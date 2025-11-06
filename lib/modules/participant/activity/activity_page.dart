@@ -38,9 +38,9 @@ class ActivityPage extends GetView<ActivityController> {
               const SizedBox(height: 10),
               const Text(
                 'Aktivitas',
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 1),
 
               // Area list + pull-to-refresh
               Expanded(
