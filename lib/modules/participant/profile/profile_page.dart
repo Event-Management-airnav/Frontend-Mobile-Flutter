@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/profile_widgets.dart';
@@ -8,8 +9,6 @@ import 'package:frontend_mobile_flutter/modules/participant/profile/profile_cont
 
 import '../../../app_pages.dart';
 import '../activity/widgets/app_bar.dart';
-
-
 
 class ProfilePage extends GetView<ProfileController> {
   const ProfilePage({super.key});
@@ -24,40 +23,42 @@ class ProfilePage extends GetView<ProfileController> {
             return const Center(child: CircularProgressIndicator());
           }
           if (!controller.isLoggedIn.value) {
-            return CallToLogin(page: "profil");
+            return const CallToLogin(page: "profil");
           }
 
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: Card(
-              elevation: 0,
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      'Informasi Profil',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+          return Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  // pindahkan padding Card ke sini
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                  child: ListView(
+                    physics: const BouncingScrollPhysics(),
+                    shrinkWrap: true,
+                    children: [
+                      const Text(
+                        'Informasi Profil',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
                       const SizedBox(height: 24),
+
                       Obx(() {
                         ImageProvider? backgroundImage;
                         if (controller.profileImageFile.value != null) {
                           backgroundImage = FileImage(controller.profileImageFile.value!);
-                        } else if (controller.profileImageUrl.isNotEmpty) {
+                        } else if (controller.profileImageUrl.value.isNotEmpty) {
                           backgroundImage = NetworkImage(controller.profileImageUrl.value);
                         }
-            
+
                         return GestureDetector(
                           onTap: () {
                             if (backgroundImage != null) {
@@ -71,7 +72,7 @@ class ProfilePage extends GetView<ProfileController> {
                                       minScale: 0.5,
                                       maxScale: 4,
                                       child: Center(
-                                        child: Image(image: backgroundImage),
+                                        child: Image(image: backgroundImage!),
                                       ),
                                     ),
                                   ),
@@ -91,12 +92,14 @@ class ProfilePage extends GetView<ProfileController> {
                           ),
                         );
                       }),
+
                       const SizedBox(height: 24),
                       Obx(() => ProfileInfoTile(label: 'Nama Lengkap', value: controller.name.value)),
                       const SizedBox(height: 12),
                       Obx(() => ProfileInfoTile(label: 'No. Whatsapp', value: controller.whatsapp.value)),
                       const SizedBox(height: 12),
                       Obx(() => ProfileInfoTile(label: 'Email', value: controller.email.value)),
+
                       const SizedBox(height: 24),
                       Row(
                         children: [
@@ -147,52 +150,55 @@ class ProfilePage extends GetView<ProfileController> {
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    ElevatedButton(
-                      onPressed: () {
-                        Get.dialog(
-                          AlertDialog(
-                            title: const Text('Konfirmasi Logout'),
-                            content: const Text('Apakah Anda yakin ingin keluar?'),
-                            actions: [
-                              // batal = outline biru
-                              ElevatedButton(
-                                onPressed: () => Get.back(),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                  foregroundColor: Colors.blue,
-                                  shadowColor: Colors.transparent,
-                                  side: const BorderSide(color: Colors.blue),
-                                  padding: const EdgeInsets.symmetric(vertical: 14),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                ),
-                                child: const Text("Tidak"),
-                              ),
+                        ],
+                      ),
 
-                              // logout = filled merah
-                              ElevatedButton(
-                                onPressed: () {
-                                  Get.offAllNamed('/main');
-                                  controller.logout();
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                  padding: const EdgeInsets.symmetric(vertical: 14),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6),
+                      const SizedBox(height: 8),
+                      ElevatedButton(
+                        onPressed: () {
+                          Get.dialog(
+                            AlertDialog(
+                              title: const Text('Konfirmasi Logout'),
+                              content: const Text('Apakah Anda yakin ingin keluar?'),
+                              actions: [
+                                OutlinedButton(
+                                  onPressed: () => Get.back(),
+                                  style: OutlinedButton.styleFrom(
+                                    side: const BorderSide(color: Colors.blue),
+                                    foregroundColor: Colors.blue,
+                                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                  ),
+                                  child: const Text("Tidak"),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Get.offAllNamed('/main');
+                                    controller.logout();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    "Ya",
+                                    style: TextStyle(color: Colors.white),
                                   ),
                                 ),
-                                child: const Text(
-                                  "Ya",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                         child: const Text(
@@ -208,7 +214,7 @@ class ProfilePage extends GetView<ProfileController> {
                   ),
                 ),
               ),
-            ),
+            ],
           );
         }),
       ),
