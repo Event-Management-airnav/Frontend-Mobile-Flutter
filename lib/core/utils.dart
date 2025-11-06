@@ -125,22 +125,6 @@ class Utils {
         DateTime.parse(raw.replaceFirst(' ', 'T'));
   }
 
-  static String fromDateTimeToIndonesiaDate(DateTime dt) {
-    const bulan = [
-      "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
-      "Jul", "Agt", "Sep", "Okt", "Nov", "Des"
-    ];
-    String? day = dt.day.toString().padLeft(2, '0');
-    String month = bulan[dt.month - 1];
-    String? year = dt.year.toString();
-
-    return "$day $month $year";
-  }
-
-  static String fromDateTimeToHHMM(DateTime dt) {
-    return dt.toString().substring(11, 16);
-  }
-
   static Future<void> openUrl(String? url) async {
     print('Opening URL: $url');
     if (url == null || url.isEmpty) return;
@@ -159,7 +143,7 @@ class Utils {
       try {
         return DateTime.parse(date);
       } catch (_) {
-        return null; // Return null if parsing fails
+        return null;
       }
     }
     return null;
