@@ -84,6 +84,7 @@ class AboutEventCard extends StatelessWidget {
         onPressed = null;
       } else {
         if (isAttendanceActive == 1) {
+          // TODO Add indicator sudah presensi
           buttonText = 'Scan Absensi';
           buttonColor = primaryColor;
           onPressed = onScan;

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/app_colors.dart';
+
 class InfoItem {
+  final Icon leading;
   final String label;
   final String value;
-  const InfoItem({required this.label, required this.value});
+  const InfoItem({required this.leading, required this.label, required this.value});
 }
 
 class InfoListCard extends StatelessWidget {
@@ -22,7 +25,11 @@ class InfoListCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+              style: const TextStyle(
+                color: AppColors.primary,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600
+              ),
             ),
             const SizedBox(height: 12),
             Table(
@@ -38,9 +45,16 @@ class InfoListCard extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: Text(
-                            e.label,
-                            style: const TextStyle(color: Colors.black),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              e.leading,
+                              const SizedBox(width: 8),
+                              Text(
+                                e.label,
+                                style: const TextStyle(color: Colors.black),
+                              ),
+                            ],
                           ),
                         ),
                         const Padding(
