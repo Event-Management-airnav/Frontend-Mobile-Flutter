@@ -1,4 +1,3 @@
-import 'package:frontend_mobile_flutter/data/models/event/event_detail.dart';
 import 'package:get/get.dart';
 import 'package:frontend_mobile_flutter/data/network/services/activity_service.dart';
 import 'package:frontend_mobile_flutter/data/models/event/followed_event.dart';
@@ -14,8 +13,8 @@ class ActivityController extends GetxController {
   final _utils = Utils();
   final _storage = Get.find<GetStorage>();
 
-  final isLoggedIn = false.obs;
-  final isLoading = false.obs;
+  final RxBool isLoggedIn = false.obs;
+  final RxBool isLoading = false.obs;
   final error = RxnString();
   final followedEvents = <Datum>[].obs;
   final selectedFilter = Rxn<ActivityFilter>();
