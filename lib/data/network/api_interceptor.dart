@@ -36,7 +36,7 @@ class ApiInterceptor extends Interceptor {
           Get.snackbar("Permintaan Tidak Valid", response.data["message"] ?? "Permintaan yang Anda kirim tidak valid",backgroundColor: failColor);
           break;
         case 401:
-          Get.snackbar("Sesi Berakhir", response.data["message"] ?? "Sesi Anda telah berakhir, silakan masuk kembali",backgroundColor: failColor);
+          Get.snackbar("Tidak Memiliki Akses", response.data["message"] ?? "Kredensial tidak valid.",backgroundColor: failColor);
           break;
         case 403:
           Get.snackbar("Akses Ditolak", response.data["message"] ?? "Anda tidak memiliki izin untuk melakukan aksi ini",backgroundColor: failColor);
