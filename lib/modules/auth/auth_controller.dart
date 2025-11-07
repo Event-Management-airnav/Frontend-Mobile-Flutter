@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:frontend_mobile_flutter/data/models/auth/forgot_password_request.dart';
 import 'package:frontend_mobile_flutter/data/models/auth/login_request.dart';
 import 'package:frontend_mobile_flutter/data/models/auth/otp_resend_request.dart';
@@ -10,12 +11,11 @@ import '../../data/network/services/auth_service.dart';
 
 class AuthController extends GetxController {
   final AuthService authService = Get.find<AuthService>();
-  final storage = GetStorage();
+  final storage = Get.find<GetStorage>();
 
   // Observable user state
   RxBool isLoggedIn = false.obs;
   RxString currentEmail = ''.obs;
-
 
   /// LOGIN
   /// Called from flutter_login.onLogin
@@ -62,8 +62,10 @@ class AuthController extends GetxController {
         statusKaryawan: statusKaryawan,
       ),
     );
-    print('register result: $result');
-    print('status karyawan: $statusKaryawan');
+    if (kDebugMode) {
+      print('register result: $result');
+      print('status karyawan: $statusKaryawan');
+    }
     if (!result.success) {
       return result.message + result.errors.toString();
     }

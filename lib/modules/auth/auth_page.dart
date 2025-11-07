@@ -82,7 +82,7 @@ class _AuthPageState extends State<AuthPage> {
     setState(() => isLoading = false);
 
     if (result != null) {
-      Get.to(() => const FailRegister());
+
     } else {
       Get.to(() => OtpVerificationPage(email: _emailReg.text.trim()));
       Get.snackbar("Registrasi Berhasil",
@@ -90,26 +90,6 @@ class _AuthPageState extends State<AuthPage> {
           backgroundColor: Colors.green, colorText: Colors.white);
     }
   }
-
-// Forget Password 
-  // Future<void> _onRegister() async {
-  //   if (!_formKey.currentState!.validate()) return;
-
-  //   setState(() => isLoading = true);
-  //   final result = await controller.forgetpassword(
-  //     email: _emailReg.text.trim(),
-  //   );
-  //   setState(() => isLoading = false);
-
-  //   if (result != null) {
-  //     Get.to(() => const FailRegister());
-  //   } else {
-  //     Get.to(() => OtpVerificationPage(email: _emailReg.text.trim()));
-  //     Get.snackbar("",
-  //         "Silakan verifikasi email kamu sebelum login.",
-  //         backgroundColor: Colors.green, colorText: Colors.white);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
