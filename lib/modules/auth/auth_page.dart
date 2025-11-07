@@ -383,7 +383,7 @@ class _AuthPageState extends State<AuthPage> {
                     
                     GestureDetector(
                       onTap: () {
-                        Get.to(() => const ForgetPasswordPage());
+                        Get.to(() => const ForgotPasswordPage());
                       },
                       child: Text(
                         "lupa kata sandi",
