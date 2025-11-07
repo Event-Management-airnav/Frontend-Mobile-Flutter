@@ -273,7 +273,7 @@ class _EventListTile extends StatelessWidget {
                               color: statusColor,
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: Text(filterText, style: TextStyle(fontSize: 12, color: textColor)),
+                            child: Text(filterText, style: TextStyle(fontSize: 12, color: textColor, fontWeight: FontWeight.w700)),
                           ),
                         ],
                       ),
@@ -346,7 +346,7 @@ Widget _buildEventInfo(
       children: [
         Icon(icon, size: iconSize, color: textColor),
         const SizedBox(width: 4),
-        Text(label, style: TextStyle(fontSize: 12, color: textColor)),
+        Text(label, style: TextStyle(fontSize: 12, color: textColor,)),
       ],
     ),
   );
