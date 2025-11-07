@@ -15,7 +15,7 @@ class ApiInterceptor extends Interceptor {
     final token = storage.read("access_token");
 
     if (token != null && token.isNotEmpty) {
-      options.headers["Authorization"] = "Bearer $token";
+      options.headers["Authorization"] = "Bearer \$token";
     }
     options.headers["Accept"] = "application/json";
 
@@ -30,42 +30,42 @@ class ApiInterceptor extends Interceptor {
     if (response != null) {
       switch (response.statusCode) {
         case 200:
-          Get.snackbar("Success", response.data["message"] ?? "Operation successful",backgroundColor: Colors.green);
+          Get.snackbar("Berhasil", response.data["message"] ?? "Operasi berhasil",backgroundColor: Colors.green);
           break;
         case 201:
-          Get.snackbar("Created", response.data["message"] ?? "Resource created successfully",backgroundColor: Colors.green);
+          Get.snackbar("Berhasil Dibuat", response.data["message"] ?? "Data berhasil dibuat",backgroundColor: Colors.green);
           break;
         case 400:
-          Get.snackbar("Bad Request", response.data["message"] ?? "Invalid request",backgroundColor: failColor);
+          Get.snackbar("Permintaan Tidak Valid", response.data["message"] ?? "Permintaan yang Anda kirim tidak valid",backgroundColor: failColor);
           break;
         case 401:
-          Get.snackbar("Unauthorized", response.data["message"] ?? "Invalid credentials",backgroundColor: failColor);
+          Get.snackbar("Sesi Berakhir", response.data["message"] ?? "Sesi Anda telah berakhir, silakan masuk kembali",backgroundColor: failColor);
           break;
         case 403:
-          Get.snackbar("Forbidden", response.data["message"] ?? "Not allowed",backgroundColor: failColor);
+          Get.snackbar("Akses Ditolak", response.data["message"] ?? "Anda tidak memiliki izin untuk melakukan aksi ini",backgroundColor: failColor);
           break;
         case 404:
-          // Get.snackbar("Not Found", response.data["message"] ?? "Not found"); DISABLE SEMENTARA KARENA DETAIL ADA DIBILANG 404
+          // Get.snackbar("Tidak Ditemukan", response.data["message"] ?? "Tidak ditemukan");
           break;
         case 422:
-          String message = response.data["message"] ?? "Invalid request";
+          String message = response.data["message"] ?? "Data yang dikirim tidak valid";
           if (response.data["errors"] != null) {
             Map<String, dynamic> errors = response.data["errors"];
             errors.forEach((key, value) {
-              message += "\n- ${value[0]}";
+              message += "\\n- \${value[0]}";
             });
           }
-          Get.snackbar("Unprocessable Entity", message, backgroundColor: failColor);
+          Get.snackbar("Data Tidak Valid", message, backgroundColor: failColor);
           break;
         case 500:
-          Get.snackbar("Internal Server Error", response.data["message"] ?? "Internal server error",backgroundColor: failColor);
+          Get.snackbar("Masalah Server", response.data["message"] ?? "Terjadi masalah pada server, coba lagi nanti",backgroundColor: failColor);
           break;
         default:
-          Get.snackbar("Unknown Error", response.data["message"] ?? "Something went wrong",backgroundColor: failColor);
+          Get.snackbar("Terjadi Kesalahan", response.data["message"] ?? "Telah terjadi kesalahan yang tidak diketahui",backgroundColor: failColor);
           break;
       }
     } else {
-      Get.snackbar("Connection Error", "Network unavailable",backgroundColor: failColor);
+      Get.snackbar("Masalah Koneksi", "Tidak dapat terhubung ke server, periksa koneksi internet Anda",backgroundColor: failColor);
     }
 
     handler.next(err);
