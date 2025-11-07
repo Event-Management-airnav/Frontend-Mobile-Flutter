@@ -206,9 +206,8 @@ class ProfileController extends GetxController {
       final response = await _profileService.logout();
       if (response.success) {
         checkLoginStatus();
-        Get.offAllNamed('/main'); // or your login route
-      } else {
-        Get.snackbar('Gagal', response.message, backgroundColor: Colors.red, colorText: Colors.white);
+        Get.snackbar('Berhasil', 'Anda berhasil keluar.', backgroundColor: Colors.green, colorText: Colors.white);
+        Get.offAllNamed('/login');
       }
     } finally {
       isLoading.value = false;
