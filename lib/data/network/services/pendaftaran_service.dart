@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:equatable/src/equatable.dart';
 import 'package:frontend_mobile_flutter/data/models/basic_response.dart';
 import 'package:get/get.dart';
 
@@ -35,23 +34,23 @@ class PendaftaranService extends GetxService {
     }
   }
 
-  Future<List<MyRegistration>> fetchMyEvents() async {
-    try {
-      final resp = await _dio.get(Endpoints.followedEvents);
-
-      final list = (resp.data["data"]["data"] as List<dynamic>)
-          .map((e) => MyRegistration.fromJson(e))
-          .toList();
-
-      return list;
-    } catch (_) {
-      return [];
-    }
-  }
+  // Future<List<MyRegistration>> fetchMyEvents() async {
+  //   try {
+  //     final resp = await _dio.get(Endpoints.followedEvents);
+  //
+  //     final list = (resp.data["data"]["data"] as List<dynamic>)
+  //         .map((e) => MyRegistration.fromJson(e))
+  //         .toList();
+  //
+  //     return list;
+  //   } catch (_) {
+  //     return [];
+  //   }
+  // }
 
   Future<MyRegistration?> fetchMyEventDetail(int eventId) async {
     try {
-      final resp = await _dio.get("${Endpoints.events}/$eventId/me");
+      final resp = await _dio.get("${Endpoints.followedEventDetail}/$eventId/me");
       return MyRegistration.fromJson(resp.data["data"]);
     } catch (_) {
       return null;
