@@ -12,7 +12,7 @@ import '../../../data/network/services/profile_service.dart';
 // Controller untuk mengelola state dan logika halaman profil.
 class ProfileController extends GetxController {
   // -- DEPENDENCIES --
-  final _storage = GetStorage();
+  final _storage = Get.find<GetStorage>();
   final _profileService = Get.find<ProfileService>();
 
   // -- STATE REAKTIF (.obs) --

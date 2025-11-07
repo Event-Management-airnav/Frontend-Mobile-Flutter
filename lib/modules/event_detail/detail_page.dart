@@ -22,7 +22,11 @@ class DetailPage extends GetView<EventDetailController> {
     final args = Get.arguments as Map;
     final eventId = args["id"];
     final data = args["data"]; // Keep for existing logic if needed
+
     controller.loadEventDetail(eventId);
+    if (controller.isUserLoggedIn.value) {
+      controller.loadRegistration(eventId);
+    }
 
     return Scaffold(
       appBar: TAppBar(),
