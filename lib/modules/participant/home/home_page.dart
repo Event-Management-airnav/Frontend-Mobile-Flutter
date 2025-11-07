@@ -262,7 +262,7 @@ class _EventListTile extends StatelessWidget {
                           ),
                           _buildEventInfo(
                             Icons.location_on,
-                            (lokasi != null && lokasi.isNotEmpty)
+                            (lokasi != null && lokasi.isNotEmpty && event.tipe != "online")
                                 ? (lokasi.length > 13 ? '${lokasi.substring(0, 10)}...' : lokasi)
                                 : "Online",
                           ),
