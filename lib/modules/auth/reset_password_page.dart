@@ -43,7 +43,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   //       _isLoading = true;
   //     });
   //
-  //     final storage = GetStorage();
+  //     final storage = Get.find<GetStorage>();
   //     final token = storage.read('access_token');
   //
   //     try {

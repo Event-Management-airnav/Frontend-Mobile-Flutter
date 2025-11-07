@@ -27,7 +27,7 @@ class EventDetailController extends GetxController {
       isLoading.value = true;
       errorMessage.value = '';
 
-      final storage = GetStorage();
+      final storage = Get.find<GetStorage>();
       isUserLoggedIn.value = storage.hasData('access_token');
 
       final detail = await eventService.getEventDetail(id);

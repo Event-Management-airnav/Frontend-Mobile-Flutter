@@ -10,7 +10,7 @@ import '../../data/network/services/auth_service.dart';
 
 class AuthController extends GetxController {
   final AuthService authService = Get.find<AuthService>();
-  final storage = GetStorage();
+  final storage = Get.find<GetStorage>();
 
   // Observable user state
   RxBool isLoggedIn = false.obs;
