@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_controller.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../../../app_pages.dart';
 
 class ActivityContainer extends StatelessWidget {
   final String eventName;
   final String eventDate;
   final ActivityFilter status;
   final VoidCallback? onTap;
-  final VoidCallback? onActionTap;
+  final bool isPresent;
 
   const ActivityContainer({
     super.key,
@@ -15,21 +18,8 @@ class ActivityContainer extends StatelessWidget {
     required this.eventDate,
     required this.status,
     this.onTap,
-    this.onActionTap,
+    required this.isPresent,
   });
-
-  bool get _isBerlangsung => status == ActivityFilter.berlangsung;
-
-  String statusMap(ActivityFilter status) {
-    switch (status) {
-      case ActivityFilter.mendatang:
-        return 'Belum Mulai';
-      case ActivityFilter.berlangsung:
-        return 'Berlangsung';
-      case ActivityFilter.selesai:
-        return 'Selesai';
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +27,77 @@ class ActivityContainer extends StatelessWidget {
     const headerBlue = Color(0xFFDDF3FF);
     const darkBlue = Color(0xFF10498D);
 
-    final Color statusBg = _isBerlangsung ? const Color(0xFFEFFFF9) : const Color(0xFFFFF6E0);
-    final Color statusText = _isBerlangsung ? const Color(0xFF049E67) : const Color(0xFFD79A00);
-    final Color dotColor = _isBerlangsung ? const Color(0xFF02C26A) : const Color(0xFF9AA3AF);
-    final Color buttonBg = _isBerlangsung ? const Color(0xFF175FA4) : const Color(0xFFD1D5DB);
-    final Color buttonFg = _isBerlangsung ? Colors.white : Colors.black;
+    final String chipText;
+    final String btnText;
+    final IconData btnIcon;
+    final Color statusBgColor;
+    final Color statusTextColor;
+    final Color dotColor;
+    final Color buttonBgColor;
+    final Color buttonFgColor;
+
+    switch (status) {
+      case ActivityFilter.mendatang:
+        chipText = 'Belum Mulai';
+        btnText = 'Menunggu';
+        btnIcon = Icons.access_time;
+        statusBgColor = const Color(0xFFFFF6E0);
+        statusTextColor = const Color(0xFFD79A00);
+        dotColor = const Color(0xFF9AA3AF);
+        buttonBgColor = const Color(0xFFD1D5DB);
+        buttonFgColor = Colors.black;
+        break;
+      case ActivityFilter.berlangsung:
+        chipText = 'Berlangsung';
+        btnText = isPresent ? 'Hadir' : 'Scan';
+        btnIcon = isPresent
+            ? Icons.check_circle_outline_outlined
+            : Icons.qr_code_scanner;
+        statusBgColor = const Color(0xFFEFFFF9);
+        statusTextColor = const Color(0xFF049E67);
+        dotColor = const Color(0xFF02C26A);
+        buttonBgColor = const Color(0xFF175FA4);
+        buttonFgColor = Colors.white;
+        break;
+      case ActivityFilter.selesai:
+        chipText = 'Selesai';
+        btnText = isPresent ? 'Sertifikat' : 'Ditutup';
+        btnIcon = isPresent ? Icons.download : Icons.cancel_outlined;
+        statusBgColor = const Color(0xFFFFF6E0);
+        statusTextColor = const Color(0xFFD79A00);
+        dotColor = const Color(0xFF9AA3AF);
+        buttonBgColor = const Color(0xFFD1D5DB);
+        buttonFgColor = Colors.black;
+        break;
+    }
+
+    VoidCallback? onActionTapHandler;
+    if (status == ActivityFilter.berlangsung) {
+      onActionTapHandler = () {
+        if (isPresent) {
+          Get.snackbar(
+            'Sudah absen',
+            'Anda sudah melakukan absensi untuk event ini',
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+          );
+        } else {
+          Get.snackbar('Scan QR Code', 'Scan untuk absensi kegiatan.');
+          Get.toNamed(Routes.SCAN);
+        }
+      };
+    } else if (status == ActivityFilter.selesai) {
+      if (isPresent) {
+        onActionTapHandler = () {
+          Get.snackbar(
+            'Sertifikat',
+            'Fitur Unduh sertifikat akan segera hadir.',
+          );
+        };
+      } else {
+        onActionTapHandler = null; // Disabled for 'Ditutup'
+      }
+    }
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -61,7 +117,10 @@ class ActivityContainer extends StatelessWidget {
               children: [
                 // ===== Header biru =====
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
                   decoration: BoxDecoration(
                     color: headerBlue,
                     borderRadius: BorderRadius.circular(12),
@@ -100,7 +159,6 @@ class ActivityContainer extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Bagian kiri: Hanya teks "Status" dan chip status
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -114,16 +172,19 @@ class ActivityContainer extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 6,
+                          ),
                           decoration: BoxDecoration(
-                            color: statusBg,
+                            color: statusBgColor,
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Text(
-                            statusMap(status),
+                            chipText,
                             style: GoogleFonts.poppins(
                               fontSize: 14,
-                              color: statusText,
+                              color: statusTextColor,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -146,35 +207,27 @@ class ActivityContainer extends StatelessWidget {
                           const SizedBox(width: 8),
                           // Kemudian tombol ditampilkan
                           TextButton.icon(
-                            onPressed: onActionTap,
-                            icon: Icon(
-                              switch (status) {
-                                ActivityFilter.mendatang => Icons.calendar_month,
-                                ActivityFilter.berlangsung => Icons.qr_code_scanner,
-                                ActivityFilter.selesai => Icons.download,
-                              },
-                              color: buttonFg,
-                            ),
+                            onPressed: onActionTapHandler,
+                            icon: Icon(btnIcon, color: buttonFgColor),
                             label: Text(
-                              switch (status) {
-                                ActivityFilter.mendatang => "Tunggu",
-                                ActivityFilter.berlangsung => "Scan",
-                                ActivityFilter.selesai => "Sertif",
-                              },
+                              btnText,
                               style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w600,
-                                color: buttonFg,
+                                color: buttonFgColor,
                               ),
                             ),
                             style: TextButton.styleFrom(
-                              backgroundColor: buttonBg,
-                              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
+                              backgroundColor: buttonBgColor,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 28,
+                                vertical: 10,
+                              ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18),
                               ),
                             ),
                           ),
-                        ]
+                        ],
                       ],
                     ),
                   ],
