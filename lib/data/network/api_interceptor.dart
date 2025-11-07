@@ -48,7 +48,14 @@ class ApiInterceptor extends Interceptor {
           // Get.snackbar("Not Found", response.data["message"] ?? "Not found"); DISABLE SEMENTARA KARENA DETAIL ADA DIBILANG 404
           break;
         case 422:
-          Get.snackbar("Unprocessable Entity", response.data["message"] ?? "Invalid request",backgroundColor: failColor);
+          String message = response.data["message"] ?? "Invalid request";
+          if (response.data["errors"] != null) {
+            Map<String, dynamic> errors = response.data["errors"];
+            errors.forEach((key, value) {
+              message += "\n- ${value[0]}";
+            });
+          }
+          Get.snackbar("Unprocessable Entity", message, backgroundColor: failColor);
           break;
         case 500:
           Get.snackbar("Internal Server Error", response.data["message"] ?? "Internal server error",backgroundColor: failColor);
