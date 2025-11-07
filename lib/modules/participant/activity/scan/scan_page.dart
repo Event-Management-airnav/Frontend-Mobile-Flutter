@@ -23,7 +23,6 @@ class _ScanPageState extends State<ScanPage> with WidgetsBindingObserver {
     formats: const [BarcodeFormat.qrCode],
     detectionSpeed: DetectionSpeed.noDuplicates,
     autoZoom: true,
-    // v5 lifecycle is user-managed → kita yang start/stop
   );
 
   late final MainController _main;
