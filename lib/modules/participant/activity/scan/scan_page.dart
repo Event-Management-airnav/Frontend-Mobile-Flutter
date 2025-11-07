@@ -105,12 +105,6 @@ class _ScanPageState extends State<ScanPage> with WidgetsBindingObserver {
   }
 
   Future<void> _onDetect(BarcodeCapture capture) async {
-    // Guard tambahan: kalau user keburu pindah tab, hentikan & abaikan
-    if (_main.currentIndex.value != 2) {
-      try { await _scanner.stop(); } catch (_) {}
-      return;
-    }
-
     if (_handled) return;
 
     final code = capture.barcodes.first.rawValue;
