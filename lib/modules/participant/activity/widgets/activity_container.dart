@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_controller.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ActivityContainer extends StatelessWidget {
   final String eventName;
@@ -17,7 +18,6 @@ class ActivityContainer extends StatelessWidget {
     this.onActionTap,
   });
 
-  // bool get _isSelesai => status == ActivityFilter.selesai;
   bool get _isBerlangsung => status == ActivityFilter.berlangsung;
 
   String statusMap(ActivityFilter status) {
@@ -67,32 +67,27 @@ class ActivityContainer extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start, // penting agar date tetap di pojok saat title tinggi
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Judul event: multi-line
                       Expanded(
                         child: Text(
                           eventName,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w900,
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
                             color: darkBlue,
                           ),
                           softWrap: true,
-                          // `maxLines: null` = tanpa batas baris (boleh tinggi)
-                          // Bisa juga batasi misal 3 baris: maxLines: 3, overflow: TextOverflow.ellipsis,
-                          // tapi permintaanmu ingin melebar ke bawah, jadi biar null.
                           maxLines: null,
                         ),
                       ),
                       const SizedBox(width: 8),
-                      // Tanggal di kanan, tetap satu baris
                       Text(
                         eventDate,
                         textAlign: TextAlign.right,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w900,
+                        style: GoogleFonts.poppins(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
                           color: darkBlue,
                         ),
                       ),
@@ -102,89 +97,86 @@ class ActivityContainer extends StatelessWidget {
 
                 const SizedBox(height: 14),
 
-                // ===== Bawah =====
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    // Bagian kiri: Hanya teks "Status" dan chip status
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         const Text(
-                          'Status:',
+                          'Status :',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: Color(0xFF7A869A),
                           ),
                         ),
                         const SizedBox(width: 8),
-
-                        // chip status
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
                             color: statusBg,
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Text(
                             statusMap(status),
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
                               color: statusText,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                             ),
-                          ),
-                        ),
-
-                        // bulatan hijau/abu
-                        Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: dotColor,
                           ),
                         ),
                       ],
                     ),
 
-                    // tombol kanan
-                    (status == ActivityFilter.mendatang)? SizedBox.shrink() :
-                   TextButton.icon(
-                        onPressed: onActionTap,
-                        icon: Icon(
-                          switch (status) {
-                            ActivityFilter.mendatang =>
-                              Icons.calendar_month,
-                            ActivityFilter.berlangsung =>
-                              Icons.qr_code_scanner,
-                            ActivityFilter.selesai =>
-                              Icons.download,
-                          },
-                          color: buttonFg,
-                        ),
-                        label: Text(
-                          switch (status) {
-                            ActivityFilter.mendatang =>
-                            "Tunggu",
-                            ActivityFilter.berlangsung =>
-                            "Scan",
-                            ActivityFilter.selesai =>
-                            "Sertif",
-                          },
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: buttonFg,
+                    // Bulatan dan Tombol
+                    Row(
+                      children: [
+                        if (status != ActivityFilter.mendatang) ...[
+                          Container(
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: dotColor,
+                            ),
                           ),
-                        ),
-                        style: TextButton.styleFrom(
-                          backgroundColor: buttonBg,
-                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18),
+                          const SizedBox(width: 8),
+                          // Kemudian tombol ditampilkan
+                          TextButton.icon(
+                            onPressed: onActionTap,
+                            icon: Icon(
+                              switch (status) {
+                                ActivityFilter.mendatang => Icons.calendar_month,
+                                ActivityFilter.berlangsung => Icons.qr_code_scanner,
+                                ActivityFilter.selesai => Icons.download,
+                              },
+                              color: buttonFg,
+                            ),
+                            label: Text(
+                              switch (status) {
+                                ActivityFilter.mendatang => "Tunggu",
+                                ActivityFilter.berlangsung => "Scan",
+                                ActivityFilter.selesai => "Sertif",
+                              },
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w600,
+                                color: buttonFg,
+                              ),
+                            ),
+                            style: TextButton.styleFrom(
+                              backgroundColor: buttonBg,
+                              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-
+                        ]
+                      ],
+                    ),
                   ],
                 ),
               ],
@@ -195,4 +187,3 @@ class ActivityContainer extends StatelessWidget {
     );
   }
 }
-
