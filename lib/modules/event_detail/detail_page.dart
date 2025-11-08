@@ -113,56 +113,8 @@ class DetailPage extends GetView<EventDetailController> {
 
                   onLogin: controller.goToLogin,
                   onRegister: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AttendanceDialog(eventId: eventId);
-                          },
-                        );
+                        Get.dialog(AttendanceDialog(eventId: eventId));
                   },
-                    // showDialog(
-                    //   context: context,
-                    //   builder: (context) => AlertDialog(
-                    //     title: const Text('Daftar Acara'),
-                    //     content: const Text(
-                    //       'Apakah Anda ingin mendaftar acara ini?',
-                    //     ),
-                    //     actions: [
-                    //       TextButton(
-                    //         onPressed: () => Get.back(),
-                    //         child: const Text('Tidak'),
-                    //       ),
-                    //       ElevatedButton(
-                    //         style: ElevatedButton.styleFrom(
-                    //           backgroundColor: Colors.green,
-                    //         ),
-                    //         onPressed: () async {
-                    //           Get.back();
-                    //           final errorMessage = await controller.register(
-                    //             eventId,
-                    //           );
-                    //           if (errorMessage == null) {
-                    //             SuccessRegister.show(
-                    //               context,
-                    //               title: 'SUCCESS',
-                    //               subtitle: 'Pendaftaran Berhasil',
-                    //             );
-                    //           } else {
-                    //             FailRegister.show(
-                    //               context,
-                    //               title: 'FAILED',
-                    //               subtitle: errorMessage,
-                    //             );
-                    //           }
-                    //         },
-                    //         child: const Text(
-                    //           'Daftar',
-                    //           style: TextStyle(color: Colors.white),
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // )
                   onCancelRegistration: () {
                     showDialog(
                       context: context,

@@ -150,6 +150,8 @@ class AttendanceDialog extends StatelessWidget {
               final err = await c.register(eventId, c.selectedMethod.value.name);
                 if (err == null) {
                     //Kita pakai snackbar sekarang
+                    Navigator.of(context).pop();
+                    SuccessRegister.show(context,urlWhatsappGroup: urlWa,subtitle: "Silahkan masuk grup WhatsApp ini untuk info lebih lanjut");
                 } else {
 
                 }
