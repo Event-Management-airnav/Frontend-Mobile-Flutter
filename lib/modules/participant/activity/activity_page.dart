@@ -81,11 +81,14 @@ class ActivityPage extends GetView<ActivityController> {
                       if (status == 'Unknown') {
                         return const SizedBox.shrink();
                       }
+                      
+                      bool isPresent = d.presensi != null && d.presensi?.status == "Hadir";
 
                       return ActivityContainer(
                         eventName: name,
                         eventDate: date,
                         status: status,
+                        isPresent: isPresent,
                         onTap: () async {
                           await Get.toNamed(
                             Routes.DETAIL,
@@ -96,23 +99,6 @@ class ActivityPage extends GetView<ActivityController> {
                           );
                           // refresh setelah kembali dari detail
                           await controller.refreshFollowed();
-                        },
-                        onActionTap: () {
-                          if (status == ActivityFilter.selesai) {
-                            Get.snackbar(
-                              'Sertifikat',
-                              'Fitur Unduh sertifikat akan segera hadir.',
-                            );
-                          } else if (status ==
-                              ActivityFilter.berlangsung) {
-                            Get.snackbar(
-                              'Scan QR Code',
-                              'Scan untuk absensi kegiatan.',
-                            );
-                            Get.toNamed(Routes.SCAN);
-                          } else {
-                            print("status else : $status");
-                          }
                         },
                       );
                     },

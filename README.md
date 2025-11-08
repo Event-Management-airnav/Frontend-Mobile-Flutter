@@ -1,3 +1,3 @@
-# frontend_mobile_flutter
+# NavEvent
 
 Event Management Flutter App by AirNav Indonesia

@@ -262,7 +262,7 @@ class _EventListTile extends StatelessWidget {
                           ),
                           _buildEventInfo(
                             Icons.location_on,
-                            (lokasi != null && lokasi.isNotEmpty)
+                            (lokasi != null && lokasi.isNotEmpty && event.tipe != "online")
                                 ? (lokasi.length > 13 ? '${lokasi.substring(0, 10)}...' : lokasi)
                                 : "Online",
                           ),
@@ -273,7 +273,7 @@ class _EventListTile extends StatelessWidget {
                               color: statusColor,
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: Text(filterText, style: TextStyle(fontSize: 12, color: textColor)),
+                            child: Text(filterText, style: TextStyle(fontSize: 12, color: textColor, fontWeight: FontWeight.w700)),
                           ),
                         ],
                       ),
@@ -346,7 +346,7 @@ Widget _buildEventInfo(
       children: [
         Icon(icon, size: iconSize, color: textColor),
         const SizedBox(width: 4),
-        Text(label, style: TextStyle(fontSize: 12, color: textColor)),
+        Text(label, style: TextStyle(fontSize: 12, color: textColor,)),
       ],
     ),
   );

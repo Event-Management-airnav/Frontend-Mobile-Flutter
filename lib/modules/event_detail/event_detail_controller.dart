@@ -1,13 +1,10 @@
+import 'package:frontend_mobile_flutter/data/models/pendaftaran/my_registration.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../../app_pages.dart';
-import '../../core/utils.dart';
-import '../../data/models/event/event.dart';
 import '../../data/models/event/event_detail.dart';
-import '../../data/models/event/followed_event.dart';
 import '../../data/network/services/pendaftaran_service.dart';
 import '../../data/network/services/event_detail_service.dart';
-import '../participant/activity/activity_controller.dart';
 
 class EventDetailController extends GetxController {
   final EventDetailService eventService;
@@ -18,6 +15,7 @@ class EventDetailController extends GetxController {
   final isLoading = false.obs;
   final errorMessage = ''.obs;
   final eventDetail = Rxn<EventDetail>();
+  final registrationInfo = Rxn<MyRegistration>();
   final isRegistered = false.obs;
   final isUserLoggedIn = false.obs;
   DateTime dateTimeNow = DateTime.now();
@@ -27,7 +25,7 @@ class EventDetailController extends GetxController {
       isLoading.value = true;
       errorMessage.value = '';
 
-      final storage = GetStorage();
+      final storage = Get.find<GetStorage>();
       isUserLoggedIn.value = storage.hasData('access_token');
 
       final detail = await eventService.getEventDetail(id);
@@ -46,6 +44,30 @@ class EventDetailController extends GetxController {
     }
   }
 
+  Future<void> loadRegistration(int id) async {
+    try {
+      isLoading.value = true;
+      errorMessage.value = '';
+
+      final storage = Get.find<GetStorage>();
+      isUserLoggedIn.value = storage.hasData('access_token');
+
+      final detail = await daftarService.fetchMyEventDetail(id);
+      registrationInfo.value = detail;
+
+      if (isUserLoggedIn.value) {
+        isRegistered.value = await daftarService.isRegistered(id);
+      } else {
+        isRegistered.value = false;
+      }
+    } catch (e) {
+      errorMessage.value = e.toString();
+      registrationInfo.value = null;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<String?> register(int id) async {
     final result = await daftarService.daftarEvent(id);
     if (result == null) return "Unexpected error";
@@ -58,8 +80,6 @@ class EventDetailController extends GetxController {
       Get.snackbar('Gagal', result.message);
       return result.message;
     }
-
-    return result.message;
   }
   
   // New method for canceling registration
