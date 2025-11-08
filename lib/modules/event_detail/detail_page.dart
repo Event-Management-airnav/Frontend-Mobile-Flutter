@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend_mobile_flutter/core/app_colors.dart';
 import 'package:frontend_mobile_flutter/modules/event_detail/event_detail_controller.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/widgets/fail_register.dart';
+import 'package:frontend_mobile_flutter/modules/participant/home/widgets/new_register_event_popup.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/widgets/success_register.dart';
 import 'package:get/get.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
@@ -112,50 +113,56 @@ class DetailPage extends GetView<EventDetailController> {
 
                   onLogin: controller.goToLogin,
                   onRegister: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Daftar Acara'),
-                        content: const Text(
-                          'Apakah Anda ingin mendaftar acara ini?',
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Get.back(),
-                            child: const Text('Tidak'),
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
-                            ),
-                            onPressed: () async {
-                              Get.back();
-                              final errorMessage = await controller.register(
-                                eventId,
-                              );
-                              if (errorMessage == null) {
-                                SuccessRegister.show(
-                                  context,
-                                  title: 'SUCCESS',
-                                  subtitle: 'Pendaftaran Berhasil',
-                                );
-                              } else {
-                                FailRegister.show(
-                                  context,
-                                  title: 'FAILED',
-                                  subtitle: errorMessage,
-                                );
-                              }
-                            },
-                            child: const Text(
-                              'Daftar',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AttendanceDialog(eventId: eventId);
+                          },
+                        );
                   },
+                    // showDialog(
+                    //   context: context,
+                    //   builder: (context) => AlertDialog(
+                    //     title: const Text('Daftar Acara'),
+                    //     content: const Text(
+                    //       'Apakah Anda ingin mendaftar acara ini?',
+                    //     ),
+                    //     actions: [
+                    //       TextButton(
+                    //         onPressed: () => Get.back(),
+                    //         child: const Text('Tidak'),
+                    //       ),
+                    //       ElevatedButton(
+                    //         style: ElevatedButton.styleFrom(
+                    //           backgroundColor: Colors.green,
+                    //         ),
+                    //         onPressed: () async {
+                    //           Get.back();
+                    //           final errorMessage = await controller.register(
+                    //             eventId,
+                    //           );
+                    //           if (errorMessage == null) {
+                    //             SuccessRegister.show(
+                    //               context,
+                    //               title: 'SUCCESS',
+                    //               subtitle: 'Pendaftaran Berhasil',
+                    //             );
+                    //           } else {
+                    //             FailRegister.show(
+                    //               context,
+                    //               title: 'FAILED',
+                    //               subtitle: errorMessage,
+                    //             );
+                    //           }
+                    //         },
+                    //         child: const Text(
+                    //           'Daftar',
+                    //           style: TextStyle(color: Colors.white),
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // )
                   onCancelRegistration: () {
                     showDialog(
                       context: context,
