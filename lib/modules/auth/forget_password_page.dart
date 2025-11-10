@@ -29,7 +29,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       Get.snackbar(
         'Peringatan', 
         'Mohon masukkan email Anda terlebih dahulu.',
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.orange,
         colorText: Colors.white,
       );
@@ -41,7 +41,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       Get.snackbar(
         'Peringatan', 
         'Format email tidak valid.',
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.orange,
         colorText: Colors.white,
       );
@@ -60,20 +60,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       Get.snackbar(
         'Gagal', 
         result,
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red,
         colorText: Colors.white,
       );
     } else {
-      // Berhasil - navigate ke OTP page
-      Get.to(() =>(
-        email: email,
-        isFromRegistration: false, // PENTING: untuk forgot password flow
-      ));
       Get.snackbar(
         'Berhasil',
-        'Kode OTP telah dikirim ke email Anda.',
-        snackPosition: SnackPosition.BOTTOM,
+        'Email reset kata sandi telah dikirim. Silakan cek kotak masuk Anda.',
+        snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
