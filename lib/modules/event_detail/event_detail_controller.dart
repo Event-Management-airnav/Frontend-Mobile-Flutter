@@ -6,6 +6,7 @@ import '../../data/models/event/event_detail.dart';
 import '../../data/network/services/pendaftaran_service.dart';
 import '../../data/network/services/event_detail_service.dart';
 
+enum AttendanceMethod {online,offline,hybrid}
 class EventDetailController extends GetxController {
   final EventDetailService eventService;
   final PendaftaranService daftarService;
@@ -19,6 +20,38 @@ class EventDetailController extends GetxController {
   final isRegistered = false.obs;
   final isUserLoggedIn = false.obs;
   DateTime dateTimeNow = DateTime.now();
+  // === State untuk dialog kehadiran (GetX) ===
+  final selectedMethod = AttendanceMethod.online.obs;
+  final isConfirmed = false.obs;
+
+  void setMethod(AttendanceMethod m) {
+    selectedMethod.value = m;
+    print('[DEBUG] Nilai selectedMethod berubah menjadi: $m');
+    // opsional: reset konfirmasi jika pindah ke online
+    if (m == AttendanceMethod.online) isConfirmed.value = false;
+  }
+
+  void toggleConfirmed([bool? v]) {
+    isConfirmed.value = v ?? !isConfirmed.value;
+  }
+
+  bool get isButtonEnabled => isConfirmed.value;
+
+  String get tipeKehadiran {
+    switch (selectedMethod.value) {
+      case AttendanceMethod.online:
+        return 'online';
+      case AttendanceMethod.offline:
+        return 'offline';
+      case AttendanceMethod.hybrid:
+        return 'hybrid';
+    }
+  }
+
+  void resetAttendanceState() {
+    selectedMethod.value = AttendanceMethod.online;
+    isConfirmed.value = false;
+  }
 
   Future<void> loadEventDetail(int id) async {
     try {
@@ -68,8 +101,8 @@ class EventDetailController extends GetxController {
     }
   }
 
-  Future<String?> register(int id) async {
-    final result = await daftarService.daftarEvent(id);
+  Future<String?> register(int id,String tipeKehadiran) async {
+    final result = await daftarService.daftarEvent(id,tipeKehadiran);
     if (result == null) return "Unexpected error";
 
     if (result.success) {

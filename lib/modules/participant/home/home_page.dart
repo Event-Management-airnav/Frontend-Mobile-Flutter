@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_mobile_flutter/core/utils.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_controller.dart';
 import 'package:get/get.dart';
@@ -162,7 +163,8 @@ class HomePage extends GetView<HomeController> {
     required ValueChanged<bool> onSelected,
   }) {
     return ChoiceChip(
-      label: Text(label),
+      label: FittedBox(fit: BoxFit.scaleDown,child: Text(label),),
+      clipBehavior: Clip.none,
       selected: isSelected,
       onSelected: onSelected,
       labelStyle: GoogleFonts.poppins(
@@ -176,7 +178,7 @@ class HomePage extends GetView<HomeController> {
         borderRadius: BorderRadius.circular(20),
         side: BorderSide(
           color: isSelected ? const Color(0xFF175FA4) : const Color(0xFFE0E0E0),
-          width: 1.5,
+          width: 2,
         ),
       ),
       showCheckmark: false,
@@ -240,6 +242,7 @@ class _EventListTile extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       clipBehavior: Clip.antiAlias,
       child: Padding(
+
         padding: const EdgeInsets.all(12.0),
         child: Column(
           children: [
@@ -247,8 +250,14 @@ class _EventListTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height: MediaQuery.of(context).size.width * 0.23,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.3,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.23,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
                     child: event.mediaUrls?.banner != null
@@ -271,7 +280,8 @@ class _EventListTile extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment
+                        .start,
                     children: [
                       Text(
                         event.nama,
@@ -329,7 +339,10 @@ class _EventListTile extends StatelessWidget {
             DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.blue[800]!, Colors.blue[400]!],
+                  colors: [
+                    Colors.blue[800]!,
+                    Colors.blue[400]!
+                  ],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                 ),
@@ -337,10 +350,10 @@ class _EventListTile extends StatelessWidget {
               ),
               child: ElevatedButton(
                 onPressed: () {
-                  Get.toNamed(
-                    Routes.DETAIL,
-                    arguments: {"id": event.id, "data": null},
-                  );
+                  Get.toNamed(Routes.DETAIL, arguments: {
+                    "id":event.id,
+                    "data":null
+                  });
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
@@ -375,19 +388,18 @@ Widget _buildEventInfo(
   double iconSize = 16,
 }) {
   return Container(
-    margin: const EdgeInsets.only(right: 4, bottom: 4),
-    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-    decoration: BoxDecoration(
-      color: backgroundColor,
-      borderRadius: BorderRadius.circular(20),
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: iconSize, color: textColor),
-        const SizedBox(width: 4),
-        Text(label, style: TextStyle(fontSize: 12, color: textColor)),
-      ],
-    ),
-  );
+      margin: const EdgeInsets.only(right: 4, bottom: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: iconSize, color: textColor),
+            const SizedBox(width: 4),
+            Text(label, style: TextStyle(fontSize: 12, color: textColor,)),
+          ],
+),);
 }

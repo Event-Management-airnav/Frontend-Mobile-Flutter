@@ -22,9 +22,13 @@ class PendaftaranService extends GetxService {
     }
   }
 
-  Future<PendaftaranResponse?> daftarEvent(int eventId) async {
+  Future<PendaftaranResponse?> daftarEvent(int eventId,String tipeKehadiran) async {
     try {
-      final resp = await _dio.post("${Endpoints.events}/$eventId/daftar");
+      final resp = await _dio.post("${Endpoints.events}/$eventId/daftar"
+      ,data:{
+            "tipe_kehadiran":tipeKehadiran
+          }
+      );
       return PendaftaranResponse.fromJson(resp.data);
     } on DioException catch (e) {
       return PendaftaranResponse(

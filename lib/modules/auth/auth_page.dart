@@ -42,14 +42,122 @@ class _AuthPageState extends State<AuthPage> {
 
   String _statusKaryawan = "1";
 
+  // State untuk Password Requirements Indicator
+  bool _hasMinLength = false;
+  bool _hasUppercase = false;
+  bool _hasNumber = false;
+  bool _hasSpecialChar = false;
+
+  //VALIDATOR 
+  
+  String? _validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Nama tidak boleh kosong";
+    }
+    
+    // Cek apakah nama mengandung angka
+    if (RegExp(r'[0-9]').hasMatch(value)) {
+      return "Yakin Sudah memasukkan nama dengan benar?";
+    }
+    
+    // Minimal 2 karakter
+    if (value.length < 2) {
+      return "Nama minimal 2 karakter";
+    }
+    
+    return null;
+  }
+
+  String? _validateUsername(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Username tidak boleh kosong";
+    }
+
+    if (value.length < 3) {
+      return "Username minimal 3 karakter";
+    }
+
+    final usernameRegex = RegExp(r'^[a-zA-Z0-9._]+$');
+    if (!usernameRegex.hasMatch(value)) {
+      return "Username hanya boleh berisi huruf, angka, titik, dan underscore";
+    }
+
+    return null;
+  }
+
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Email tidak boleh kosong";
+    }
+    
+    final emailRegex = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    );
+    
+    if (!emailRegex.hasMatch(value)) {
+      return "Masukkan alamat email yang valid";
+    }
+
+    if (_statusKaryawan == "1" && !value.endsWith("@airnavindonesia.co.id")) {
+      return "Gunakan email @airnavindonesia.co.id";
+    }
+    
+    return null;
+  }
+
+  String? _validatePhone(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Nomor telepon tidak boleh kosong";
+    }
+
+    final phoneRegex = RegExp(r'^(?:\+62|0)[0-9]{9,}$');
+    if (!phoneRegex.hasMatch(value)) {
+      return "Format nomor tidak valid (contoh: 0812xxx atau +62812xxx)";
+    }
+
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Password tidak boleh kosong";
+    }
+
+    final pwdRegex = RegExp(
+        r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$');
+    if (!pwdRegex.hasMatch(value)) {
+      return "Password harus mengandung huruf besar, angka, simbol, dan minimal 8 karakter";
+    }
+    return null;
+  }
+
+  String? _validateConfirmPassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Konfirmasi password tidak boleh kosong";
+    }
+
+    if (value != _passwordReg.text) {
+      return "Password tidak sama";
+    }
+
+    return null;
+  }
+
+  void _checkPasswordRequirements(String password) {
+    setState(() {
+      _hasMinLength = password.length >= 8;
+      _hasUppercase = RegExp(r'[A-Z]').hasMatch(password);
+      _hasNumber = RegExp(r'[0-9]').hasMatch(password);
+      _hasSpecialChar = RegExp(r'[^A-Za-z0-9]').hasMatch(password);
+    });
+  }
+
+  bool get _allPasswordRequirementsMet {
+    return _hasMinLength && _hasUppercase && _hasNumber && _hasSpecialChar;
+  }
+
   Future<void> _onLogin() async {
     if (!_loginFormKey.currentState!.validate()) return;
-
-    // if (_emailLogin.text.isEmpty || _passwordLogin.text.isEmpty) {
-    //   Get.snackbar("Error", "Email dan password wajib diisi",
-    //       backgroundColor: Colors.redAccent, colorText: Colors.white);
-    //   return;
-    // }
 
     setState(() => isLoading = true);
     final result =
@@ -91,27 +199,35 @@ class _AuthPageState extends State<AuthPage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (!isLogin) {
-          setState(() => isLogin = true);
-          return false;
-        }
-        return true;
-      },
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 400),
-            child: isLogin ? _buildLoginView() : _buildRegisterView(),
+  
+
+      @override
+      Widget build(BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async {
+            if (FocusScope.of(context).hasFocus) {
+              FocusScope.of(context).unfocus();
+              return false;
+            }
+        
+            if (!isLogin) {
+              setState(() => isLogin = true);
+              return false; 
+            }
+        
+            return true;
+          },
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            body: SafeArea(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 400),
+                child: isLogin ? _buildLoginView() : _buildRegisterView(),
+              ),
+            ),
           ),
-        ),
-      ),
-    );
-  }
+        );
+      }
 
   // Login View
   Widget _buildLoginView() {
@@ -169,7 +285,6 @@ class _AuthPageState extends State<AuthPage> {
                           width: 1.5,
                         ),
                       ),
-                      // Error border
                       errorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
@@ -184,7 +299,6 @@ class _AuthPageState extends State<AuthPage> {
                           width: 1.5,
                         ),
                       ),
-
                       labelStyle: TextStyle(
                         color: Colors.grey[700],
                         fontSize: 14,
@@ -196,7 +310,6 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                       contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                     ),
-                    // Validator
                     validator: (v) {
                       if (v == null || v.isEmpty) {
                         return "Email tidak boleh kosong";
@@ -245,7 +358,6 @@ class _AuthPageState extends State<AuthPage> {
                           width: 1.5,
                         ),
                       ),
-                      //Error border
                       errorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
@@ -271,7 +383,6 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                       contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                     ),
-                    // Tambah Validator
                     validator: (v) {
                       if (v == null || v.isEmpty) {
                         return "Password tidak boleh kosong";
@@ -279,42 +390,6 @@ class _AuthPageState extends State<AuthPage> {
                       return null;
                     },
                   ),
-
-                  const SizedBox(height: 20),
-
-                  // // View Ingat saya
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     Row(
-                  //       children: [
-                  //         SizedBox(
-                  //           height: 20,
-                  //           width: 20,
-                  //           child: Checkbox(
-                  //             value: _rememberMe,
-                  //             onChanged: (value) {
-                  //               setState(() {
-                  //                 _rememberMe = value ?? false;
-                  //               });
-                  //             },
-                  //             shape: RoundedRectangleBorder(
-                  //               borderRadius: BorderRadius.circular(4),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //         const SizedBox(width: 8),
-                  //         Text(
-                  //           "Ingat saya",
-                  //           style: TextStyle(
-                  //             fontSize: 13,
-                  //             color: Colors.black87,
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ],
-                  // ),
 
                   const SizedBox(height: 50),
 
@@ -430,7 +505,6 @@ class _AuthPageState extends State<AuthPage> {
                   ),
                   const SizedBox(height: 30),
 
-                  // Nama Lengkap
                   TextFormField(
                     controller: _name,
                     decoration: InputDecoration(
@@ -480,12 +554,10 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                       contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                     ),
-                    validator: (v) =>
-                        v!.isEmpty ? "Nama tidak boleh kosong" : null,
+                    validator: _validateName, 
                   ),
                   const SizedBox(height: 16),
 
-                  // Username
                   TextFormField(
                     controller: _username,
                     decoration: InputDecoration(
@@ -535,12 +607,10 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                       contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                     ),
-                    validator: (v) =>
-                        v!.isEmpty ? "Username tidak boleh kosong" : null,
+                    validator: _validateUsername, 
                   ),
                   const SizedBox(height: 16),
 
-                  // Nomor Telepon
                   TextFormField(
                     controller: _telp,
                     keyboardType: TextInputType.phone,
@@ -591,22 +661,10 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                       contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                     ),
-                    validator: (v) {
-                      if (v == null || v.isEmpty) {
-                        return "Nomor telepon tidak boleh kosong";
-                      }
-
-                      final phoneRegex = RegExp(r'^(?:\+62|0)[0-9]{9,}$');
-                      if (!phoneRegex.hasMatch(v)) {
-                        return "Format nomor tidak valid (contoh: 0812xxx atau +62812xxx)";
-                      }
-
-                      return null;
-                    },
+                    validator: _validatePhone, 
                   ),
                   const SizedBox(height: 16),
 
-                  // Email
                   TextFormField(
                     controller: _emailReg,
                     keyboardType: TextInputType.emailAddress,
@@ -657,15 +715,14 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                       contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                     ),
-                    validator: (v) =>
-                        v!.isEmpty ? "Email tidak boleh kosong" : null,
+                    validator: _validateEmail, 
                   ),
                   const SizedBox(height: 16),
 
-                  // Password
                   TextFormField(
                     controller: _passwordReg,
                     obscureText: _obscurePasswordReg,
+                    onChanged: _checkPasswordRequirements,
                     decoration: InputDecoration(
                       labelText: "Password",
                       hintText: "Password",
@@ -726,22 +783,10 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                       contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                     ),
-                    validator: (v) {
-                      if (v == null || v.isEmpty) {
-                        return "Password tidak boleh kosong";
-                      }
-
-                      final pwdRegex = RegExp(
-                          r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$');
-                      if (!pwdRegex.hasMatch(v)) {
-                        return "Minimal 8 karakter, harus ada 1 uppercase, 1 simbol, dan 1 angka";
-                      }
-                      return null;
-                    },
+                    validator: _validatePassword,
                   ),
                   const SizedBox(height: 16),
 
-                  // Konfirmasi Password
                   TextFormField(
                     controller: _confirmPassword,
                     obscureText: _obscureConfirmPassword,
@@ -805,37 +850,37 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                       contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                     ),
-                    validator: (v) {
-                      if (v == null || v.isEmpty) {
-                        return "Password tidak boleh kosong";
-                      }
-
-                      final pwdRegex = RegExp(
-                          r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$');
-                      if (!pwdRegex.hasMatch(v)) {
-                        return "Minimal 8 karakter, harus ada 1 uppercase, 1 simbol, dan 1 angka";
-                      }
-
-                      if (v != _passwordReg.text) {
-                        return "Password tidak sama";
-                      }
-
-                      return null;
-                    },
+                    validator: _validateConfirmPassword, 
                   ),
                   const SizedBox(height: 8),
 
-                  // Password hint
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4),
-                    child: Text(
-                      "Minimal 8 karakter, 1 angka, 1 kapital, 1 simbol",
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 4, top: 8),
+                          child: Row(
+                            children: [
+                              if (_allPasswordRequirementsMet)
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8),
+                                  child: Icon(
+                                    Icons.check, 
+                                    color: Colors.green,
+                                    size: 20,
+                                  ),
+                                ),
+
+                              Flexible(
+                                child: Text(
+                                  "Minimal 8 karakter, 1 angka, 1 kapital, 1 simbol",
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.black87,  
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
 
                   const SizedBox(height: 20),
 

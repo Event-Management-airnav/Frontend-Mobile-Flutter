@@ -186,6 +186,7 @@ class ModulAcara extends Equatable {
     this.mdlBannerAcaraUrl,
     this.mdlFileAcaraUrl,
     this.mdlFileRundownUrl,
+    this.mdlTemplateSertifikatUrl
   });
 
   final int id;
@@ -236,6 +237,9 @@ class ModulAcara extends Equatable {
   @JsonKey(name: 'mdl_file_rundown_url')
   final String? mdlFileRundownUrl;
 
+  @JsonKey(name: "mdl_template_sertifikat_url")
+  final String? mdlTemplateSertifikatUrl;
+
   factory ModulAcara.fromJson(Map<String, dynamic> json) =>
       _$ModulAcaraFromJson(json);
 
@@ -257,6 +261,7 @@ class ModulAcara extends Equatable {
     mdlBannerAcaraUrl,
     mdlFileAcaraUrl,
     mdlFileRundownUrl,
+    mdlTemplateSertifikatUrl
   ];
 }
 
