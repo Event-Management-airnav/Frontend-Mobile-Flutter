@@ -46,7 +46,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:frontend_mobile_flutter/core/app_colors.dart';
-import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/notification_button.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/profile_controller.dart';
 import 'package:get/get.dart';
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:frontend_mobile_flutter/modules/auth/otp_verification_page.dart';
 import 'package:frontend_mobile_flutter/modules/auth/auth_controller.dart';
 
 class ForgotPasswordPage extends StatefulWidget {

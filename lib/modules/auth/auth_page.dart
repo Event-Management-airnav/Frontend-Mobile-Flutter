@@ -3,11 +3,7 @@ import 'package:get/get.dart';
 import 'package:frontend_mobile_flutter/modules/auth/auth_controller.dart';
 import 'package:frontend_mobile_flutter/modules/auth/otp_verification_page.dart';
 import 'package:frontend_mobile_flutter/modules/auth/forget_password_page.dart';
-import 'package:frontend_mobile_flutter/modules/participant/home/widgets/fail_register.dart';
-import 'package:frontend_mobile_flutter/modules/participant/home/widgets/success_register.dart';
 import '../../core/widgets/login_header_widget.dart';
-import '../../core/app_colors.dart';
-import '../../core/text_styles.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);

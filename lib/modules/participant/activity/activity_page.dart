@@ -69,7 +69,7 @@ class ActivityPage extends GetView<ActivityController> {
                     physics:
                     const AlwaysScrollableScrollPhysics(), // tetap bisa tarik refresh walau item sedikit
                     itemCount: items.length,
-                    separatorBuilder: (_, __) =>
+                    separatorBuilder: (_, _) =>
                     const SizedBox(height: 8),
                     itemBuilder: (_, i) {
                       final d = items[i];
