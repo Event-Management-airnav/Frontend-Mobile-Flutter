@@ -61,14 +61,13 @@ class HomeController extends GetxController {
       final d = await service.fetchPastEvents();
 
       allEvents.assignAll(a);
-      activeEvents.assignAll(b);
-      upcomingEvents.assignAll(c);
-      pastEvents.assignAll(d);
-    } catch (e) {
-      Get.snackbar(
-        "Error loading data",
-        "An unexpected error occurred: ${e.toString()}",
-      );
+      upcomingEvents.assignAll(a.where((event) => _isUpcoming(event)));
+      openEvents.assignAll(a.where((event) => _isOpen(event)));
+      closedEvents.assignAll(a.where((event) => _isClosed(event)));
+      activeEvents.assignAll(a.where((event) => _isOngoing(event)));
+      pastEvents.assignAll(a.where((event) => _isPast(event)));
+    } catch (e, stackTrace) {
+      logger.e("Gagal memuat data home screen", error: e, stackTrace: stackTrace);
     } finally {
       isLoading.value = false;
     }
