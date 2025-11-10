@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_mobile_flutter/core/utils.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_controller.dart';
 import 'package:get/get.dart';

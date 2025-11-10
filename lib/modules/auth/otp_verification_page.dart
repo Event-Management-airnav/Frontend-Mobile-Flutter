@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_mobile_flutter/data/models/auth/otp_resend_request.dart';
-import 'package:frontend_mobile_flutter/data/models/auth/otp_verify_request.dart';
 import 'package:get/get.dart';
 import '../../core/app_colors.dart';
 import '../../core/text_styles.dart';

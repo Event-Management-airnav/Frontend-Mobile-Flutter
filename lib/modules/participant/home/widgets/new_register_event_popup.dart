@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/widgets/success_register.dart';
 import 'package:get/get.dart';
-// Pastikan path ini benar sesuai struktur proyek Anda
 import '../../../event_detail/event_detail_controller.dart';
-import 'fail_register.dart';
 
 
 class AttendanceDialog extends StatelessWidget {
