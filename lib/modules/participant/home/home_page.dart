@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_mobile_flutter/core/utils.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/home/home_controller.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-
 import '../../../app_pages.dart';
 import '../../../core/app_colors.dart';
 import '../../../data/models/event/event.dart';
@@ -54,7 +52,6 @@ class HomePage extends GetView<HomeController> {
               return SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     _buildFilterChip(
                       label: 'Semua',
@@ -126,7 +123,8 @@ class HomePage extends GetView<HomeController> {
     required ValueChanged<bool> onSelected,
   }) {
     return ChoiceChip(
-      label: Text(label),
+      label: FittedBox(fit: BoxFit.scaleDown,child: Text(label),),
+      clipBehavior: Clip.none,
       selected: isSelected,
       onSelected: onSelected,
       labelStyle: GoogleFonts.poppins(
@@ -140,11 +138,10 @@ class HomePage extends GetView<HomeController> {
         borderRadius: BorderRadius.circular(20),
         side: BorderSide(
           color: isSelected ? const Color(0xFF175FA4) : const Color(0xFFE0E0E0),
-          width: 1.5,
+          width: 2,
         ),
       ),
       showCheckmark: false,
-      padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
     );
   }
 }
@@ -210,9 +207,9 @@ class _EventListTile extends StatelessWidget {
                       .size
                       .width * 0.3,
                   height: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.23,
+                      .of(context)
+                      .size
+                      .width * 0.23,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
                     child: event.mediaUrls?.banner != null
@@ -266,7 +263,7 @@ class _EventListTile extends StatelessWidget {
                                 ? (lokasi.length > 13 ? '${lokasi.substring(0, 10)}...' : lokasi)
                                 : "Online",
                           ),
-                           Container(
+                          Container(
                             margin: const EdgeInsets.only(right: 4, bottom: 4),
                             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                             decoration: BoxDecoration(
@@ -283,43 +280,43 @@ class _EventListTile extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.blue[800]!,
-                Colors.blue[400]!
-              ],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: ElevatedButton(
-            onPressed: () {
-              Get.toNamed(Routes.DETAIL, arguments: {
-                "id":event.id,
-                "data":null
-              });
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.transparent,
-              padding: const EdgeInsets.symmetric(vertical: 1),
-              shadowColor: Colors.transparent,
-              minimumSize: const Size.fromHeight(5),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.blue[800]!,
+                    Colors.blue[400]!
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: ElevatedButton(
+                onPressed: () {
+                  Get.toNamed(Routes.DETAIL, arguments: {
+                    "id":event.id,
+                    "data":null
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  padding: const EdgeInsets.symmetric(vertical: 1),
+                  shadowColor: Colors.transparent,
+                  minimumSize: const Size.fromHeight(5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text(
+                  'Detail Acara',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
-            child: const Text(
-              'Detail Acara',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
           ],
         ),
       ),
@@ -335,19 +332,18 @@ Widget _buildEventInfo(
       double iconSize = 16,
     }) {
   return Container(
-    margin: const EdgeInsets.only(right: 4, bottom: 4),
-    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-    decoration: BoxDecoration(
-      color: backgroundColor,
-      borderRadius: BorderRadius.circular(20),
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: iconSize, color: textColor),
-        const SizedBox(width: 4),
-        Text(label, style: TextStyle(fontSize: 12, color: textColor,)),
-      ],
-    ),
-  );
+      margin: const EdgeInsets.only(right: 4, bottom: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: iconSize, color: textColor),
+            const SizedBox(width: 4),
+            Text(label, style: TextStyle(fontSize: 12, color: textColor,)),
+          ],
+),);
 }
