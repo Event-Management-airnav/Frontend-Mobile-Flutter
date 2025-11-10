@@ -95,21 +95,23 @@ class TAppBar extends GetView<ProfileController> implements PreferredSizeWidget 
         //   onPressed: () => {},
         // ),
         // const SizedBox(width: 8.0),
-        Obx(() {
-          ImageProvider? backgroundImage;
-
-          if (controller.profileImageFile.value != null) {
-            backgroundImage = FileImage(controller.profileImageFile.value!);
-          } else if (controller.profileImageUrl.value.isNotEmpty) {
-            backgroundImage = NetworkImage(controller.profileImageUrl.value);
-          } else {
-            backgroundImage = const AssetImage("assets/images/user_image.jpg");
-          }
-          return CircleAvatar(
-            radius: 20,
-            backgroundImage: backgroundImage,
-          );
-        }),
+        Padding(
+          padding: const EdgeInsets.only(right: 16),
+          child: Obx(() {
+            ImageProvider? backgroundImage;
+            if (controller.profileImageFile.value != null) {
+              backgroundImage = FileImage(controller.profileImageFile.value!);
+            } else if (controller.profileImageUrl.value.isNotEmpty) {
+              backgroundImage = NetworkImage(controller.profileImageUrl.value);
+            } else {
+              backgroundImage = const AssetImage("assets/images/user_image.jpg");
+            }
+            return CircleAvatar(
+              radius: 18,
+              backgroundImage: backgroundImage,
+            );
+          }),
+        ),
       ],
       backgroundColor: Colors.white,
       elevation: 1,
