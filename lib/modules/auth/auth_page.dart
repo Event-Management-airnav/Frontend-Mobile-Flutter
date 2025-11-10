@@ -72,15 +72,16 @@ class _AuthPageState extends State<AuthPage> {
     if (value == null || value.isEmpty) {
       return "Username tidak boleh kosong";
     }
-    
-    if (!RegExp(r'^[a-zA-Z0-9._]+$').hasMatch(value)) {
-      return "Yakin Sudah memasukkan username dengan benar?";
-    }
-    
+
     if (value.length < 3) {
       return "Username minimal 3 karakter";
     }
-    
+
+    final usernameRegex = RegExp(r'^[a-zA-Z0-9._]+$');
+    if (!usernameRegex.hasMatch(value)) {
+      return "Username hanya boleh berisi huruf, angka, titik, dan underscore";
+    }
+
     return null;
   }
 
@@ -125,7 +126,7 @@ class _AuthPageState extends State<AuthPage> {
     final pwdRegex = RegExp(
         r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$');
     if (!pwdRegex.hasMatch(value)) {
-      return ""; 
+      return "Password harus mengandung huruf besar, angka, simbol, dan minimal 8 karakter";
     }
     return null;
   }
@@ -133,12 +134,6 @@ class _AuthPageState extends State<AuthPage> {
   String? _validateConfirmPassword(String? value) {
     if (value == null || value.isEmpty) {
       return "Konfirmasi password tidak boleh kosong";
-    }
-
-    final pwdRegex = RegExp(
-        r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}$');
-    if (!pwdRegex.hasMatch(value)) {
-      return ""; 
     }
 
     if (value != _passwordReg.text) {
