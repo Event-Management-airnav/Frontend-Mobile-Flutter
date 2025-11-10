@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../app_pages.dart';
+import '../../../../core/utils.dart';
 
 class ActivityContainer extends StatelessWidget {
   final String eventName;
@@ -11,6 +12,8 @@ class ActivityContainer extends StatelessWidget {
   final ActivityFilter status;
   final VoidCallback? onTap;
   final bool isPresent;
+  final String? urlSertifikat;
+  final bool? hasDoorprize;
 
   const ActivityContainer({
     super.key,
@@ -19,6 +22,8 @@ class ActivityContainer extends StatelessWidget {
     required this.status,
     this.onTap,
     required this.isPresent,
+    this.urlSertifikat,
+    this.hasDoorprize,
   });
 
   @override
@@ -26,6 +31,8 @@ class ActivityContainer extends StatelessWidget {
     const borderBlue = Color(0xFF9ED1F5);
     const headerBlue = Color(0xFFDDF3FF);
     const darkBlue = Color(0xFF10498D);
+    const yellow50 = Color(0xFFFEFCE8);
+    const yellow900 = Color(0xFF713F12);
 
     final String chipText;
     final String btnText;
@@ -49,7 +56,7 @@ class ActivityContainer extends StatelessWidget {
         break;
       case ActivityFilter.berlangsung:
         chipText = 'Berlangsung';
-        btnText = isPresent ? 'Hadir' : 'Scan';
+        btnText = isPresent ? 'Hadir' : 'Belum Absen';
         btnIcon = isPresent
             ? Icons.check_circle_outline_outlined
             : Icons.qr_code_scanner;
@@ -61,7 +68,9 @@ class ActivityContainer extends StatelessWidget {
         break;
       case ActivityFilter.selesai:
         chipText = 'Selesai';
-        btnText = isPresent ? 'Sertifikat' : 'Ditutup';
+        btnText = (isPresent && urlSertifikat != null)
+            ? 'Sertifikat'
+            : 'Ditutup';
         btnIcon = isPresent ? Icons.download : Icons.cancel_outlined;
         statusBgColor = const Color(0xFFFFF6E0);
         statusTextColor = const Color(0xFFD79A00);
@@ -87,12 +96,9 @@ class ActivityContainer extends StatelessWidget {
         }
       };
     } else if (status == ActivityFilter.selesai) {
-      if (isPresent) {
+      if (isPresent && urlSertifikat != null) {
         onActionTapHandler = () {
-          Get.snackbar(
-            'Sertifikat',
-            'Fitur Unduh sertifikat akan segera hadir.',
-          );
+            Utils.openUrl(urlSertifikat);
         };
       } else {
         onActionTapHandler = null; // Disabled for 'Ditutup'
@@ -159,18 +165,19 @@ class ActivityContainer extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Status :',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF7A869A),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
+                        // const Text(
+                        //   'Status :',
+                        //   style: TextStyle(
+                        //     fontSize: 14,
+                        //     fontWeight: FontWeight.w600,
+                        //     color: Color(0xFF7A869A),
+                        //   ),
+                        // ),
+                        // const SizedBox(width: 8),
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 10,
@@ -183,8 +190,27 @@ class ActivityContainer extends StatelessWidget {
                           child: Text(
                             chipText,
                             style: GoogleFonts.poppins(
-                              fontSize: 14,
+                              fontSize: 12,
                               color: statusTextColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        if (hasDoorprize == true)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: yellow50,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Text(
+                            hasDoorprize == true ? "Pemenang Doorprize" : "",
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              color: yellow900,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -196,15 +222,15 @@ class ActivityContainer extends StatelessWidget {
                     Row(
                       children: [
                         if (status != ActivityFilter.mendatang) ...[
-                          Container(
-                            width: 10,
-                            height: 10,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: dotColor,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
+                          // Container(
+                          //   width: 10,
+                          //   height: 10,
+                          //   decoration: BoxDecoration(
+                          //     shape: BoxShape.circle,
+                          //     color: dotColor,
+                          //   ),
+                          // ),
+                          // const SizedBox(width: 8),
                           // Kemudian tombol ditampilkan
                           TextButton.icon(
                             onPressed: onActionTapHandler,

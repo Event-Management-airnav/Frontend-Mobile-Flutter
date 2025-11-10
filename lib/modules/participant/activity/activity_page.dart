@@ -89,6 +89,8 @@ class ActivityPage extends GetView<ActivityController> {
                         eventDate: date,
                         status: status,
                         isPresent: isPresent,
+                        urlSertifikat: d.modulAcara?.mdlTemplateSertifikatUrl,
+                        hasDoorprize: d.hasDoorprize == 1,
                         onTap: () async {
                           await Get.toNamed(
                             Routes.DETAIL,
