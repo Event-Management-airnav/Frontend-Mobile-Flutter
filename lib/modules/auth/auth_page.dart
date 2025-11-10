@@ -96,6 +96,10 @@ class _AuthPageState extends State<AuthPage> {
     if (!emailRegex.hasMatch(value)) {
       return "Masukkan alamat email yang valid";
     }
+
+    if (_statusKaryawan == "1" && !value.endsWith("@airnavindonesia.co.id")) {
+      return "Gunakan email @airnavindonesia.co.id";
+    }
     
     return null;
   }
