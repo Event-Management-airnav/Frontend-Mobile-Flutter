@@ -29,15 +29,45 @@ class DetailPage extends GetView<EventDetailController> {
       controller.loadRegistration(eventId);
     }
 
+    Future<void> _refresh() async {
+      await controller.loadEventDetail(eventId);
+      if (controller.isUserLoggedIn.value) {
+        await controller.loadRegistration(eventId);
+      }
+    }
+
     return Scaffold(
       appBar: TAppBar(),
       body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+        // Helper for states that need to be scrollable for the refresh indicator to work
+        Widget buildScrollableFeedback(Widget child) {
+          return RefreshIndicator(
+            onRefresh: _refresh,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [
+                    SizedBox(
+                      height: constraints.maxHeight,
+                      child: Center(child: child),
+                    ),
+                  ],
+                );
+              },
+            ),
+          );
+        }
+
+        // Show full-page loader only on initial load.
+        // During pull-to-refresh, isLoading is true but hasData is also true,
+        // so this block won't be triggered, showing the indicator at the top instead.
+        if (controller.isLoading.value && !controller.hasData) {
+          return buildScrollableFeedback(const CircularProgressIndicator());
         }
 
         if (controller.hasError) {
-          return Center(child: Text(controller.errorMessage.value));
+          return buildScrollableFeedback(const Text("Detail acara tidak bisa ditampilkan"));
         }
 
         if (controller.hasData) {
@@ -62,12 +92,7 @@ class DetailPage extends GetView<EventDetailController> {
           DateFormat("d MMMM yyy", "id_ID").format(event.acaraMulai);
 
           return RefreshIndicator(
-            onRefresh: () async {
-              await controller.loadEventDetail(eventId);
-              if (controller.isUserLoggedIn.value) {
-                await controller.loadRegistration(eventId);
-              }
-            },
+            onRefresh: _refresh,
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.all(16),
@@ -245,7 +270,7 @@ class DetailPage extends GetView<EventDetailController> {
           );
         }
 
-        return const Center(child: Text('No event data available.'));
+        return buildScrollableFeedback(const Text('No event data available.'));
       }),
     );
   }
