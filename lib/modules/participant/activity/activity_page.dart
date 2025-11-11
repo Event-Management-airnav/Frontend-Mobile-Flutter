@@ -85,9 +85,7 @@ class ActivityPage extends GetView<ActivityController> {
                       }
                       
                       bool isPresent = d.presensi != null && d.presensi?.status == "Hadir";
-                      if (d.certificateUrl == null) {
-                        controller.getCertificateForEvent(d.modulAcaraId);
-                      }
+
                       return ActivityContainer(
                         eventName: name,
                         eventDate: date,

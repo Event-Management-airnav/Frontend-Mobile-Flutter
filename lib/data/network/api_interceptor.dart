@@ -33,6 +33,7 @@ class ApiInterceptor extends Interceptor {
           Get.snackbar("Berhasil Dibuat", response.data["message"] ?? "Data berhasil dibuat",backgroundColor: Colors.green);
           break;
         case 400:
+          if (response.data["message"] == "Sertifikat belum terbit" || response.data["message"] == "Absen tidak lengkap." ) break;
           Get.snackbar("Permintaan Tidak Valid", response.data["message"] ?? "Permintaan yang Anda kirim tidak valid",backgroundColor: failColor);
           break;
         case 401:
@@ -58,7 +59,7 @@ class ApiInterceptor extends Interceptor {
           Get.snackbar("Masalah Server", response.data["message"] ?? "Terjadi masalah pada server, coba lagi nanti",backgroundColor: failColor);
           break;
         default:
-          Get.snackbar("Terjadi Kesalahan", response.data["message"] ?? "Telah terjadi kesalahan yang tidak diketahui",backgroundColor: failColor);
+          //Get.snackbar("Terjadi Kesalahan", response.data["message"] ?? "Telah terjadi kesalahan yang tidak diketahui",backgroundColor: failColor);
           break;
       }
     } else {
