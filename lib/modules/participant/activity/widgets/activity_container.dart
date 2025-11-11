@@ -64,8 +64,8 @@ class ActivityContainer extends StatelessWidget {
     final bool isEnabled = isPresent && urlSertifikat != null;
 
     final Color buttonBgColor =
-    isEnabled ? const Color(0xFF175FA4) : const Color(0xFFD1D5DB);
-    final Color buttonFgColor = isEnabled ? Colors.white : Colors.black;
+    isEnabled ? const Color(0xFF175FA4) : const Color(0xFFCFEEFA);
+    final Color buttonFgColor = isEnabled ? Colors.white : Colors.white;
 
     VoidCallback? onActionTapHandler;
     if (isEnabled) {
