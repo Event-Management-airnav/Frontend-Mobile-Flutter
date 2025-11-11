@@ -28,6 +28,7 @@ class ActivityContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("urlSertifikat : $urlSertifikat");
     const borderBlue = Color(0xFF9ED1F5);
     const headerBlue = Color(0xFFDDF3FF);
     const darkBlue = Color(0xFF10498D);

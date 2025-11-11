@@ -6,6 +6,7 @@ import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/act
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/search_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/widgets/call_to_login.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../../app_pages.dart';
 
@@ -30,6 +31,7 @@ class ActivityPage extends GetView<ActivityController> {
           }
 
           final items = controller.filteredFollowed;
+
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,7 +91,7 @@ class ActivityPage extends GetView<ActivityController> {
                         eventDate: date,
                         status: status,
                         isPresent: isPresent,
-                        urlSertifikat: d.modulAcara?.mdlTemplateSertifikatUrl,
+                        urlSertifikat:d.certificateUrl,
                         hasDoorprize: d.hasDoorprize == 1,
                         onTap: () async {
                           await Get.toNamed(

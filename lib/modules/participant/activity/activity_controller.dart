@@ -5,6 +5,7 @@ import 'package:frontend_mobile_flutter/data/models/event/presence.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../../core/utils.dart';
+import '../../../data/models/certificate/certificate_response.dart';
 import '../../../data/models/event/scan_response.dart';
 
 
@@ -33,6 +34,30 @@ class ActivityController extends GetxController {
       loadFollowed();
     }
   }
+
+  Future<CertificateResponse?> getCertificateForEvent(int eventId) async {
+    try {
+      isLoading.value = true;
+      error.value = null;
+
+      final CertificateResponse res = await service.getCertificate(eventId);
+
+      if (!res.status) {
+        error.value = res.message;
+      }
+
+      print("urlSertifikat (controller): ${res.data}");
+      return res;
+    } catch (e) {
+      error.value = e.toString();
+      rethrow;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+
+
 
   void updateSearchQuery(String query) {
     searchQuery.value = query;
@@ -95,10 +120,20 @@ class ActivityController extends GetxController {
       error.value = null;
 
       final list = await service.getFollowedEvents(page: page);
+
       if (page == 1) {
         followedEvents.assignAll(list);
       } else {
         followedEvents.addAll(list);
+      }
+
+      // Check Certificate
+      for (var datum in followedEvents) {
+        if (datum.certificateUrl == null) {
+          // setelah return, bisa assign ke datum di sini jika ingin
+          final res = await getCertificateForEvent(datum.modulAcaraId);
+          datum.certificateUrl = res?.data;
+        }
       }
     } catch (e) {
       error.value = e.toString();
