@@ -5,6 +5,7 @@ import 'package:frontend_mobile_flutter/data/models/event/presence.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../../core/utils.dart';
+import '../../../data/models/certificate/certificate_response.dart';
 import '../../../data/models/event/scan_response.dart';
 
 
@@ -33,6 +34,64 @@ class ActivityController extends GetxController {
       loadFollowed();
     }
   }
+
+  Future<CertificateResponse?> getCertificateForEvent(int eventId) async {
+    try {
+      isLoading.value = true;
+      error.value = null;
+
+      final CertificateResponse res = await service.getCertificate(eventId);
+
+      // cari index Datum yang sesuai eventId
+      final idx = followedEvents.indexWhere((d) => d.modulAcaraId == eventId);
+      if (idx == -1) {
+        // event tidak ditemukan di list
+        return res;
+      }
+
+      final datum = followedEvents[idx];
+
+      if (!res.status) {
+        error.value = res.message;
+        Get.snackbar(
+          'Info',
+          res.message,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 3),
+        );
+
+        // langsung set certificateUrl ke null
+        datum.certificateUrl = null;
+        followedEvents.refresh(); // trigger rebuild UI
+        return res;
+      }
+
+      // ambil URL dari response
+      String? url;
+      if (res.data != null) {
+        url = res.data;
+      }
+
+      // langsung assign ke field Datum
+      datum.certificateUrl = url;
+      followedEvents.refresh(); // trigger rebuild UI
+
+      return res;
+    } catch (e) {
+      error.value = e.toString();
+      Get.snackbar(
+        'Kesalahan',
+        'Gagal mengambil sertifikat: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      rethrow;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+
+
 
   void updateSearchQuery(String query) {
     searchQuery.value = query;

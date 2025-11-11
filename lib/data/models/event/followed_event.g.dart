@@ -85,10 +85,12 @@ Datum _$DatumFromJson(Map<String, dynamic> json) => Datum(
   user: json['user'] == null
       ? null
       : MyRegistrationUser.fromJson(json['user'] as Map<String, dynamic>),
+  certificateUrl: json['certificateUrl'] as String?,
 );
 
 Map<String, dynamic> _$DatumToJson(Datum instance) => <String, dynamic>{
   'id': instance.id,
+  'certificateUrl': instance.certificateUrl,
   'modul_acara_id': instance.modulAcaraId,
   'user_id': instance.userId,
   'metode_daftar': instance.metodeDaftar,
@@ -121,6 +123,7 @@ ModulAcara _$ModulAcaraFromJson(Map<String, dynamic> json) => ModulAcara(
   mdlBannerAcaraUrl: json['mdl_banner_acara_url'] as String?,
   mdlFileAcaraUrl: json['mdl_file_acara_url'] as String?,
   mdlFileRundownUrl: json['mdl_file_rundown_url'] as String?,
+  mdlTemplateSertifikatUrl: json['mdl_template_sertifikat_url'] as String?,
 );
 
 Map<String, dynamic> _$ModulAcaraToJson(ModulAcara instance) =>
@@ -139,6 +142,7 @@ Map<String, dynamic> _$ModulAcaraToJson(ModulAcara instance) =>
       'mdl_banner_acara_url': instance.mdlBannerAcaraUrl,
       'mdl_file_acara_url': instance.mdlFileAcaraUrl,
       'mdl_file_rundown_url': instance.mdlFileRundownUrl,
+      'mdl_template_sertifikat_url': instance.mdlTemplateSertifikatUrl,
     };
 
 Link _$LinkFromJson(Map<String, dynamic> json) => Link(

@@ -112,9 +112,12 @@ class Datum extends Equatable {
     this.modulAcara,
     this.presensi,
     this.user,
+    this.certificateUrl
   });
 
   final int id;
+
+  String? certificateUrl; //Ini tambahan untuk nyimpen, di API ga ada field ini
 
   @JsonKey(name: 'modul_acara_id')
   final int modulAcaraId;
@@ -286,3 +289,4 @@ class Link extends Equatable {
   @override
   List<Object?> get props => [url, label, page, active];
 }
+
