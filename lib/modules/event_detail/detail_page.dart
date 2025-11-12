@@ -73,23 +73,17 @@ class DetailPage extends GetView<EventDetailController> {
         if (controller.hasData) {
           final event = controller.eventDetail.value!;
 
-          String eventRegStartShort =
-          DateFormat("d MMM yyy", "id_ID").format(event.pendaftaranMulai);
-          String eventRegEndShort =
-          DateFormat("d MMM yyy", "id_ID").format(event.pendaftaranMulai);
-          String eventStartShort =
-          DateFormat("d MMM yyy", "id_ID").format(event.pendaftaranMulai);
-          String eventRegStartHour =
-          DateFormat("HH:mm", "id_ID").format(event.pendaftaranMulai);
-          String eventRegEndHour =
-          DateFormat("HH:mm", "id_ID").format(event.pendaftaranSelesai);
-          String eventStartHour =
-          DateFormat("HH:mm", "id_ID").format(event.acaraMulai);
-          String eventEndHour = event.acaraSelesai != null
-              ? DateFormat("HH:mm", "id_ID").format(event.acaraSelesai!)
+          final eventRegStart =
+              DateFormat("d MMM yyyy, HH:mm", "id_ID").format(event.pendaftaranMulai);
+          final eventRegEnd =
+              DateFormat("d MMM yyyy, HH:mm", "id_ID").format(event.pendaftaranSelesai);
+          final eventStart =
+              DateFormat("d MMM yyyy, HH:mm", "id_ID").format(event.acaraMulai);
+          final eventEnd = event.acaraSelesai != null
+              ? DateFormat("d MMM yyyy, HH:mm", "id_ID").format(event.acaraSelesai!)
               : '';
-          String eventStartFull =
-          DateFormat("d MMMM yyy", "id_ID").format(event.acaraMulai);
+          final eventStartFull =
+          DateFormat("d MMMM yyy, HH:mm", "id_ID").format(event.acaraMulai);
 
           return RefreshIndicator(
             onRefresh: _refresh,
@@ -102,8 +96,7 @@ class DetailPage extends GetView<EventDetailController> {
                   EventHeroCard(
                     title: event.nama,
                     location: event.lokasi ?? 'N/A',
-                    dateTimeText:
-                    '$eventStartFull, $eventStartHour${event.acaraSelesai != null ? ' - $eventEndHour' : ''}',
+                    dateTimeText: eventStartFull,
                     imageUrl: event.bannerAcara,
                     borderColor: AppColors.primary,
                   ),
@@ -225,36 +218,40 @@ class DetailPage extends GetView<EventDetailController> {
                           Icons.location_on_outlined,
                           size: 20,
                         ),
-                        label: 'Lokasi',
-                        value: event.lokasi ?? 'N/A',
+                        label: 'Alamat',
+                        value: event.lokasi ?? 'Online',
                       ),
                       InfoItem(
                         leading: const Icon(
-                          Icons.how_to_reg_outlined,
+                          Icons.event_available_outlined,
                           size: 20,
                         ),
-                        label: 'Pendaftaran',
-                        value:
-                        '$eventRegStartShort $eventRegStartHour - $eventRegEndShort $eventRegEndHour',
+                        label: 'Pendaftaran Dibuka',
+                        value: eventRegStart,
                       ),
                       InfoItem(
                         leading: const Icon(
-                          Icons.calendar_today_rounded,
+                          Icons.event_busy_outlined,
                           size: 20,
                         ),
-                        label: 'Tanggal Acara',
-                        value: eventStartShort,
+                        label: 'Pendaftaran Ditutup',
+                        value: eventRegEnd,
                       ),
                       InfoItem(
                         leading: const Icon(
-                          Icons.access_time_rounded,
+                          Icons.play_circle_outline_rounded,
                           size: 20,
                         ),
-                        label: 'Jam Acara',
-                        value: eventStartHour +
-                            (event.acaraSelesai != null
-                                ? ' - $eventEndHour'
-                                : ''),
+                        label: 'Acara mulai',
+                        value: eventStart,
+                      ),
+                      if (event.acaraSelesai != null) InfoItem(
+                        leading: const Icon(
+                          Icons.stop_circle_outlined,
+                          size: 20,
+                        ),
+                        label: 'Acara selesai',
+                        value: eventEnd,
                       ),
                     ],
                   ),
