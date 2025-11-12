@@ -235,7 +235,7 @@ class DetailPage extends GetView<EventDetailController> {
                           Icons.play_circle_outline_rounded,
                           size: 20,
                         ),
-                        label: 'Acara mulai',
+                        label: 'Acara Mulai',
                         value: eventStart,
                       ),
                       if (event.acaraSelesai != null) InfoItem(
@@ -243,7 +243,7 @@ class DetailPage extends GetView<EventDetailController> {
                           Icons.stop_circle_outlined,
                           size: 20,
                         ),
-                        label: 'Acara selesai',
+                        label: 'Acara Selesai',
                         value: eventEnd,
                       ),
                     ],
