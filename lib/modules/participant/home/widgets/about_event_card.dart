@@ -21,7 +21,6 @@ class AboutEventCard extends StatelessWidget {
 
   final VoidCallback? onRegister;
   final VoidCallback? onCancelRegistration;
-  final VoidCallback? onScan;
   final VoidCallback? onLogin;
 
   const AboutEventCard({
@@ -41,7 +40,6 @@ class AboutEventCard extends StatelessWidget {
     required this.isAttendanceActive,
     this.onRegister,
     this.onCancelRegistration,
-    this.onScan,
     this.onLogin,
   });
 
@@ -49,12 +47,13 @@ class AboutEventCard extends StatelessWidget {
   Widget build(BuildContext context) {
     String buttonText;
     Color buttonColor;
+    Color? buttonDisabledColor;
     VoidCallback? onPressed;
     final now = DateTime.now();
 
     if (!isLoggedIn) {
       buttonText = 'Login Untuk Mendaftar';
-      buttonColor = Colors.grey;
+      buttonColor = primaryColor;
       onPressed = onLogin; 
     } else if (!isRegistered) {
       // User login belum daftar
@@ -77,21 +76,11 @@ class AboutEventCard extends StatelessWidget {
         buttonText = 'Batal Pendaftaran';
         buttonColor = Colors.red;
         onPressed = onCancelRegistration;
-      } else if (now.isAfter(eventEndDate)) {
-        buttonText = 'Absensi Ditutup';
-        buttonColor = Colors.grey;
-        onPressed = null;
       } else {
-        if (isAttendanceActive == 1) {
-          // TODO Add indicator sudah presensi
-          buttonText = 'Scan Absensi';
-          buttonColor = primaryColor;
-          onPressed = onScan;
-        } else {
-          buttonText = 'Belum Dimulai';
-          buttonColor = Colors.grey;
-          onPressed = null;
-        }
+        buttonText = 'Terdaftar';
+        buttonColor = Colors.green;
+        buttonDisabledColor = Colors.green.withOpacity(0.7);
+        onPressed = null;
       }
     }
 
@@ -124,7 +113,7 @@ class AboutEventCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  disabledBackgroundColor: Colors.grey.shade500,
+                  disabledBackgroundColor: buttonDisabledColor ?? Colors.grey.shade500,
                 ),
                 child: Text(
                   buttonText,
