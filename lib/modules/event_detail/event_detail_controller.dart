@@ -130,17 +130,8 @@ class EventDetailController extends GetxController {
     }
   }
 
-  // New method for QR Scan (dummy)
-  void scanQrCode() {
-    // This is a dummy implementation as requested
-    Get.snackbar('Fitur Segera Hadir', 'Fitur pemindaian QR akan segera tersedia.');
-    // In a real implementation, you might navigate to a scanner page
-    Get.toNamed(Routes.SCAN);
-  }
-
-  // New method to navigate to login
   void goToLogin() {
-    Get.toNamed(Routes.AUTH); // Navigate to the authentication page
+    Get.toNamed(Routes.AUTH);
   }
 
 

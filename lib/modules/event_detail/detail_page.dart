@@ -39,7 +39,6 @@ class DetailPage extends GetView<EventDetailController> {
     return Scaffold(
       appBar: TAppBar(),
       body: Obx(() {
-        // Helper for states that need to be scrollable for the refresh indicator to work
         Widget buildScrollableFeedback(Widget child) {
           return RefreshIndicator(
             onRefresh: _refresh,
@@ -59,9 +58,6 @@ class DetailPage extends GetView<EventDetailController> {
           );
         }
 
-        // Show full-page loader only on initial load.
-        // During pull-to-refresh, isLoading is true but hasData is also true,
-        // so this block won't be triggered, showing the indicator at the top instead.
         if (controller.isLoading.value && !controller.hasData) {
           return buildScrollableFeedback(const CircularProgressIndicator());
         }
@@ -118,9 +114,7 @@ class DetailPage extends GetView<EventDetailController> {
                     registrationStartDate: event.pendaftaranMulai,
                     registrationEndDate: event.pendaftaranSelesai,
                     eventStartDate: event.acaraMulai,
-                    eventEndDate:
-                    event.acaraSelesai ??
-                        event.acaraMulai.add(const Duration(days: 1)),
+                    eventEndDate: event.acaraSelesai!,
                     isAttendanceActive: event.presensiAktif,
 
                     onLogin: controller.goToLogin,
@@ -171,7 +165,6 @@ class DetailPage extends GetView<EventDetailController> {
                         ),
                       );
                     },
-                    onScan: controller.scanQrCode,
                   ),
                   const SizedBox(height: 16),
                   if (controller.isRegistered.value) ...[
