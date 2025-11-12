@@ -36,7 +36,7 @@ class InfoListCard extends StatelessWidget {
             const SizedBox(height: 12),
             Table(
               columnWidths: const {
-                0: IntrinsicColumnWidth(),
+                0: FlexColumnWidth(),
                 1: FixedColumnWidth(12),
                 2: FlexColumnWidth(),
               },
@@ -46,35 +46,46 @@ class InfoListCard extends StatelessWidget {
                     (e) => TableRow(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          padding: const EdgeInsets.symmetric(vertical: 6),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              e.leading,
+                              Icon(
+                                e.leading.icon,
+                                color: AppColors.primary,
+                                size: e.leading.size,
+                              ),
                               const SizedBox(width: 8),
-                              Text(
-                                e.label,
-                                style: const TextStyle(
-                                  color: AppColors.primaryDark,
+                              Expanded(
+                                child: Text(
+                                  e.label,
+                                  style: const TextStyle(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
                         ),
                         const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 4),
+                          padding: EdgeInsets.symmetric(vertical: 6),
                           child: Text(
                             ':',
-                            style: TextStyle(color: AppColors.primaryDark),
+                            style: TextStyle(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          padding: const EdgeInsets.symmetric(vertical: 6),
                           child: Text(
                             e.value,
                             style: const TextStyle(
-                              color: AppColors.primaryDark,
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
