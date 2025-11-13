@@ -1,5 +1,7 @@
 // popup_detail_presence_responsive.dart
 import 'package:flutter/material.dart';
+import 'package:easy_stepper/easy_stepper.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 enum PresenceStatus { present, absent, disabled }
 
@@ -14,17 +16,13 @@ class PopupDetailPresence extends StatefulWidget {
   });
 
   @override
-  State<PopupDetailPresence> createState() =>
-      _PopupDetailPresenceState();
+  State<PopupDetailPresence> createState() => _PopupDetailPresenceState();
 }
 
-class _PopupDetailPresenceState
-    extends State<PopupDetailPresence> {
+class _PopupDetailPresenceState extends State<PopupDetailPresence> {
   int activeStep = 0;
 
-  static const double _desiredItemWidth = 120; // lebar ideal tiap step (responsif)
-
-  Widget _iconForStatus(PresenceStatus status, bool isActive) {
+  Widget _buildStepIcon(PresenceStatus status, int index) {
     const double size = 36;
     switch (status) {
       case PresenceStatus.present:
@@ -49,25 +47,51 @@ class _PopupDetailPresenceState
     }
   }
 
-  TextStyle _labelStyle(PresenceStatus status) {
-    switch (status) {
-      case PresenceStatus.present:
-        return const TextStyle(color: Colors.black, fontWeight: FontWeight.w600);
-      case PresenceStatus.absent:
-        return const TextStyle(color: Colors.red, fontWeight: FontWeight.w600);
-      case PresenceStatus.disabled:
-      default:
-        return TextStyle(color: Colors.grey.shade400, fontWeight: FontWeight.w600);
+  Color _getLineColor(int index) {
+    if (index >= widget.statusPerSession.length - 1) {
+      return Colors.grey.shade300;
     }
+
+    final currentStatus = widget.statusPerSession[index];
+    final nextStatus = widget.statusPerSession[index + 1];
+
+    // Garis hijau jika kedua sesi hadir
+    if (currentStatus == PresenceStatus.present &&
+        nextStatus == PresenceStatus.present) {
+      return Colors.green;
+    }
+
+    // Garis merah jika ada yang absent
+    if (currentStatus == PresenceStatus.absent ||
+        nextStatus == PresenceStatus.absent) {
+      return Colors.red.shade300;
+    }
+
+    return Colors.grey.shade300;
   }
 
-  List<List<int>> _chunkIndices(int count, int perRow) {
-    final rows = <List<int>>[];
-    for (var i = 0; i < count; i += perRow) {
-      rows.add(
-          List<int>.generate((i + perRow > count ? count - i : perRow), (j) => i + j));
+  TextStyle _getTitleStyle(PresenceStatus status) {
+    switch (status) {
+      case PresenceStatus.present:
+        return const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.w600,
+          fontSize: 13,
+        );
+      case PresenceStatus.absent:
+        return const TextStyle(
+          color: Colors.red,
+          fontWeight: FontWeight.w600,
+          fontSize: 13,
+        );
+      case PresenceStatus.disabled:
+      default:
+        return TextStyle(
+          color: Colors.grey.shade400,
+          fontWeight: FontWeight.w600,
+          fontSize: 13,
+        );
     }
-    return rows;
   }
 
   @override
@@ -79,140 +103,74 @@ class _PopupDetailPresenceState
       insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       child: Padding(
         padding: const EdgeInsets.all(18.0),
-        child: LayoutBuilder(builder: (context, constraints) {
-          final maxWidth = constraints.maxWidth;
-          final itemsPerRow =
-          maxWidth >= _desiredItemWidth ? (maxWidth ~/ _desiredItemWidth) : 1;
-          final rows = _chunkIndices(statuses.length, itemsPerRow);
-
-          // actual itemWidth depends on available space (distribute evenly)
-          final itemWidth = (maxWidth - 16) / (itemsPerRow); // minus some padding
-
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(widget.title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Navigator.of(context).pop(),
-                  )
-                ],
-              ),
-              const SizedBox(height: 12),
-
-              // stepper build rows
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) ...[
-                    // Row of items with horizontal connectors between items in same row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        for (var col = 0; col < rows[rowIndex].length; col++) ...[
-                          _buildStepItem(
-                            index: rows[rowIndex][col],
-                            width: itemWidth,
-                          ),
-                          // if not last item in row, draw horizontal connector
-                          if (col != rows[rowIndex].length - 1)
-                            Expanded(
-                              child: Container(
-                                height: 2,
-                                margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 17),
-                                color: Colors.grey.shade300,
-                              ),
-                            )
-                        ]
-                      ],
-                    ),
-
-                    // if there is a next row, draw vertical connectors aligned to columns that exist in next row
-                    if (rowIndex != rows.length - 1)
-                      SizedBox(
-                        height: 28,
-                        child: Row(
-                          children: [
-                            for (var col = 0; col < itemsPerRow; col++) ...[
-                              SizedBox(
-                                width: itemWidth,
-                                child: Center(
-                                  child: Builder(builder: (context) {
-                                    // determine if current row has an item at this col, and next row has item at same col
-                                    final curRowHas = col < rows[rowIndex].length;
-                                    final nextRowHas = col < rows[rowIndex + 1].length;
-                                    if (curRowHas && nextRowHas) {
-                                      return Container(
-                                        width: 2,
-                                        height: 28,
-                                        color: Colors.grey.shade300,
-                                      );
-                                    }
-                                    return const SizedBox.shrink();
-                                  }),
-                                ),
-                              ),
-                              // if col < itemsPerRow -1, we need to leave space for horizontal connector area as we used Expanded earlier
-                              if (col != itemsPerRow - 1)
-                                const SizedBox(width: 16), // spacing under horizontal connectors
-                            ]
-                          ],
-                        ),
-                      )
-                  ]
-                ],
-              ),
-
-              const SizedBox(height: 12),
-              // legend
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _legendItem(Colors.green, Icons.check, 'Hadir'),
-                  _legendItem(Colors.red, Icons.close, 'Tidak Hadir'),
-                  _legendItem(Colors.grey.shade300, Icons.circle, 'Belum'),
-                ],
-              ),
-            ],
-          );
-        }),
-      ),
-    );
-  }
-
-  Widget _buildStepItem({required int index, required double width}) {
-    final status = widget.statusPerSession[index];
-    final label = 'Sesi ${index + 1}';
-    final isActive = index == activeStep;
-
-    return SizedBox(
-      width: width,
-      child: InkWell(
-        onTap: status == PresenceStatus.disabled
-            ? null
-            : () {
-          setState(() => activeStep = index);
-        },
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // icon with a small shadow when active
-            Container(
-              padding: const EdgeInsets.all(2),
-              decoration: isActive
-                  ? BoxDecoration(
-                shape: BoxShape.circle,
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.12), blurRadius: 6)],
-              )
-                  : null,
-              child: _iconForStatus(status, isActive),
+            // Header
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  widget.title,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.of(context).pop(),
+                )
+              ],
             ),
-            const SizedBox(height: 8),
-            Text(label, style: _labelStyle(status)),
+            const SizedBox(height: 16),
+
+            // EasyStepper - otomatis responsive!
+            EasyStepper(
+              activeStep: activeStep,
+              stepRadius: 20,
+              stepBorderRadius: 0,
+              borderThickness: 0,
+              padding: const EdgeInsets.all(8),
+              showLoadingAnimation: false,
+              enableStepTapping: true,
+              disableScroll: true,
+              fitWidth: true,
+              steps: List.generate(
+                statuses.length,
+                    (index) {
+                  final status = statuses[index];
+                  return EasyStep(
+                    customStep: _buildStepIcon(status, index),
+                    title: 'Sesi ${index + 1}',
+                    lineText: '',
+                    enabled: status != PresenceStatus.disabled,
+                    customTitle: Text(
+                      'Sesi ${index + 1}',
+                      style: _getTitleStyle(status),
+                      textAlign: TextAlign.center,
+                    ),
+                  );
+                },
+              ),
+              onStepReached: (index) {
+                if (statuses[index] != PresenceStatus.disabled) {
+                  setState(() => activeStep = index);
+                }
+              },
+            ),
+
+            const SizedBox(height: 20),
+
+            // Legend
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _legendItem(Colors.green, Icons.check, 'Hadir'),
+                _legendItem(Colors.red, Icons.close, 'Tidak Hadir'),
+                _legendItem(Colors.grey.shade300, Icons.circle, 'Belum'),
+              ],
+            ),
           ],
         ),
       ),
@@ -222,7 +180,11 @@ class _PopupDetailPresenceState
   Widget _legendItem(Color bgColor, IconData icon, String label) {
     return Row(
       children: [
-        CircleAvatar(radius: 12, backgroundColor: bgColor, child: Icon(icon, size: 14, color: Colors.white)),
+        CircleAvatar(
+          radius: 12,
+          backgroundColor: bgColor,
+          child: Icon(icon, size: 14, color: Colors.white),
+        ),
         const SizedBox(width: 6),
         Text(label, style: const TextStyle(fontSize: 14)),
       ],
