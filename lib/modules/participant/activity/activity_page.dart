@@ -85,7 +85,8 @@ class ActivityPage extends GetView<ActivityController> {
                       }
                       
                       bool isPresent = d.presensi != null && d.presensi?.status == "Hadir";
-
+                      print("activity page url:${d.certificateUrl}");
+                      print("hadir ga: $isPresent");
                       return ActivityContainer(
                         eventName: name,
                         eventDate: date,
