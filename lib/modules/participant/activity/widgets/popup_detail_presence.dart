@@ -1,4 +1,4 @@
-// popup_detail_presence_responsive.dart
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -47,29 +47,6 @@ class _PopupDetailPresenceState extends State<PopupDetailPresence> {
     }
   }
 
-  Color _getLineColor(int index) {
-    if (index >= widget.statusPerSession.length - 1) {
-      return Colors.grey.shade300;
-    }
-
-    final currentStatus = widget.statusPerSession[index];
-    final nextStatus = widget.statusPerSession[index + 1];
-
-    // Garis hijau jika kedua sesi hadir
-    if (currentStatus == PresenceStatus.present &&
-        nextStatus == PresenceStatus.present) {
-      return Colors.green;
-    }
-
-    // Garis merah jika ada yang absent
-    if (currentStatus == PresenceStatus.absent ||
-        nextStatus == PresenceStatus.absent) {
-      return Colors.red.shade300;
-    }
-
-    return Colors.grey.shade300;
-  }
-
   TextStyle _getTitleStyle(PresenceStatus status) {
     switch (status) {
       case PresenceStatus.present:
@@ -98,82 +75,99 @@ class _PopupDetailPresenceState extends State<PopupDetailPresence> {
   Widget build(BuildContext context) {
     final statuses = widget.statusPerSession;
 
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      child: Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Header
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  widget.title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () => Navigator.of(context).pop(),
-                )
-              ],
+    return Stack(
+      children: [
+        // 🔹 Latar belakang blur
+        Positioned.fill(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+            child: Container(
+              color: Colors.black.withOpacity(0.3), // semi-transparan
             ),
-            const SizedBox(height: 16),
-
-            // EasyStepper - otomatis responsive!
-            EasyStepper(
-              activeStep: activeStep,
-              stepRadius: 20,
-              stepBorderRadius: 0,
-              borderThickness: 0,
-              padding: const EdgeInsets.all(8),
-              showLoadingAnimation: false,
-              enableStepTapping: true,
-              disableScroll: true,
-              fitWidth: true,
-              steps: List.generate(
-                statuses.length,
-                    (index) {
-                  final status = statuses[index];
-                  return EasyStep(
-                    customStep: _buildStepIcon(status, index),
-                    title: 'Sesi ${index + 1}',
-                    lineText: '',
-                    enabled: status != PresenceStatus.disabled,
-                    customTitle: Text(
-                      'Sesi ${index + 1}',
-                      style: _getTitleStyle(status),
-                      textAlign: TextAlign.center,
-                    ),
-                  );
-                },
-              ),
-              onStepReached: (index) {
-                if (statuses[index] != PresenceStatus.disabled) {
-                  setState(() => activeStep = index);
-                }
-              },
-            ),
-
-            const SizedBox(height: 20),
-
-            // Legend
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _legendItem(Colors.green, Icons.check, 'Hadir'),
-                _legendItem(Colors.red, Icons.close, 'Tidak Hadir'),
-                _legendItem(Colors.grey.shade300, Icons.circle, 'Belum'),
-              ],
-            ),
-          ],
+          ),
         ),
-      ),
+
+        // 🔹 Dialog utama
+        Center(
+          child: Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Header
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        widget.title,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.of(context).pop(),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+
+                  // EasyStepper
+                  EasyStepper(
+                    activeStep: activeStep,
+                    stepRadius: 20,
+                    stepBorderRadius: 0,
+                    borderThickness: 0,
+                    padding: const EdgeInsets.all(8),
+                    showLoadingAnimation: false,
+                    enableStepTapping: true,
+                    disableScroll: true,
+                    fitWidth: true,
+                    steps: List.generate(
+                      statuses.length,
+                          (index) {
+                        final status = statuses[index];
+                        return EasyStep(
+                          customStep: _buildStepIcon(status, index),
+                          title: 'Sesi ${index + 1}',
+                          lineText: '',
+                          enabled: status != PresenceStatus.disabled,
+                          customTitle: Text(
+                            'Sesi ${index + 1}',
+                            style: _getTitleStyle(status),
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      },
+                    ),
+                    onStepReached: (index) {
+                      if (statuses[index] != PresenceStatus.disabled) {
+                        setState(() => activeStep = index);
+                      }
+                    },
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Legend
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _legendItem(Colors.green, Icons.check, 'Hadir'),
+                      _legendItem(Colors.red, Icons.close, 'Tidak Hadir'),
+                      _legendItem(Colors.grey.shade300, Icons.circle, 'Belum'),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
