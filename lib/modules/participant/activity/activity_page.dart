@@ -2,12 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_controller.dart';
-import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/activity_container.dart' hide SizedBox;
+import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/activity_container.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/search_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/widgets/call_to_login.dart';
 
 import '../../../app_pages.dart';
+import '../../../core/utils.dart';
 
 class ActivityPage extends GetView<ActivityController> {
   const ActivityPage({super.key});
@@ -73,15 +74,15 @@ class ActivityPage extends GetView<ActivityController> {
                     const SizedBox(height: 8),
                     itemBuilder: (_, i) {
                       final d = items[i];
-                      final name = controller.eventNameOf(d);
+                      final name = d.modulAcara.mdlNama;
                       final date = controller
-                          .formatDate(controller.eventDateOf(d));
+                          .formatDate(d.modulAcara.mdlAcaraMulai);
                       final status = controller.eventStatus(d);
 
                       if (status == 'Unknown') {
                         return const SizedBox.shrink();
                       }
-                      
+
                       //bool isPresent = d.presensi != null && d.presensi?.status == "Hadir"; belum bener
                       bool isPresent = true;
                       if (kDebugMode) {
@@ -97,7 +98,7 @@ class ActivityPage extends GetView<ActivityController> {
                         urlSertifikat:d.certificateUrl,
                         hasDoorprize: d.hasDoorprize == 1,
                         timeNow: controller.timeNow.value,
-                        onTap: () async {
+                        onCardPressed: () async {
                           await Get.toNamed(
                             Routes.DETAIL,
                             arguments: {
@@ -107,6 +108,14 @@ class ActivityPage extends GetView<ActivityController> {
                           );
                           // refresh setelah kembali dari detail
                           await controller.refreshFollowed();
+                        },
+                        onDownloadCertificatePressed: () async {
+                          var res = await controller.getCertificateForEvent(d.modulAcaraId);
+                          if (res != null && res.success) {
+                            final url = res.data;
+                            Utils.openUrl(url);
+                            Get.snackbar('Berhasil', 'Sertifikat berhasil diunduh.', backgroundColor: Colors.green, colorText: Colors.white);
+                          }
                         },
                       );
                     },

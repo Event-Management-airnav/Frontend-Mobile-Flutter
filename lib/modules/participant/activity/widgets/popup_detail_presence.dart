@@ -38,7 +38,6 @@ class _PopupDetailPresenceState extends State<PopupDetailPresence> {
           child: const Icon(Icons.close, color: Colors.white, size: 18),
         );
       case PresenceStatus.disabled:
-      default:
         return CircleAvatar(
           radius: size / 2,
           backgroundColor: Colors.grey.shade300,
@@ -62,7 +61,6 @@ class _PopupDetailPresenceState extends State<PopupDetailPresence> {
           fontSize: 13,
         );
       case PresenceStatus.disabled:
-      default:
         return TextStyle(
           color: Colors.grey.shade400,
           fontWeight: FontWeight.w600,

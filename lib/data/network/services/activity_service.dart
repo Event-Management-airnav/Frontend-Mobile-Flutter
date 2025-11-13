@@ -57,14 +57,14 @@ class ActivityService extends GetxService {
       final data = e.response?.data;
 
       return CertificateResponse(
-        status: data?["status"] ?? false,
+        success: data?["status"] ?? false,
         message: data?["message"] ?? "Gagal mengambil sertifikat.",
         data: null,
       );
     } catch (e) {
       // Untuk jaga-jaga jika error bukan dari Dio
       return CertificateResponse(
-        status: false,
+        success: false,
         message: "Terjadi kesalahan tak terduga: $e",
         data: null,
       );
