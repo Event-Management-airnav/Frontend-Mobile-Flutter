@@ -31,7 +31,6 @@ class ActivityPage extends GetView<ActivityController> {
 
           final items = controller.filteredFollowed;
 
-
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -41,7 +40,7 @@ class ActivityPage extends GetView<ActivityController> {
                 'Aktivitas',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
               ),
-              const SizedBox(height: 1),
+              const SizedBox(height: 10),
 
               // Area list + pull-to-refresh
               Expanded(
