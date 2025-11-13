@@ -82,7 +82,7 @@ class ActivityPage extends GetView<ActivityController> {
                       if (status == 'Unknown') {
                         return const SizedBox.shrink();
                       }
-                      
+
                       bool isPresent = false;//d.presensi != null && d.presensi?.status == "Hadir";
 
                       return ActivityContainer(
