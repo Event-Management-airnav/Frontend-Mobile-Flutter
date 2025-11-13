@@ -69,9 +69,7 @@ Datum _$DatumFromJson(Map<String, dynamic> json) => Datum(
   hasDoorprize: (json['has_doorprize'] as num).toInt(),
   tipeKehadiran: json['tipe_kehadiran'] as String?,
   noSertifikat: json['no_sertifikat'],
-  modulAcara: json['modul_acara'] == null
-      ? null
-      : ModulAcara.fromJson(json['modul_acara'] as Map<String, dynamic>),
+  modulAcara: ModulAcara.fromJson(json['modul_acara'] as Map<String, dynamic>),
   certificateUrl: json['certificateUrl'] as String?,
 );
 
@@ -120,8 +118,8 @@ ModulAcara _$ModulAcaraFromJson(Map<String, dynamic> json) => ModulAcara(
             .toList(),
       )
       .toList(),
-  totalHari: (json['total_hari'] as num?)?.toInt(),
-  totalSesi: (json['total_sesi'] as num?)?.toInt(),
+  totalHari: (json['total_hari'] as num).toInt(),
+  totalSesi: (json['total_sesi'] as num).toInt(),
 );
 
 Map<String, dynamic> _$ModulAcaraToJson(ModulAcara instance) =>

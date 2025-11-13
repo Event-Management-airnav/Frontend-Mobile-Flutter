@@ -124,7 +124,7 @@ class Datum extends Equatable {
   final dynamic noSertifikat;
 
   @JsonKey(name: 'modul_acara')
-  final ModulAcara? modulAcara;
+  final ModulAcara modulAcara;
 
   String? certificateUrl; //Ini tambahan untuk nyimpen, di API ga ada field ini
 
@@ -137,7 +137,7 @@ class Datum extends Equatable {
     required this.hasDoorprize,
     this.tipeKehadiran,
     this.noSertifikat,
-    this.modulAcara,
+    required this.modulAcara,
     this.certificateUrl
   });
 
@@ -230,10 +230,10 @@ class ModulAcara extends Equatable {
   final List<List<Presensi>>? presensi;
 
   @JsonKey(name: 'total_hari')
-  final int? totalHari;
+  final int totalHari;
 
   @JsonKey(name: 'total_sesi')
-  final int? totalSesi;
+  final int totalSesi;
 
   const ModulAcara({
     required this.id,
@@ -259,8 +259,8 @@ class ModulAcara extends Equatable {
     this.mdlFileRundownUrl,
     this.mdlTemplateSertifikatUrl,
     this.presensi,
-    this.totalHari,
-    this.totalSesi,
+    required this.totalHari,
+    required this.totalSesi,
   });
 
   factory ModulAcara.fromJson(Map<String, dynamic> json) =>

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_controller.dart';
@@ -84,15 +85,19 @@ class ActivityPage extends GetView<ActivityController> {
                       
                       //bool isPresent = d.presensi != null && d.presensi?.status == "Hadir"; belum bener
                       bool isPresent = true;
-                      print("activity page url:${d.certificateUrl}");
-                      print("hadir ga: $isPresent");
+                      if (kDebugMode) {
+                        print("activity page url:${d.certificateUrl}");
+                        print("hadir ga: $isPresent");
+                      }
                       return ActivityContainer(
+                        event: d,
                         eventName: name,
                         eventDate: date,
                         status: status,
                         isPresent: isPresent,
                         urlSertifikat:d.certificateUrl,
                         hasDoorprize: d.hasDoorprize == 1,
+                        timeNow: controller.timeNow.value,
                         onTap: () async {
                           await Get.toNamed(
                             Routes.DETAIL,
