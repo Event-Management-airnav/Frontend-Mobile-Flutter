@@ -15,7 +15,6 @@ class ActivityController extends GetxController {
   final _utils = Utils();
   final _storage = Get.find<GetStorage>();
 
-  var timeNow = DateTime.now().obs;
   final RxBool isLoggedIn = false.obs;
   final RxBool isLoading = false.obs;
   final error = RxnString();
@@ -95,14 +94,14 @@ class ActivityController extends GetxController {
         return eventName.contains(query);
       }).toList();
     }
-    
+
     return events;
   }
 
 
   ActivityFilter eventStatus(Datum d) {
-    final startTime = Utils.parseDate(d.modulAcara.mdlAcaraMulai);
-    final endTime = Utils.parseDate(d.modulAcara.mdlAcaraSelesai);
+    final startTime = Utils.parseDate(d.modulAcara?.mdlAcaraMulai);
+    final endTime = Utils.parseDate(d.modulAcara?.mdlAcaraSelesai);
     final now = DateTime.now();
 
     if (startTime == null) return ActivityFilter.selesai;
@@ -118,7 +117,6 @@ class ActivityController extends GetxController {
       return;
     }
     try {
-      timeNow.value = DateTime.now();
       isLoading.value = true;
       error.value = null;
 
@@ -167,17 +165,20 @@ class ActivityController extends GetxController {
 
 
   /// Nama event atau '-'
-  String eventNameOf(Datum d) => d.modulAcara.mdlNama;
+  String eventNameOf(Datum d) => d.modulAcara?.mdlNama ?? '-';
 
   /// Ambil tanggal event: prioritas mulai acara; fallback ke waktu daftar.
   /// Selalu parse via Utils.toDateTimeFlexible agar aman kalau tipe berubah (String/DateTime).
   DateTime? eventDateOf(Datum d) {
-    final mulai = d.modulAcara.mdlAcaraMulai;
-    return mulai;
+    final mulai = d.modulAcara?.mdlAcaraMulai; // bisa DateTime? (model baru) atau null
+    if (mulai is DateTime) return mulai;
+    final daftar = d.waktuDaftar;
+    if (daftar is DateTime) return daftar;
+    return null;
   }
 
   /// Status event atau '-'
-  String statusOf(Datum d) => d.modulAcara.mdlStatus ?? '-';
+  String statusOf(Datum d) => d.modulAcara?.mdlStatus ?? '-';
 
   /// Format sederhana: 29 Oct 2025 (tanpa intl)
   String formatDate(DateTime? dt) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_controller.dart';
+import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/popup_detail_presence.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -35,7 +36,7 @@ class ActivityContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("urlSertifikat : $urlSertifikat");
-    const borderBlue = Color(0xFF9ED1F5);
+    const borderBlue = Color(0xFFDCD9D9);
     const headerBlue = Color(0xFFDDF3FF);
     const darkBlue = Color(0xFF10498D);
     const yellow50 = Color(0xFFFEFCE8);
@@ -68,7 +69,7 @@ class ActivityContainer extends StatelessWidget {
     const String btnText = 'Sertifikat';
     const IconData btnIcon = Icons.download;
 
-    final bool isEnabled = timeNow.isAfter(event.modulAcara.mdlAcaraSelesai!);
+    final bool isEnabled = isPresent && urlSertifikat != null;
 
     final Color buttonBgColor = isEnabled
         ? const Color(0xFF175FA4)
@@ -78,9 +79,6 @@ class ActivityContainer extends StatelessWidget {
     VoidCallback? onActionTapHandler;
     if (isEnabled) {
       onActionTapHandler = () {
-        /// TODO if certificate url exists open url
-        /// if not, request to generate url, if success open url from response
-        /// if at any point, failed to get/generate,
         Utils.openUrl(urlSertifikat);
       };
     } else {
@@ -160,23 +158,43 @@ class ActivityContainer extends StatelessWidget {
           textColor = Colors.grey.shade600;
         }
 
-        return Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 18,
-            vertical: 10,
-          ),
-          margin: const EdgeInsets.only(right: 12),
-          decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: borderColor, width: 3),
-          ),
-          child: Text(
-            'Hari $dayNumber',
-            style: GoogleFonts.poppins(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: textColor,
+        return GestureDetector(
+          onTap: () {
+            Get.dialog(
+                PopupDetailPresence(
+                  statusPerSession: [
+                    PresenceStatus.present,
+                    PresenceStatus.present,
+                    PresenceStatus.present,
+                    PresenceStatus.absent,
+                    PresenceStatus.disabled,
+                    PresenceStatus.disabled,
+                    PresenceStatus.present,
+                    PresenceStatus.disabled,
+                    PresenceStatus.present,
+                    PresenceStatus.disabled,
+                  ],
+                ),barrierDismissible: true
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 18,
+              vertical: 10,
+            ),
+            margin: const EdgeInsets.only(right: 12),
+            decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: borderColor, width: 3),
+            ),
+            child: Text(
+              'Hari $dayNumber',
+              style: GoogleFonts.poppins(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: textColor,
+              ),
             ),
           ),
         );
@@ -191,7 +209,7 @@ class ActivityContainer extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 0.5),
       child: Material(
         color: Colors.white,
         shape: RoundedRectangleBorder(
@@ -252,7 +270,6 @@ class ActivityContainer extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // === PERUBAHAN DI SINI ===
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -310,14 +327,13 @@ class ActivityContainer extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(height: 7),
+                const SizedBox(height: 10),
                 buildPresencePills(),
 
-                const SizedBox(height: 5),
+                const SizedBox(height: 6),
 
                 Row(
                   children: [
-                    // Tombol WhatsApp Baru
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: event.modulAcara.mdlLinkWa != null
