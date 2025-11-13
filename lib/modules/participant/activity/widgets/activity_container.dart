@@ -68,7 +68,7 @@ class ActivityContainer extends StatelessWidget {
     const String btnText = 'Sertifikat';
     const IconData btnIcon = Icons.download;
 
-    final bool isEnabled = isPresent && urlSertifikat != null;
+    final bool isEnabled = timeNow.isAfter(event.modulAcara.mdlAcaraSelesai!);
 
     final Color buttonBgColor = isEnabled
         ? const Color(0xFF175FA4)
@@ -78,6 +78,9 @@ class ActivityContainer extends StatelessWidget {
     VoidCallback? onActionTapHandler;
     if (isEnabled) {
       onActionTapHandler = () {
+        /// TODO if certificate url exists open url
+        /// if not, request to generate url, if success open url from response
+        /// if at any point, failed to get/generate,
         Utils.openUrl(urlSertifikat);
       };
     } else {
@@ -106,6 +109,84 @@ class ActivityContainer extends StatelessWidget {
         behavior: HitTestBehavior.opaque,
         onTap: () {},
         child: sertifikatButton,
+      );
+    }
+
+    Widget buildPresencePills() {
+      final totalDays = event.modulAcara.presensi?.length ?? 1;
+      debugPrint("totalHari: $totalDays");
+      if (totalDays < 1) {
+        return const SizedBox.shrink();
+      }
+
+      final allPresences =
+          event.modulAcara.presensi?.expand((day) => day).toList() ?? [];
+      final Set<int> attendedDays = allPresences
+          .where((p) => p.status == 'Hadir')
+          .map((p) => p.hariKe)
+          .toSet();
+
+      final eventStartDate = event.modulAcara.mdlAcaraMulai;
+      final today = DateTime.now();
+
+      Widget buildPill(int dayNumber) {
+        final bool isAttended = attendedDays.contains(dayNumber);
+
+        final eventStartDateOnly =
+            DateTime(eventStartDate.year, eventStartDate.month, eventStartDate.day);
+        final pillDate = eventStartDateOnly.add(Duration(days: dayNumber - 1));
+        final todayDateOnly = DateTime(today.year, today.month, today.day);
+        final bool isDayPast = pillDate.isBefore(todayDateOnly);
+        final bool isDayNow = pillDate.isAtSameMomentAs(todayDateOnly);
+
+
+        final Color borderColor, bgColor, textColor;
+
+        if (isAttended) {
+          borderColor = const Color(0xFF5BE1A9);
+          bgColor = const Color(0xFFECFDF5);
+          textColor = const Color(0xFF0B6B3B);
+        } else if (isDayPast) {
+          borderColor = const Color(0xFFFCA5A5);
+          bgColor = const Color(0xFFFEF2F2);
+          textColor = const Color(0xFFB91C1C);
+        } else if (isDayNow) {
+          borderColor = const Color(0xFF90CDF4);
+          bgColor = const Color(0xFFEBF8FF);
+          textColor = const Color(0xFF2C5282);
+        } else {
+          borderColor = Colors.grey.shade200;
+          bgColor = Colors.grey.shade50;
+          textColor = Colors.grey.shade600;
+        }
+
+        return Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 18,
+            vertical: 10,
+          ),
+          margin: const EdgeInsets.only(right: 12),
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: borderColor, width: 3),
+          ),
+          child: Text(
+            'Hari $dayNumber',
+            style: GoogleFonts.poppins(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: textColor,
+            ),
+          ),
+        );
+      }
+
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: List.generate(totalDays, (index) => buildPill(index + 1)),
+        ),
       );
     }
 
@@ -230,57 +311,7 @@ class ActivityContainer extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 7),
-                StatefulBuilder(
-                  builder: (context, setState) {
-                    final List<bool> _selected = [true, true, false];
-
-                    Widget _buildPill(int index, String label) {
-                      final bool active = _selected[index];
-                      final borderColor = active ? const Color(0xFF14C27A) : Colors.grey.shade200;
-                      final bgColor = active ? const Color(0xFFECFDF5) : Colors.grey.shade50;
-                      final textColor = active ? const Color(0xFF0B6B3B) : Colors.grey.shade600;
-
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selected[index] = !_selected[index];
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 18,
-                            vertical: 10,
-                          ),
-                          margin: const EdgeInsets.only(right: 12),
-                          decoration: BoxDecoration(
-                            color: bgColor,
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: borderColor, width: 3),
-                          ),
-                          child: Text(
-                            label,
-                            style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: textColor,
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-
-                    return SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          _buildPill(0, 'Hari 1'),
-                          _buildPill(1, 'Hari 2'),
-                          _buildPill(2, 'Hari 3'),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                buildPresencePills(),
 
                 const SizedBox(height: 5),
 
