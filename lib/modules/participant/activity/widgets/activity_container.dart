@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_controller.dart';
@@ -129,6 +130,25 @@ class ActivityContainer extends StatelessWidget {
         final bool isDayPast = pillDate.isBefore(todayDateOnly);
         final bool isDayNow = pillDate.isAtSameMomentAs(todayDateOnly);
 
+        List<PresenceStatus> getStatusPerSession() {
+          List<Presensi> presensiList = event.modulAcara.presensi![dayNumber - 1];
+          if (event.modulAcara.mdlSesiAcara == null) {
+            return List.filled(presensiList.length, PresenceStatus.disabled);
+          }
+
+          final currentSession = event.modulAcara.mdlSesiAcara!;
+
+          return presensiList.mapIndexed((index, presensi) {
+            if (presensi.status == 'Hadir') {
+              return PresenceStatus.present;
+            } else if (isDayPast) {
+              return PresenceStatus.absent;
+            } else if (isDayNow) {
+              return (currentSession > index + 1) ? PresenceStatus.absent : PresenceStatus.disabled;
+            }
+            return PresenceStatus.disabled;
+          }).toList();
+        }
 
         final Color borderColor, bgColor, textColor;
 
@@ -154,18 +174,7 @@ class ActivityContainer extends StatelessWidget {
           onTap: () {
             Get.dialog(
                 PopupDetailPresence(
-                  statusPerSession: [
-                    PresenceStatus.present,
-                    PresenceStatus.present,
-                    PresenceStatus.present,
-                    PresenceStatus.absent,
-                    PresenceStatus.disabled,
-                    PresenceStatus.disabled,
-                    PresenceStatus.present,
-                    PresenceStatus.disabled,
-                    PresenceStatus.present,
-                    PresenceStatus.disabled,
-                  ],
+                  statusPerSession: getStatusPerSession(),
                 ),barrierDismissible: true
             );
           },
@@ -195,6 +204,7 @@ class ActivityContainer extends StatelessWidget {
       return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: List.generate(totalDays, (index) => buildPill(index + 1)),
         ),
       );
@@ -320,7 +330,10 @@ class ActivityContainer extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 10),
-                buildPresencePills(),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: buildPresencePills(),
+                ),
 
                 const SizedBox(height: 6),
 
