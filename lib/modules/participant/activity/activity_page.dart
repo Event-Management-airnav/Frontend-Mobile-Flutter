@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_controller.dart';
-import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/activity_container.dart';
+import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/activity_container.dart' hide SizedBox;
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/search_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/widgets/call_to_login.dart';
@@ -82,9 +81,11 @@ class ActivityPage extends GetView<ActivityController> {
                       if (status == 'Unknown') {
                         return const SizedBox.shrink();
                       }
-
-                      bool isPresent = false;//d.presensi != null && d.presensi?.status == "Hadir";
-
+                      
+                      //bool isPresent = d.presensi != null && d.presensi?.status == "Hadir"; belum bener
+                      bool isPresent = true;
+                      print("activity page url:${d.certificateUrl}");
+                      print("hadir ga: $isPresent");
                       return ActivityContainer(
                         eventName: name,
                         eventDate: date,
