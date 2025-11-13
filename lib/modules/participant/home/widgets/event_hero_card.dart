@@ -102,7 +102,9 @@ class EventHeroCard extends StatelessWidget {
                   children: [
                     const Icon(Icons.place, size: 16, color: Colors.white),
                     const SizedBox(width: 4),
-                    Text(location, style: const TextStyle(color: Colors.white)),
+                    Expanded(
+                      child: Text(location, style: const TextStyle(color: Colors.white)),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 2),
