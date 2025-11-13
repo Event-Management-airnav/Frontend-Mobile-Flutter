@@ -101,8 +101,8 @@ class ActivityController extends GetxController {
 
 
   ActivityFilter eventStatus(Datum d) {
-    final startTime = Utils.parseDate(d.modulAcara?.mdlAcaraMulai);
-    final endTime = Utils.parseDate(d.modulAcara?.mdlAcaraSelesai);
+    final startTime = Utils.parseDate(d.modulAcara.mdlAcaraMulai);
+    final endTime = Utils.parseDate(d.modulAcara.mdlAcaraSelesai);
     final now = DateTime.now();
 
     if (startTime == null) return ActivityFilter.selesai;
@@ -166,20 +166,17 @@ class ActivityController extends GetxController {
 
 
   /// Nama event atau '-'
-  String eventNameOf(Datum d) => d.modulAcara?.mdlNama ?? '-';
+  String eventNameOf(Datum d) => d.modulAcara.mdlNama;
 
   /// Ambil tanggal event: prioritas mulai acara; fallback ke waktu daftar.
   /// Selalu parse via Utils.toDateTimeFlexible agar aman kalau tipe berubah (String/DateTime).
   DateTime? eventDateOf(Datum d) {
-    final mulai = d.modulAcara?.mdlAcaraMulai; // bisa DateTime? (model baru) atau null
-    if (mulai is DateTime) return mulai;
-    final daftar = d.waktuDaftar;
-    if (daftar is DateTime) return daftar;
-    return null;
+    final mulai = d.modulAcara.mdlAcaraMulai;
+    return mulai;
   }
 
   /// Status event atau '-'
-  String statusOf(Datum d) => d.modulAcara?.mdlStatus ?? '-';
+  String statusOf(Datum d) => d.modulAcara.mdlStatus ?? '-';
 
   /// Format sederhana: 29 Oct 2025 (tanpa intl)
   String formatDate(DateTime? dt) {
