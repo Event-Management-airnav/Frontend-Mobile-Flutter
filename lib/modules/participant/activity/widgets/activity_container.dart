@@ -5,7 +5,6 @@ import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/pop
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../../app_pages.dart';
 import '../../../../core/utils.dart';
 import '../../../../data/models/event/followed_event.dart';
 
