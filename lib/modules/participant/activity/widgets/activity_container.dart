@@ -14,11 +14,12 @@ class ActivityContainer extends StatelessWidget {
   final String eventName;
   final String eventDate;
   final ActivityFilter status;
-  final VoidCallback? onTap;
+  final VoidCallback? onCardPressed;
   final bool isPresent;
   final String? urlSertifikat;
   final bool? hasDoorprize;
   final DateTime timeNow;
+  final VoidCallback onDownloadCertificatePressed;
 
   const ActivityContainer({
     super.key,
@@ -26,11 +27,12 @@ class ActivityContainer extends StatelessWidget {
     required this.eventName,
     required this.eventDate,
     required this.status,
-    this.onTap,
+    this.onCardPressed,
     required this.isPresent,
     this.urlSertifikat,
     this.hasDoorprize,
     required this.timeNow,
+    required this.onDownloadCertificatePressed,
   });
 
   @override
@@ -69,24 +71,15 @@ class ActivityContainer extends StatelessWidget {
     const String btnText = 'Sertifikat';
     const IconData btnIcon = Icons.download;
 
-    final bool isEnabled = isPresent && urlSertifikat != null;
+    final bool isEnabled = timeNow.isAfter(event.modulAcara.mdlAcaraSelesai!);
 
     final Color buttonBgColor = isEnabled
         ? const Color(0xFF175FA4)
         : const Color(0xFFCFEEFA);
     final Color buttonFgColor = isEnabled ? Colors.white : Colors.white;
 
-    VoidCallback? onActionTapHandler;
-    if (isEnabled) {
-      onActionTapHandler = () {
-        Utils.openUrl(urlSertifikat);
-      };
-    } else {
-      onActionTapHandler = null;
-    }
-
     Widget sertifikatButton = TextButton.icon(
-      onPressed: onActionTapHandler,
+      onPressed: isEnabled? onDownloadCertificatePressed : null,
       icon: Icon(btnIcon, color: buttonFgColor),
       label: Text(
         btnText,
@@ -218,7 +211,7 @@ class ActivityContainer extends StatelessWidget {
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
-          onTap: onTap,
+          onTap: onCardPressed,
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Column(

@@ -40,12 +40,11 @@ class ActivityController extends GetxController {
   Future<CertificateResponse?> getCertificateForEvent(int eventId) async {
     try {
       timeNow.value = DateTime.now();
-      isLoading.value = true;
       error.value = null;
 
       final CertificateResponse res = await service.getCertificate(eventId);
 
-      if (!res.status) {
+      if (!res.success) {
         error.value = res.message;
       }
 
@@ -56,8 +55,6 @@ class ActivityController extends GetxController {
     } catch (e) {
       error.value = e.toString();
       rethrow;
-    } finally {
-      isLoading.value = false;
     }
   }
 
@@ -94,7 +91,7 @@ class ActivityController extends GetxController {
 
     if (query.isNotEmpty) {
       events = events.where((d) {
-        final eventName = eventNameOf(d).toLowerCase();
+        final eventName = d.modulAcara.mdlNama.toLowerCase();
         return eventName.contains(query);
       }).toList();
     }
@@ -167,20 +164,6 @@ class ActivityController extends GetxController {
       isLoading.value = false;
     }
   }
-
-
-  /// Nama event atau '-'
-  String eventNameOf(Datum d) => d.modulAcara.mdlNama;
-
-  /// Ambil tanggal event: prioritas mulai acara; fallback ke waktu daftar.
-  /// Selalu parse via Utils.toDateTimeFlexible agar aman kalau tipe berubah (String/DateTime).
-  DateTime? eventDateOf(Datum d) {
-    final mulai = d.modulAcara.mdlAcaraMulai; // bisa DateTime? (model baru) atau null
-    return mulai;
-  }
-
-  /// Status event atau '-'
-  String statusOf(Datum d) => d.modulAcara.mdlStatus;
 
   /// Format sederhana: 29 Oct 2025 (tanpa intl)
   String formatDate(DateTime? dt) {
