@@ -6,7 +6,6 @@ import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/act
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/search_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/widgets/call_to_login.dart';
-import 'package:get_storage/get_storage.dart';
 
 import '../../../app_pages.dart';
 

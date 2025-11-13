@@ -1,13 +1,15 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:frontend_mobile_flutter/data/network/services/activity_service.dart';
 import 'package:frontend_mobile_flutter/data/models/event/followed_event.dart';
 import 'package:frontend_mobile_flutter/data/models/event/presence.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../../../core/logger.dart';
 import '../../../core/utils.dart';
 import '../../../data/models/certificate/certificate_response.dart';
 import '../../../data/models/event/scan_response.dart';
-
 
 class ActivityController extends GetxController {
   final ActivityService service = Get.find<ActivityService>();
@@ -121,6 +123,9 @@ class ActivityController extends GetxController {
 
       final list = await service.getFollowedEvents(page: page);
 
+      if (kDebugMode)
+        debugPrint('followed events list: $list');
+
       if (page == 1) {
         followedEvents.assignAll(list);
       } else {
@@ -135,7 +140,8 @@ class ActivityController extends GetxController {
           datum.certificateUrl = res?.data;
         }
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      logger.e("Error loading followed events", error:e, stackTrace: stackTrace);
       error.value = e.toString();
     } finally {
       isLoading.value = false;

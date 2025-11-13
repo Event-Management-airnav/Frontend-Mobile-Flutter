@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_controller.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -58,14 +59,15 @@ class ActivityContainer extends StatelessWidget {
         break;
     }
 
-    // ===== Tombol Sertifikat =====
+    // ===== Tombol Sertifikat (Logika tidak berubah) =====
     const String btnText = 'Sertifikat';
     const IconData btnIcon = Icons.download;
 
     final bool isEnabled = isPresent && urlSertifikat != null;
 
-    final Color buttonBgColor =
-    isEnabled ? const Color(0xFF175FA4) : const Color(0xFFCFEEFA);
+    final Color buttonBgColor = isEnabled
+        ? const Color(0xFF175FA4)
+        : const Color(0xFFCFEEFA);
     final Color buttonFgColor = isEnabled ? Colors.white : Colors.white;
 
     VoidCallback? onActionTapHandler;
@@ -77,7 +79,6 @@ class ActivityContainer extends StatelessWidget {
       onActionTapHandler = null;
     }
 
-    // Tombol: jika enabled -> normal TextButton; jika disabled -> bungkus dengan GestureDetector kosong
     Widget sertifikatButton = TextButton.icon(
       onPressed: onActionTapHandler,
       icon: Icon(btnIcon, color: buttonFgColor),
@@ -90,23 +91,15 @@ class ActivityContainer extends StatelessWidget {
       ),
       style: TextButton.styleFrom(
         backgroundColor: buttonBgColor,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 28,
-          vertical: 10,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),
       ),
     );
 
     if (!isEnabled) {
-      // Bungkus agar tap tidak diteruskan ke parent (card)
       sertifikatButton = GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () {
-          // kosong -> hanya menyerap gesture
-        },
+        onTap: () {},
         child: sertifikatButton,
       );
     }
@@ -121,7 +114,7 @@ class ActivityContainer extends StatelessWidget {
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
-          onTap: onTap, // klik card tetap ke detail
+          onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Column(
@@ -165,33 +158,46 @@ class ActivityContainer extends StatelessWidget {
                     ],
                   ),
                 ),
-
-                const SizedBox(height: 14),
-
+                const SizedBox(height: 7),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ===== Chip status dan doorprize =====
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            color: chipBgColor,
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Text(
-                            chipText,
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                              color: chipTextColor,
-                              fontWeight: FontWeight.w600,
+                        // === PERUBAHAN DI SINI ===
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Status:",
+                              style: GoogleFonts.poppins(
+                                fontSize: 14,
+                                color: Colors.grey.shade700,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: chipBgColor,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Text(
+                                chipText,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  color: chipTextColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         if (hasDoorprize == true)
                           Container(
@@ -215,9 +221,84 @@ class ActivityContainer extends StatelessWidget {
                           ),
                       ],
                     ),
+                  ],
+                ),
 
-                    // ===== Tombol Sertifikat =====
-                    sertifikatButton,
+                const SizedBox(height: 7),
+                StatefulBuilder(
+                  builder: (context, setState) {
+                    final List<bool> _selected = [true, true, false];
+
+                    Widget _buildPill(int index, String label) {
+                      final bool active = _selected[index];
+                      final borderColor = active ? const Color(0xFF14C27A) : Colors.grey.shade200;
+                      final bgColor = active ? const Color(0xFFECFDF5) : Colors.grey.shade50;
+                      final textColor = active ? const Color(0xFF0B6B3B) : Colors.grey.shade600;
+
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selected[index] = !_selected[index];
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 18,
+                            vertical: 10,
+                          ),
+                          margin: const EdgeInsets.only(right: 12),
+                          decoration: BoxDecoration(
+                            color: bgColor,
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(color: borderColor, width: 3),
+                          ),
+                          child: Text(
+                            label,
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: textColor,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          _buildPill(0, 'Hari 1'),
+                          _buildPill(1, 'Hari 2'),
+                          _buildPill(2, 'Hari 3'),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 5),
+
+                Row(
+                  children: [
+                    // Tombol WhatsApp Baru
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () { /* TODO: Implement WhatsApp functionality */ },
+                        icon: const Icon(FontAwesomeIcons.whatsapp, color: Colors.white, size: 20),
+                        label: Text("WhatsApp", style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.white)),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF25D366),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(17)),
+                          elevation: 0,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: sertifikatButton,
+                    ),
                   ],
                 ),
               ],
