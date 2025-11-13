@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:frontend_mobile_flutter/data/network/services/activity_service.dart';
@@ -16,6 +15,7 @@ class ActivityController extends GetxController {
   final _utils = Utils();
   final _storage = Get.find<GetStorage>();
 
+  var timeNow = DateTime.now().obs;
   final RxBool isLoggedIn = false.obs;
   final RxBool isLoading = false.obs;
   final error = RxnString();
@@ -118,6 +118,7 @@ class ActivityController extends GetxController {
       return;
     }
     try {
+      timeNow.value = DateTime.now();
       isLoading.value = true;
       error.value = null;
 

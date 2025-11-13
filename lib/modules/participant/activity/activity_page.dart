@@ -86,12 +86,14 @@ class ActivityPage extends GetView<ActivityController> {
                       bool isPresent = false;//d.presensi != null && d.presensi?.status == "Hadir";
 
                       return ActivityContainer(
+                        event: d,
                         eventName: name,
                         eventDate: date,
                         status: status,
                         isPresent: isPresent,
                         urlSertifikat:d.certificateUrl,
                         hasDoorprize: d.hasDoorprize == 1,
+                        timeNow: controller.timeNow.value,
                         onTap: () async {
                           await Get.toNamed(
                             Routes.DETAIL,

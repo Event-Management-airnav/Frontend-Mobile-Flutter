@@ -6,8 +6,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../app_pages.dart';
 import '../../../../core/utils.dart';
+import '../../../../data/models/event/followed_event.dart';
 
 class ActivityContainer extends StatelessWidget {
+  final Datum event;
   final String eventName;
   final String eventDate;
   final ActivityFilter status;
@@ -15,9 +17,11 @@ class ActivityContainer extends StatelessWidget {
   final bool isPresent;
   final String? urlSertifikat;
   final bool? hasDoorprize;
+  final DateTime timeNow;
 
   const ActivityContainer({
     super.key,
+    required this.event,
     required this.eventName,
     required this.eventDate,
     required this.status,
@@ -25,6 +29,7 @@ class ActivityContainer extends StatelessWidget {
     required this.isPresent,
     this.urlSertifikat,
     this.hasDoorprize,
+    required this.timeNow,
   });
 
   @override
