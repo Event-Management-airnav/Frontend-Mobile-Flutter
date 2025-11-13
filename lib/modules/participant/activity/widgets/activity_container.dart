@@ -284,7 +284,12 @@ class ActivityContainer extends StatelessWidget {
                     // Tombol WhatsApp Baru
                     Expanded(
                       child: ElevatedButton.icon(
-                        onPressed: () { /* TODO: Implement WhatsApp functionality */ },
+                        onPressed: event.modulAcara.mdlLinkWa != null
+                            ? () {
+                                Utils.openUrl(
+                                    event.modulAcara.mdlLinkWa);
+                              }
+                            : null,
                         icon: const Icon(FontAwesomeIcons.whatsapp, color: Colors.white, size: 20),
                         label: Text("WhatsApp", style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.white)),
                         style: ElevatedButton.styleFrom(
