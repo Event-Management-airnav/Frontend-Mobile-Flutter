@@ -1,3 +1,5 @@
+//activity_controller
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -95,7 +97,7 @@ class ActivityController extends GetxController {
         return eventName.contains(query);
       }).toList();
     }
-    
+
     return events;
   }
 

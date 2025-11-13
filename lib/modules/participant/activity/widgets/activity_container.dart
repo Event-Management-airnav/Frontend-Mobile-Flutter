@@ -31,7 +31,7 @@ class ActivityContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print("urlSertifikat : $urlSertifikat");
-    const borderBlue = Color(0xFF9ED1F5);
+    const borderBlue = Color(0xFFDCD9D9);
     const headerBlue = Color(0xFFDDF3FF);
     const darkBlue = Color(0xFF10498D);
     const yellow50 = Color(0xFFFEFCE8);
@@ -106,7 +106,7 @@ class ActivityContainer extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 0.5),
       child: Material(
         color: Colors.white,
         shape: RoundedRectangleBorder(
@@ -167,7 +167,6 @@ class ActivityContainer extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // === PERUBAHAN DI SINI ===
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -225,7 +224,7 @@ class ActivityContainer extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(height: 7),
+                const SizedBox(height: 10),
                 StatefulBuilder(
                   builder: (context, setState) {
                     final List<bool> _selected = [true, true, false];
@@ -267,7 +266,8 @@ class ActivityContainer extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: bgColor,
                             borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: borderColor, width: 3),
+                            // === PERUBAHAN DI SINI ===
+                            border: Border.all(color: borderColor, width:2.7), // Mengubah ketebalan border
                           ),
                           child: Text(
                             label,
@@ -294,14 +294,13 @@ class ActivityContainer extends StatelessWidget {
                   },
                 ),
 
-                const SizedBox(height: 5),
+                const SizedBox(height: 6),
 
                 Row(
                   children: [
-                    // Tombol WhatsApp Baru
                     Expanded(
                       child: ElevatedButton.icon(
-                        onPressed: () { /* TODO: Implement WhatsApp functionality */ },
+                        onPressed: () {},
                         icon: const Icon(FontAwesomeIcons.whatsapp, color: Colors.white, size: 20),
                         label: Text("WhatsApp", style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.white)),
                         style: ElevatedButton.styleFrom(
