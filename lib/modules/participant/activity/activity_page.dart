@@ -83,7 +83,8 @@ class ActivityPage extends GetView<ActivityController> {
                         return const SizedBox.shrink();
                       }
                       
-                      bool isPresent = d.presensi != null && d.presensi?.status == "Hadir";
+                      //bool isPresent = d.presensi != null && d.presensi?.status == "Hadir"; belum bener
+                      bool isPresent = true;
                       print("activity page url:${d.certificateUrl}");
                       print("hadir ga: $isPresent");
                       return ActivityContainer(
