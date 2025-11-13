@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_controller.dart';
+import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/popup_detail_presence.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -240,6 +241,22 @@ class ActivityContainer extends StatelessWidget {
                           setState(() {
                             _selected[index] = !_selected[index];
                           });
+                          Get.dialog(
+                              PopupDetailPresence(
+                                statusPerSession: [
+                                  PresenceStatus.present,
+                                  PresenceStatus.present,
+                                  PresenceStatus.present,
+                                  PresenceStatus.absent,
+                                  PresenceStatus.disabled,
+                                  PresenceStatus.disabled,
+                                  PresenceStatus.present,
+                                  PresenceStatus.disabled,
+                                  PresenceStatus.present,
+                                  PresenceStatus.disabled,
+                                ],
+                              ),barrierDismissible: true
+                          );
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(

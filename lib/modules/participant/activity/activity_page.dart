@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:frontend_mobile_flutter/modules/participant/activity/activity_controller.dart';
-import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/activity_container.dart';
+import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/activity_container.dart' hide SizedBox;
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/app_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/search_bar.dart';
 import 'package:frontend_mobile_flutter/modules/participant/profile/widgets/call_to_login.dart';
