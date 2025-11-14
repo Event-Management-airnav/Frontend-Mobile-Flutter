@@ -8,7 +8,7 @@ part of 'certificate_response.dart';
 
 CertificateResponse _$CertificateResponseFromJson(Map<String, dynamic> json) =>
     CertificateResponse(
-      success: json['status'] as bool,
+      success: json['success'] as bool,
       message: json['message'] as String,
       data: json['data'] as String?,
     );
@@ -16,7 +16,7 @@ CertificateResponse _$CertificateResponseFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CertificateResponseToJson(
   CertificateResponse instance,
 ) => <String, dynamic>{
-  'status': instance.success,
+  'success': instance.success,
   'message': instance.message,
   'data': instance.data,
 };

@@ -229,11 +229,11 @@ class ModulAcara extends Equatable {
 
   final List<List<Presensi>>? presensi;
 
-  @JsonKey(name: 'total_hari')
-  final int totalHari;
-
-  @JsonKey(name: 'total_sesi')
-  final int totalSesi;
+  // @JsonKey(name: 'total_hari')
+  // final int? totalHari;
+  //
+  // @JsonKey(name: 'total_sesi')
+  // final int? totalSesi;
 
   const ModulAcara({
     required this.id,
@@ -259,8 +259,8 @@ class ModulAcara extends Equatable {
     this.mdlFileRundownUrl,
     this.mdlTemplateSertifikatUrl,
     this.presensi,
-    required this.totalHari,
-    required this.totalSesi,
+    // this.totalHari,
+    // this.totalSesi,
   });
 
   factory ModulAcara.fromJson(Map<String, dynamic> json) =>
@@ -293,8 +293,8 @@ class ModulAcara extends Equatable {
     mdlFileRundownUrl,
     mdlTemplateSertifikatUrl,
     presensi,
-    totalHari,
-    totalSesi,
+    // totalHari,
+    // totalSesi,
   ];
 }
 

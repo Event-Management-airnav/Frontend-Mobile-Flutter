@@ -118,8 +118,6 @@ ModulAcara _$ModulAcaraFromJson(Map<String, dynamic> json) => ModulAcara(
             .toList(),
       )
       .toList(),
-  totalHari: (json['total_hari'] as num).toInt(),
-  totalSesi: (json['total_sesi'] as num).toInt(),
 );
 
 Map<String, dynamic> _$ModulAcaraToJson(ModulAcara instance) =>
@@ -147,8 +145,6 @@ Map<String, dynamic> _$ModulAcaraToJson(ModulAcara instance) =>
       'mdl_file_rundown_url': instance.mdlFileRundownUrl,
       'mdl_template_sertifikat_url': instance.mdlTemplateSertifikatUrl,
       'presensi': instance.presensi,
-      'total_hari': instance.totalHari,
-      'total_sesi': instance.totalSesi,
     };
 
 Presensi _$PresensiFromJson(Map<String, dynamic> json) => Presensi(
