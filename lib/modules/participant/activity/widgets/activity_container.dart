@@ -5,6 +5,7 @@ import 'package:frontend_mobile_flutter/modules/participant/activity/activity_co
 import 'package:frontend_mobile_flutter/modules/participant/activity/widgets/popup_detail_presence.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/utils.dart';
 import '../../../../data/models/event/followed_event.dart';
@@ -226,44 +227,75 @@ class ActivityContainer extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // ===== Header biru =====
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    color: headerBlue,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          eventName,
-                          style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: darkBlue,
-                          ),
-                          softWrap: true,
-                          maxLines: null,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        eventDate,
-                        textAlign: TextAlign.right,
+              // ===== Header biru =====
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  color: headerBlue,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        eventName,
                         style: GoogleFonts.poppins(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: darkBlue,
                         ),
+                        softWrap: true,
+                        maxLines: null,
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(width: 8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Tanggal
+                        Text(
+                          eventDate, 
+                          textAlign: TextAlign.right,
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: darkBlue,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                        
+                        const SizedBox(height: 4),
+                        
+                        // Waktu
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.access_time,
+                              size: 16,
+                              color: darkBlue,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              '${DateFormat("HH:mm", "id_ID").format(event.modulAcara.mdlAcaraMulai)} - ${DateFormat("HH:mm", "id_ID").format(event.modulAcara.mdlAcaraSelesai!)}', //ntar sesuaian
+                              style: GoogleFonts.poppins(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                color: darkBlue,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
+              ),
                 const SizedBox(height: 7),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
