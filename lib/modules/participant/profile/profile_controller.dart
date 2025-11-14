@@ -18,6 +18,7 @@ class ProfileController extends GetxController {
   // -- STATE REAKTIF (.obs) --
   final RxBool isLoggedIn = false.obs;
   final RxBool isLoading = false.obs;
+  final RxBool hasData = false.obs;
   final RxString profileImageUrl = ''.obs; // Menyimpan URL gambar dari server.
   final Rx<File?> profileImageFile = Rx<File?>(null); // Menyimpan file gambar lokal yang aktif.
   final RxString name = ''.obs; // Menyimpan nama pengguna.
@@ -83,6 +84,8 @@ class ProfileController extends GetxController {
 
   // --- FUNGSI-FUNGSI LOGIKA --
 
+  Future<void> refreshProfile() => fetchUserProfile();
+
   // Mengambil data profil awal (saat ini masih simulasi).
   Future<void> fetchUserProfile() async {
     isLoading.value = true;
@@ -94,7 +97,9 @@ class ProfileController extends GetxController {
         name.value = profile.name;
         whatsapp.value = profile.telp;
         email.value = profile.email;
+        hasData.value = true;
       } else {
+        hasData.value = false;
         Get.snackbar('Gagal', response.message, backgroundColor: Colors.red, colorText: Colors.white);
       }
     } finally {
