@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Utils {
@@ -11,29 +12,29 @@ class Utils {
   static const double spacingXL = 20.0;
   static const double spacingXXL = 24.0;
   static const double spacing3XL = 30.0;
-  
+
   // Border Radius constants
   static const double radiusS = 4.0;
   static const double radiusM = 8.0;
   static const double radiusL = 12.0;
   static const double radiusXL = 16.0;
-  
+
   // Icon sizes
   static const double iconS = 16.0;
   static const double iconM = 24.0;
   static const double iconL = 32.0;
   static const double iconXL = 48.0;
-  
+
   // Elevation constants
   static const double elevationS = 2.0;
   static const double elevationM = 4.0;
   static const double elevationL = 8.0;
-  
+
   // Animation durations
   static const Duration durationShort = Duration(milliseconds: 200);
   static const Duration durationMedium = Duration(milliseconds: 300);
   static const Duration durationLong = Duration(milliseconds: 500);
-  
+
   // Helper method untuk membuat shadow
   static BoxShadow createShadow({
     double opacity = 0.1,
@@ -46,7 +47,7 @@ class Utils {
       offset: offset,
     );
   }
-  
+
   // Helper method untuk membuat gradient overlay
   static Gradient createOverlayGradient({
     double topOpacity = 0.4,
@@ -61,46 +62,46 @@ class Utils {
       ],
     );
   }
-  
+
   // Screen size helpers
   static double screenWidth(BuildContext context) {
     return MediaQuery.of(context).size.width;
   }
-  
+
   static double screenHeight(BuildContext context) {
     return MediaQuery.of(context).size.height;
   }
-  
+
   static bool isTablet(BuildContext context) {
     return MediaQuery.of(context).size.width > 600;
   }
-  
+
   // Validation helpers
   static String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your email';
     }
-    
+
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(value)) {
       return 'Please enter a valid email';
     }
-    
+
     return null;
   }
-  
+
   static String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your password';
     }
-    
+
     if (value.length < 6) {
       return 'Password must be at least 6 characters';
     }
-    
+
     return null;
   }
-  
+
   static String? validateRequired(String? value, String fieldName) {
     if (value == null || value.isEmpty) {
       return 'Please enter your $fieldName';
@@ -152,4 +153,34 @@ class Utils {
     return null;
   }
 
+  static String formatDateRange(DateTime start, DateTime? end) {
+    const locale = 'id_ID';
+
+    // hari sama
+    if (end == null ||
+        (start.year == end.year &&
+            start.month == end.month &&
+            start.day == end.day)) {
+      return DateFormat("d MMM yyyy", locale).format(start);
+    }
+
+    // tahun berbeda
+    if (start.year != end.year) {
+      final formatMulai = DateFormat("d MMM yyyy", locale).format(start);
+      final formatSelesai = DateFormat("d MMM yyyy", locale).format(end);
+      return '$formatMulai - $formatSelesai';
+    }
+
+    // bulan berbeda
+    if (start.month != end.month) {
+      final formatMulai = DateFormat("d MMM", locale).format(start);
+      final formatSelesai = DateFormat("d MMM yyyy", locale).format(end);
+      return '$formatMulai - $formatSelesai';
+    }
+
+    // hari berbeda
+    final formatMulai = DateFormat("d", locale).format(start);
+    final formatSelesai = DateFormat("d MMM yyyy", locale).format(end);
+    return '$formatMulai - $formatSelesai';
+  }
 }
