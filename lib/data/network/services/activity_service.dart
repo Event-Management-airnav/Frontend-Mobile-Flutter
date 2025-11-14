@@ -7,6 +7,7 @@ import 'package:frontend_mobile_flutter/data/network/endpoints.dart';
 import 'package:frontend_mobile_flutter/data/models/event/followed_event.dart';
 import 'package:frontend_mobile_flutter/data/models/event/presence.dart';
 
+import '../../../core/logger.dart';
 import '../../models/event/scan_response.dart';
 
 class ActivityService extends GetxService {
@@ -24,8 +25,9 @@ class ActivityService extends GetxService {
       return wrapped.data?.data ?? <Datum>[];
     } on DioException catch (e) {
       throw Exception(_msg(e, 'Gagal memuat events yang diikuti'));
-    } catch (e) {
-      throw Exception('Terjadi kesalahan: $e');
+    } catch (e, stackTrace) {
+      logger.e(e, stackTrace: stackTrace);
+      throw Exception('Terjadi kesalahan: $e $stackTrace');
     }
   }
 

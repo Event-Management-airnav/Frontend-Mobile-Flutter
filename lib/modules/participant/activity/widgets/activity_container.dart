@@ -38,7 +38,6 @@ class ActivityContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("urlSertifikat : $urlSertifikat");
     const borderBlue = Color(0xFFDCD9D9);
     const headerBlue = Color(0xFFDDF3FF);
     const darkBlue = Color(0xFF10498D);
@@ -106,7 +105,6 @@ class ActivityContainer extends StatelessWidget {
 
     Widget buildPresencePills() {
       final totalDays = event.modulAcara.presensi?.length ?? 1;
-      debugPrint("totalHari: $totalDays");
       if (totalDays < 1) {
         return const SizedBox.shrink();
       }
@@ -253,64 +251,50 @@ class ActivityContainer extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          Utils.formatDateRange(event.modulAcara.mdlAcaraMulai, event.modulAcara.mdlAcaraSelesai),
-                          textAlign: TextAlign.right,
-                          style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: darkBlue,
-                          ),
-                        ),
-                        softWrap: true,
-                        maxLines: null,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Tanggal
-                        Text(
-                          eventDate, 
-                          textAlign: TextAlign.right,
-                          style: GoogleFonts.poppins(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: darkBlue,
-                            letterSpacing: 0.3,
-                          ),
-                        ),
-                        
-                        const SizedBox(height: 4),
-                        
-                        // Waktu
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.access_time,
-                              size: 16,
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Tanggal
+                          Text(
+                            Utils.formatDateRange(event.modulAcara.mdlAcaraMulai, event.modulAcara.mdlAcaraSelesai),
+                            textAlign: TextAlign.right,
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
                               color: darkBlue,
                             ),
-                            const SizedBox(width: 6),
-                            Text(
-                              '${DateFormat("HH:mm", "id_ID").format(event.modulAcara.mdlAcaraMulai)} - ${DateFormat("HH:mm", "id_ID").format(event.modulAcara.mdlAcaraSelesai!)}', //ntar sesuaian
-                              style: GoogleFonts.poppins(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
+                          ),
+                        
+                          const SizedBox(height: 4),
+                        
+                          // Waktu
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.access_time,
+                                size: 16,
                                 color: darkBlue,
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+                              const SizedBox(width: 6),
+                              Text(
+                                '${DateFormat("HH:mm", "id_ID").format(event.modulAcara.mdlAcaraMulai)} - ${DateFormat("HH:mm", "id_ID").format(event.modulAcara.mdlAcaraSelesai!)}', //ntar sesuaian
+                                style: GoogleFonts.poppins(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                  color: darkBlue,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+
                 const SizedBox(height: 7),
 
                 Row(
