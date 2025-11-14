@@ -41,7 +41,7 @@ class ActivityContainer extends StatelessWidget {
     const borderBlue = Color(0xFFDCD9D9);
     const headerBlue = Color(0xFFDDF3FF);
     const darkBlue = Color(0xFF10498D);
-    const yellow50 = Color(0xFFFEFCE8);
+    const yellow50 = Color(0xFFFEF08A);
     const yellow900 = Color(0xFF713F12);
 
     // ===== Chip Text berdasarkan status =====
@@ -265,64 +265,52 @@ class ActivityContainer extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 7),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center, // Sejajarkan item secara vertikal
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    // Grup untuk Status dan Doorprize
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Status:",
-                              style: GoogleFonts.poppins(
-                                fontSize: 14,
-                                color: Colors.grey.shade700,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: chipBgColor,
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Text(
-                                chipText,
-                                style: GoogleFonts.poppins(
-                                  fontSize: 12,
-                                  color: chipTextColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
+                        Text(
+                          "Status:",
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            color: Colors.grey.shade700,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: chipBgColor,
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Text(
+                            chipText,
+                            style: GoogleFonts.poppins(
+                              fontSize: 12,
+                              color: chipTextColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        // Ikon piala dipindahkan ke sini
                         if (hasDoorprize == true)
                           Container(
-                            margin: const EdgeInsets.only(top: 6),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 6,
-                            ),
+                            margin: const EdgeInsets.only(left: 5),
+                            padding: const EdgeInsets.all(5), // Padding simetris
                             decoration: BoxDecoration(
                               color: yellow50,
-                              borderRadius: BorderRadius.circular(30),
+                              borderRadius: BorderRadius.circular(15),
                             ),
-                            child: Text(
-                              "Pemenang Doorprize",
-                              style: GoogleFonts.poppins(
-                                fontSize: 12,
-                                color: yellow900,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                            child: Icon(Icons.emoji_events_outlined, color: yellow900, size: 18), // Hanya Ikon
                           ),
                       ],
                     ),
