@@ -95,7 +95,6 @@ class ActivityPage extends GetView<ActivityController> {
                         eventDate: date,
                         status: status,
                         isPresent: isPresent,
-                        urlSertifikat:d.certificateUrl,
                         hasDoorprize: d.hasDoorprize == 1,
                         timeNow: controller.timeNow.value,
                         onCardPressed: () async {
@@ -111,10 +110,13 @@ class ActivityPage extends GetView<ActivityController> {
                         },
                         onDownloadCertificatePressed: () async {
                           var res = await controller.getCertificateForEvent(d.modulAcaraId);
-                          if (res != null && res.success) {
+                          if (res != null && res.status) {
                             final url = res.data;
                             Utils.openUrl(url);
                             Get.snackbar('Berhasil', 'Sertifikat berhasil diunduh.', backgroundColor: Colors.green, colorText: Colors.white);
+                          } else {
+                            Get.snackbar('Gagal', res?.message ?? 'Terjadi kesalahan saat mengunduh sertifikat.', backgroundColor: Colors.red, colorText: Colors.white);
+
                           }
                         },
                       );

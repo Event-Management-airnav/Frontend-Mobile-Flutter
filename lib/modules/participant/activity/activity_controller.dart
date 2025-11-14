@@ -12,7 +12,6 @@ import '../../../data/models/event/scan_response.dart';
 
 class ActivityController extends GetxController {
   final ActivityService service = Get.find<ActivityService>();
-  final _utils = Utils();
   final _storage = Get.find<GetStorage>();
 
   var timeNow = DateTime.now().obs;
@@ -44,7 +43,7 @@ class ActivityController extends GetxController {
 
       final CertificateResponse res = await service.getCertificate(eventId);
 
-      if (!res.success) {
+      if (!res.status) {
         error.value = res.message;
       }
 
@@ -131,15 +130,6 @@ class ActivityController extends GetxController {
         followedEvents.assignAll(list);
       } else {
         followedEvents.addAll(list);
-      }
-
-      // Check Certificate
-      for (var datum in followedEvents) {
-        if (datum.certificateUrl == null) {
-          // setelah return, bisa assign ke datum di sini jika ingin
-          final res = await getCertificateForEvent(datum.modulAcaraId);
-          datum.certificateUrl = res?.data;
-        }
       }
     } catch (e, stackTrace) {
       logger.e("Error loading followed events", error:e, stackTrace: stackTrace);
