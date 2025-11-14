@@ -17,7 +17,6 @@ class ActivityContainer extends StatelessWidget {
   final ActivityFilter status;
   final VoidCallback? onCardPressed;
   final bool isPresent;
-  final String? urlSertifikat;
   final bool? hasDoorprize;
   final DateTime timeNow;
   final VoidCallback onDownloadCertificatePressed;
@@ -30,7 +29,6 @@ class ActivityContainer extends StatelessWidget {
     required this.status,
     this.onCardPressed,
     required this.isPresent,
-    this.urlSertifikat,
     this.hasDoorprize,
     required this.timeNow,
     required this.onDownloadCertificatePressed,

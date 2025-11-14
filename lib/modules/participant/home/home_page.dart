@@ -255,13 +255,13 @@ class _EventListTile extends StatelessWidget {
         filterText = "Segera Hadir";
         break;
       case HomeFilter.open:
-        statusColor = const Color(0xFFFFEBEE);
+        statusColor = const Color(0xFFB3E2FF);
         textColor = const Color(0xFF0F8ED4);
         filterText = "Pendaftaran Dibuka";
         break;
       case HomeFilter.closed:
-        statusColor = const Color(0xFFFFEBEE);
-        textColor = const Color(0xFF707070);
+        statusColor = const Color(0xFFCFCFCF);
+        textColor = const Color(0xFF515151);
         filterText = "Pendaftaran Ditutup";
         break;
       case HomeFilter.active:

@@ -6,12 +6,12 @@ part 'certificate_response.g.dart';
 @JsonSerializable()
 class CertificateResponse extends Equatable {
   CertificateResponse({
-    required this.success,
+    required this.status,
     required this.message,
     required this.data,
   });
 
-  final bool success;
+  final bool status;
   final String message;
   final String? data;
 
@@ -21,5 +21,5 @@ class CertificateResponse extends Equatable {
 
   @override
   List<Object?> get props => [
-    success, message, data, ];
+    status, message, data, ];
 }

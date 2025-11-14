@@ -136,6 +136,10 @@ class HomeController extends GetxController {
       return HomeFilter.active;
     } else if (upcomingEvents.contains(event)) {
       return HomeFilter.upcoming;
+    } else if (openEvents.contains(event)) {
+      return HomeFilter.open;
+    } else if (closedEvents.contains(event)) {
+      return HomeFilter.closed;
     } else {
       return HomeFilter.past;
     }
