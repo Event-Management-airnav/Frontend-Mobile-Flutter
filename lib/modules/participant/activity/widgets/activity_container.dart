@@ -252,13 +252,15 @@ class ActivityContainer extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Text(
-                        eventDate,
-                        textAlign: TextAlign.right,
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: darkBlue,
+                      Expanded(
+                        child: Text(
+                          Utils.formatDateRange(event.modulAcara.mdlAcaraMulai, event.modulAcara.mdlAcaraSelesai),
+                          textAlign: TextAlign.right,
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: darkBlue,
+                          ),
                         ),
                       ),
                     ],
