@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../core/utils.dart';
 
 class AdditionalInfoCard extends StatelessWidget {
   final String title;
@@ -17,6 +16,7 @@ class AdditionalInfoCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
@@ -24,7 +24,10 @@ class AdditionalInfoCard extends StatelessWidget {
               style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 10),
-            _buildRichText(),
+            SizedBox(
+              width: double.infinity,
+              child: _buildRichText(),
+            ),
           ],
         ),
       ),
@@ -43,19 +46,12 @@ class AdditionalInfoCard extends StatelessWidget {
       url = match.group(0);
     }
 
-    return GestureDetector(
-      onTap: () {
-        if (url != null) {
-          Utils.openUrl(url);
-        }
-      },
-      child: Text(
-        text,
-        style: TextStyle(
-          fontWeight: FontWeight.w500,
-          color: url != null ? Colors.blue : Colors.black,
-          decoration: url != null ? TextDecoration.underline : TextDecoration.none,
-        ),
+    return Text(
+      text,
+      style: TextStyle(
+        fontWeight: FontWeight.w500,
+        color: url != null ? Colors.blue : Colors.black,
+        decoration: url != null ? TextDecoration.underline : TextDecoration.none,
       ),
     );
   }
